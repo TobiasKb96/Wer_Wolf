@@ -1,0 +1,45 @@
+.join-container {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.join-container h1 {
+    color: #646cff;
+    margin-bottom: 1rem;
+}
+
+.join-input {
+    width: 80%;
+    max-width: 300px;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.join-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+    color: white;
+    background-color: #535bf2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.join-button:hover {
+    background-color: #454bb5;
+}
+
+.error-message {
+    color: red;
+    margin-top: 1rem;
+}
+
+.success-message {
+    color: green;
+    margin-top: 1rem;
+}
