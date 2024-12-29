@@ -2,7 +2,7 @@ import Join from "../Join/join.jsx";
 import {useState, useEffect} from "react";
 import io from "socket.io-client";
 import adapter from 'webrtc-adapter';
-
+//gamelogic will be put together here
 const signalUrl = window.__SIGNAL_URL__;
 const socket = io.connect(`${signalUrl}`, {
     rejectUnauthorized: false
