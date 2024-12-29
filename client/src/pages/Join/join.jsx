@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './join.css';
 
 function Join() {
-    const { sessionId } = useParams(); // Extract sessionId from the URL
+    const { sessionId } = useParams();
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -28,21 +27,24 @@ function Join() {
     };
 
     return (
-        <div className="join-container">
-            <h1>Join Game</h1>
+        <div className="text-center mt-8 p-4">
+            <h1 className="text-[#646cff] mb-4 text-2xl font-bold">Join Game</h1>
             <p>Session ID: <strong>{sessionId}</strong></p>
             <input
                 type="text"
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="join-input"
+                className="w-4/5 max-w-[300px] p-2 my-4 text-base border border-gray-300 rounded-md"
             />
-            <button onClick={handleJoinLobby} className="join-button">
+            <button
+                onClick={handleJoinLobby}
+                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
+            >
                 Join Lobby
             </button>
-            {error && <p className="error-message">{error}</p>}
-            {success && <p className="success-message">Successfully joined the lobby!</p>}
+            {error && <p className="text-red-500 mt-4">{error}</p>}
+            {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
         </div>
     );
 }

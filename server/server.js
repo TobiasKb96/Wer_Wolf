@@ -1,12 +1,19 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors")
+const https = require('https')
 const os = require('os');
+const socketio = require('socket.io')
+const fs = require("fs");
 
-
-const PORT = process.env.PORT || 8080;
+const PORT =  8080;
+const SIGNALPORT = 8081;
 
 const app = express();
+
+const key = fs.readFileSync('./certs/cert.key')
+const cert = fs.readFileSync('./certs/cert.crt')
+
 app.use(express.json());
 
 //all routes
@@ -14,11 +21,13 @@ app.use(express.json());
 const newGameRoute = require('./routes/newGame');
 const exampleRoute = require('./routes/reactExample');
 
+
+//TODO differntiate WLAN & LAN adapter
 function getLocalIP() {
     const interfaces = os.networkInterfaces();
     for (const name of Object.keys(interfaces)) {
         for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal && iface.address.startsWith('192.168')) {
+            if (iface.family === 'IPv4' && !iface.internal && iface.address.startsWith('192.168.0')) {
                 return iface.address; // Return the 192.168.x.x IP
             }
         }
@@ -39,15 +48,39 @@ app.use('/api', newGameRoute);
 // Catch-all route to serve React index.html for React Router
 app.get('/config.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript');
-    res.send(`window.__BACKEND_URL__ = "http://${LOCAL_IP}:${PORT}";`);
+    res.send(`
+        window.__BACKEND_URL__ = "https://${LOCAL_IP}:${PORT}";
+        window.__SIGNAL_URL__ = "https://${LOCAL_IP}:${PORT}";
+    `);
+
 });
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
+const secureExpressServer = https.createServer({key,cert},app)
 
 // Start the server
-app.listen(PORT, LOCAL_IP, () => {
-    console.log(`Server running on http://${LOCAL_IP}:${PORT}`);
+secureExpressServer.listen(PORT, LOCAL_IP, () => {
+    console.log(`Server running on https://${LOCAL_IP}:${PORT}`);
 });
+
+
+
+const io = socketio(secureExpressServer, {
+    cors: {
+        origin: "*", // Allow all origins
+        methods: ["GET", "POST"], // Allow necessary methods
+    },
+});
+
+io.on("connection", socket => {
+    console.log(socket.id, "has joined")
+
+    socket.on("disconnect", () => {
+        console.log(`${socket.id} disconnected from signaling server`);
+    });
+})
+
+

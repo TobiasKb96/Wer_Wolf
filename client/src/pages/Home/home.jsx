@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './home.css';
 import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
@@ -29,23 +28,26 @@ function Home() {
     };
 
     return (
-        <div className="main-content">
-            <button onClick={handleNewGame} className="new-game-button">
+        <div className="text-center p-8">
+            <button
+                onClick={handleNewGame}
+                className="px-8 py-4 text-base text-white bg-blue-600 rounded-lg cursor-pointer mb-4 transition-colors hover:bg-blue-700"
+            >
                 Create New Game
             </button>
 
             {/* Display QR Code and Active Participants Side-by-Side */}
             {qrCode && (
-                <div className="qr-code-and-participants">
+                <div className="flex justify-center items-start gap-8 mt-8">
                     {/* QR Code */}
-                    <div className="qr-code-container">
-                        <img src={qrCode} alt="QR Code for New Game" />
+                    <div className="text-center border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
+                        <img src={qrCode} alt="QR Code for New Game" className="w-48 h-48 mb-4" />
                         <p>Scan the QR code to join the game!</p>
                     </div>
 
                     {/* Active Participants */}
                     {sessionId && (
-                        <div className="participants-container">
+                        <div className="w-72 p-4 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
                             <LobbyParticipants sessionId={sessionId} />
                         </div>
                     )}

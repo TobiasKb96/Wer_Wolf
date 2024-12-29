@@ -7,6 +7,7 @@ const LobbyParticipants = ({ sessionId }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const backendUrl = window.__BACKEND_URL__;
+
     useEffect(() => {
         const fetchParticipants = async () => {
             try {
@@ -26,42 +27,29 @@ const LobbyParticipants = ({ sessionId }) => {
         return () => clearInterval(interval);
     }, [sessionId]);
 
-    if (loading) return <div style={{ textAlign: 'center', marginTop: '1rem' }}>Loading participants...</div>;
-    if (error) return <div style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>{error}</div>;
+    if (loading)
+        return <div className="text-center mt-4">Loading participants...</div>;
+    if (error)
+        return <div className="text-red-500 text-center mt-4">{error}</div>;
 
     return (
-        <div
-            style={{
-                margin: '2rem auto',
-                padding: '1rem',
-                maxWidth: '400px',
-                backgroundColor: '#f9f9f9',
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            }}
-        >
-            <h2 style={{ textAlign: 'center', color: '#646cff', marginBottom: '1rem' }}>Active Participants</h2>
+        <div className="mt-8 mx-auto p-4 max-w-md bg-gray-100 border border-gray-300 rounded-lg shadow-md">
+            <h2 className="text-center text-[#646cff] mb-4 text-xl font-bold">
+                Active Participants
+            </h2>
             {participants.length > 0 ? (
-                <ul style={{ listStyle: 'none', padding: 0 }}>
+                <ul className="list-none">
                     {participants.map((participant, index) => (
                         <li
                             key={index}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                marginBottom: '0.5rem',
-                                backgroundColor: '#e8e8ff',
-                                borderRadius: '5px',
-                                color: '#333',
-                                textAlign: 'center',
-                            }}
+                            className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-center"
                         >
                             {participant}
                         </li>
                     ))}
                 </ul>
             ) : (
-                <p style={{ textAlign: 'center', color: '#333' }}>No participants yet.</p>
+                <p className="text-center text-gray-700">No participants yet.</p>
             )}
         </div>
     );
