@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+//TODO M10.	The system shall allow players to choose their name when joining a lobby
 function Join() {
     const { sessionId } = useParams();
     const [name, setName] = useState('');

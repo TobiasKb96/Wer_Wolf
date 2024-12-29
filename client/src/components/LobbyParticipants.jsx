@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
+//TODO option to kick players that joined
+//TODO start game button
+//TODO start game button is clickable when 4 players are in the lobby
+
 const LobbyParticipants = ({ sessionId }) => {
     const [participants, setParticipants] = useState([]);
     const [loading, setLoading] = useState(true);

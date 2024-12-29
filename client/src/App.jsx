@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import routes from "./utils/routes";
-
+import adapter from 'webrtc-adapter';
 
 
 function App() {
