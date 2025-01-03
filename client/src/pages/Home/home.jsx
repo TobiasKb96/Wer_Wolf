@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
+import lobbyParticipants from "../../components/LobbyParticipants";
 
 //TODO M1. The system shall provide the users with the ability to play a game of Werewolf with a narrator.
 //TODO M2. The system shall provide the user with a one time login QR code for the players to enter the game session.
@@ -34,6 +35,23 @@ function Home() {
         }
     };
 
+    const distributeRoles = () => {
+        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+        const shuffledParticipants = [...lobbyParticipants].sort(() => Math.random() - 0.5);
+
+        // Assign roles
+        const updatedParticipants = shuffledParticipants.map((participant, index) => {
+            return {
+                ...lobbyParticipants,
+                role: index < numberOfWerewolves ? "Werewolf" : "Villager"
+            };
+        });
+
+        // Debugging: log the distributed roles
+        console.log("Roles distributed:", updatedParticipants);
+    }
+
+
     return (
         <div className="text-center p-8">
             <button
@@ -48,17 +66,26 @@ function Home() {
                 <div className="flex justify-center items-start gap-8 mt-8">
                     {/* QR Code */}
                     <div className="text-center border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
-                        <img src={qrCode} alt="QR Code for New Game" className="w-48 h-48 mb-4" />
+                        <img src={qrCode} alt="QR Code for New Game" className="w-48 h-48 mb-4"/>
                         <p>Scan the QR code to join the game!</p>
                     </div>
 
                     {/* Active Participants */}
                     {sessionId && (
                         <div className="w-72 p-4 border border-gray-300 rounded-lg bg-gray-100 shadow-md">
-                            <LobbyParticipants sessionId={sessionId} />
+                            <LobbyParticipants sessionId={sessionId}/>
                         </div>
                     )}
                 </div>
+            )}
+            {/* Start Game Button */}
+            {lobbyParticipants.length > 0 && (
+                <button
+                    onClick={distributeRoles}
+                    className="px-8 py-4 mt-4 text-base text-white bg-green-600 rounded-lg cursor-pointer transition-colors hover:bg-green-700"
+                >
+                    Start Game
+                </button>
             )}
         </div>
     );

@@ -18,7 +18,10 @@ function Join() {
         }
 
         try {
-            await axios.post(`${backendUrl}/api/join-lobby`, { name, sessionId });
+           await axios.post(`${backendUrl}/api/join-lobby`, { name, sessionId });
+
+           const newPlayer = new Player(name);
+
             setSuccess(true);
             setError(null);
         } catch (err) {

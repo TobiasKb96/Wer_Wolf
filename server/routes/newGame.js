@@ -35,6 +35,7 @@ router.post('/join-lobby', (req, res) => {
     participants.push(name);
     activeSessions.set(sessionId, participants);
 
+
     // Respond with success and updated participant list
     res.json({
         message: `${name} successfully joined session ${sessionId}.`,
