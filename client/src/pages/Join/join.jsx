@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Player from "../Game/gamelogic/Player.js";
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby
+//TODO set player object to the state
 function Join() {
     const { sessionId } = useParams();
     const [name, setName] = useState('');
