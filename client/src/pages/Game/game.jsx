@@ -17,12 +17,12 @@ console.log(`connected to ${signalUrl}`)
 //TODO M7. The system shall provide the narrator with an overview of the characters of the players.
 //TODO M8.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
-useState(()=>{
+/*useState(()=>{
    navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
     })
-},[])
+},[])*/
 function Game(){
 
 
