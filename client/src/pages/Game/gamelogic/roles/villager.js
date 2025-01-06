@@ -6,7 +6,7 @@ class Villager extends Roles{
         super('Villager', false);
     }
 
-    action(player) {
+    nightAction(player) {
 
     }
 }

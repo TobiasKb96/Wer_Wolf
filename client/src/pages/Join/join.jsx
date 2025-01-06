@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Player from "../Game/gamelogic/Player.js";
 
-//TODO M10.	The system shall allow players to choose their name when joining a lobby
-//TODO set player object to the state
-function Join() {
+//TODO M10.	The system shall allow players to choose their name when joining a lobby -> works?
+//TODO use player from parent
+
+function Join({setPlayer}) {
     const { sessionId } = useParams();
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
@@ -23,6 +24,7 @@ function Join() {
            await axios.post(`${backendUrl}/api/join-lobby`, { name, sessionId });
 
            const newPlayer = new Player(name);
+           setPlayer(newPlayer);
 
             setSuccess(true);
             setError(null);
@@ -50,7 +52,11 @@ function Join() {
                 Join Lobby
             </button>
             {error && <p className="text-red-500 mt-4">{error}</p>}
-            {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
+            {success && (
+                <div className="text-green-500 mt-4">
+                    <p>Successfully joined the lobby!</p>
+                </div>
+            )}
         </div>
     );
 }

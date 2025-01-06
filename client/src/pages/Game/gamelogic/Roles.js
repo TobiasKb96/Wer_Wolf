@@ -6,7 +6,7 @@ class Roles {
         this.hasNightAction = hasNightAction;
     }
 
-    action(player) {
+    nightAction(player) {
     }
 
 

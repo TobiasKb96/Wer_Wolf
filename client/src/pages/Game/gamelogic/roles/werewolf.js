@@ -4,12 +4,11 @@ class Werewolf extends Roles{
 
     constructor()
     {
-        super('Werewolf', false); // Villager has no night action
+        super('Werewolf', true);
     }
 
-    action(player)
+    nightAction(player)
     {
-        console.log(`${this.name} cannot perform any night action.`);
     }
 }
 
