@@ -49,13 +49,13 @@ function Home() {
     };
 
     const distributeRoles = () => {
-        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
-        const shuffledParticipants = [...lobbyParticipants].sort(() => Math.random() - 0.5);
+        const numberOfWerewolves = LobbyParticipants.length <= 5 ? 1 : 2;
+        const shuffledParticipants = [...LobbyParticipants].sort(() => Math.random() - 0.5);
 
         // Assign roles
         const updatedParticipants = shuffledParticipants.map((participant, index) => {
             return {
-                ...lobbyParticipants,
+                ...LobbyParticipants,
                 role: index < numberOfWerewolves ? "Werewolf" : "Villager"
             };
         });
@@ -102,7 +102,7 @@ function Home() {
                 </div>
             )}
             {/* Start Game Button */}
-            {lobbyParticipants.length > 0 && (
+            {LobbyParticipants.length > 0 && (
                 <button
                     onClick={distributeRoles}
                     className="px-8 py-4 mt-4 text-base text-white bg-green-600 rounded-lg cursor-pointer transition-colors hover:bg-green-700"
