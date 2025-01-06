@@ -69,6 +69,7 @@ secureExpressServer.listen(PORT, LOCAL_IP, () => {
 });
 
 
+//signalling server start
 
 const io = socketio(secureExpressServer, {
     cors: {
@@ -77,12 +78,12 @@ const io = socketio(secureExpressServer, {
     },
 });
 
-io.on("connection", socket => {
-    console.log(socket.id, "has joined")
-
-    socket.on("disconnect", () => {
-        console.log(`${socket.id} disconnected from signaling server`);
+const handlersPath = path.join(__dirname, 'socketHandlers');
+fs.readdirSync(handlersPath).forEach((file) => {
+    const handler = require(path.join(handlersPath, file));
+    io.on('connection', (socket) => {
+        handler(io, socket);
     });
-})
+});
 
 

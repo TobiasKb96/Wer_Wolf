@@ -1,40 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-
-//TODO option to kick players that joined
-//TODO start game button
-//TODO start game button is clickable when 4 players are in the lobby
+import socket from '../utils/socket'; // Import Socket.IO client
 
 const LobbyParticipants = ({ sessionId }) => {
     const [participants, setParticipants] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const backendUrl = window.__BACKEND_URL__;
 
     useEffect(() => {
-        const fetchParticipants = async () => {
-            try {
-                const response = await axios.get(`${backendUrl}/api/lobby/${sessionId}`);
-                setParticipants(response.data.participants);
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch participants.');
-                console.error(err);
-                setLoading(false);
-            }
+        // Join the lobby room
+        socket.emit('joinLobby', sessionId);
+
+        // Listen for participant updates
+        socket.on('updateParticipants', (updatedParticipants) => {
+            console.log('Participants updated:', updatedParticipants);
+            setParticipants(updatedParticipants);
+        });
+
+        // Handle any errors
+        socket.on('error', (errMsg) => {
+            setError(errMsg);
+            console.error('Error:', errMsg);
+        });
+
+        // Cleanup on component unmount
+        return () => {
+            socket.emit('leaveLobby', sessionId); // Notify server that this client is leaving
+            socket.off('updateParticipants'); // Remove listener for participant updates
+            socket.off('error'); // Remove error listener
         };
-
-        fetchParticipants();
-
-        const interval = setInterval(fetchParticipants, 5000);
-        return () => clearInterval(interval);
     }, [sessionId]);
 
-    if (loading)
-        return <div className="text-center mt-4">Loading participants...</div>;
-    if (error)
+    if (error) {
         return <div className="text-red-500 text-center mt-4">{error}</div>;
+    }
 
     return (
         <div className="mt-8 mx-auto p-4 max-w-md bg-gray-100 border border-gray-300 rounded-lg shadow-md">

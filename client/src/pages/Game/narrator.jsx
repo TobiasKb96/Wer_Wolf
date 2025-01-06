@@ -3,6 +3,8 @@ import {useState, useEffect} from "react";
 import io from "socket.io-client";
 import adapter from 'webrtc-adapter';
 
+//TODO Steffi
+
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
 //TODO provide buttons to transition phases/end game
@@ -13,9 +15,9 @@ function Narrator(){
 
 
     return (
-    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Hello im a Button
-    </button>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Hello im a Button
+        </button>
     )
 
 }

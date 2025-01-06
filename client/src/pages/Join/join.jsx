@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import LobbyParticipants from "../../components/LobbyParticipants.jsx";
+import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby
 function Join() {
@@ -9,23 +11,28 @@ function Join() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    const backendUrl = window.__BACKEND_URL__;
 
-    const handleJoinLobby = async () => {
+    const handleJoinLobby = () => {
         if (!name.trim()) {
             setError('Please enter your name.');
             return;
         }
+        console.log(sessionId)
+        console.log(name)
+        socket.emit('joinLobby', { sessionId, name });
 
-        try {
-            await axios.post(`${backendUrl}/api/join-lobby`, { name, sessionId });
+        socket.on('playerJoined', (data) => {
             setSuccess(true);
             setError(null);
-        } catch (err) {
-            console.error('Failed to join the lobby:', err);
-            setError(err.response?.data?.error || 'Unable to join the lobby. Please try again.');
-        }
+            console.log('Player joined:', data);
+        });
+
+        socket.on('error', (errMsg) => {
+            setError(errMsg);
+            console.error('Error joining lobby:', errMsg);
+        });
     };
+
 
     return (
         <div className="text-center mt-8 p-4">
@@ -46,7 +53,16 @@ function Join() {
             </button>
             {error && <p className="text-red-500 mt-4">{error}</p>}
             {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
+
+
+            {sessionId && (
+                <div>
+                    <LobbyParticipants sessionId={sessionId} />
+                </div>
+            )}
         </div>
+
+
     );
 }
 

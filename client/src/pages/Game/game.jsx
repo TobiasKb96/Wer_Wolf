@@ -4,10 +4,13 @@ import io from "socket.io-client";
 import adapter from 'webrtc-adapter';
 
 const signalUrl = window.__SIGNAL_URL__;
+
 const socket = io.connect(`${signalUrl}`, {
     rejectUnauthorized: false
 })
 console.log(`connected to ${signalUrl}`)
+
+//TODO Anna
 
 //TODO show your own role, (all players that are not the narrator, are on this page)
 //TODO should: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component)
