@@ -2,10 +2,14 @@ import React, { useState, Suspense } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import routes from "./utils/routes";
 import adapter from 'webrtc-adapter';
+import Game from "./pages/Game/game.jsx";
+import Join from "./pages/Join/join.jsx";
 
+//TODO player state
 
 function App() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [player, setPlayer] = useState(null)
 
     const toggleSidebar = () => {
         setSidebarVisible((prev) => !prev);
@@ -59,6 +63,9 @@ function App() {
                                 element={<route.component />}
                             />
                         ))}
+                        {/* Manually Defined Routes */}
+                        <Route path="/join/:sessionId" element={<Join setPlayer={setPlayer} />} />
+                        <Route path="/game" element={<Game player={player} />} />
                     </Routes>
                 </Suspense>
             </main>

@@ -48,6 +48,23 @@ function Home() {
         socket.emit("createGame");
     };
 
+    const distributeRoles = () => {
+        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+        const shuffledParticipants = [...lobbyParticipants].sort(() => Math.random() - 0.5);
+
+        // Assign roles
+        const updatedParticipants = shuffledParticipants.map((participant, index) => {
+            return {
+                ...lobbyParticipants,
+                role: index < numberOfWerewolves ? "Werewolf" : "Villager"
+            };
+        });
+
+        // Debugging: log the distributed roles
+        console.log("Roles distributed:", updatedParticipants);
+    }
+
+
     return (
         <div className="text-center p-8">
             <button
@@ -83,6 +100,15 @@ function Home() {
                     {/* Active Participants */}
                     {sessionId && <div><LobbyParticipants sessionId={sessionId} /></div>}
                 </div>
+            )}
+            {/* Start Game Button */}
+            {lobbyParticipants.length > 0 && (
+                <button
+                    onClick={distributeRoles}
+                    className="px-8 py-4 mt-4 text-base text-white bg-green-600 rounded-lg cursor-pointer transition-colors hover:bg-green-700"
+                >
+                    Start Game
+                </button>
             )}
         </div>
     );
