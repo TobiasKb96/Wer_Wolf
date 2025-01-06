@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
@@ -11,28 +11,36 @@ function Join() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
+    useEffect(() => {
+        const playerJoinedSuccessfullyHandler = (data) => {
+            setSuccess(true);
+            setError(null);
+            console.log('Player joined:', data);
+        };
+
+        const errorHandler = (errMsg) => {
+            setError(errMsg);
+            console.error('Error joining lobby:', errMsg);
+        };
+
+        // Set up listeners
+        socket.on('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
+        socket.on('JoinError', errorHandler);
+
+        return () => {
+            // Clean up listeners
+            socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
+            socket.off('JoinError', errorHandler);
+        };
+    }, []);
 
     const handleJoinLobby = () => {
         if (!name.trim()) {
             setError('Please enter your name.');
             return;
         }
-        console.log(sessionId)
-        console.log(name)
         socket.emit('joinLobby', { sessionId, name });
-
-        socket.on('playerJoined', (data) => {
-            setSuccess(true);
-            setError(null);
-            console.log('Player joined:', data);
-        });
-
-        socket.on('error', (errMsg) => {
-            setError(errMsg);
-            console.error('Error joining lobby:', errMsg);
-        });
     };
-
 
     return (
         <div className="text-center mt-8 p-4">
@@ -53,16 +61,12 @@ function Join() {
             </button>
             {error && <p className="text-red-500 mt-4">{error}</p>}
             {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
-
-
-            {sessionId && (
+            {success && (
                 <div>
                     <LobbyParticipants sessionId={sessionId} />
                 </div>
             )}
         </div>
-
-
     );
 }
 

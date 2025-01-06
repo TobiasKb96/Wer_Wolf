@@ -7,13 +7,11 @@ const LobbyParticipants = ({ sessionId }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Join the lobby room
-        socket.emit('joinLobby', sessionId);
-
+        socket.emit('getParticipants', sessionId)
         // Listen for participant updates
         socket.on('updateParticipants', (updatedParticipants) => {
             console.log('Participants updated:', updatedParticipants);
-            setParticipants(updatedParticipants);
+            if (updatedParticipants != null) setParticipants(updatedParticipants);
         });
 
         // Handle any errors
@@ -24,7 +22,6 @@ const LobbyParticipants = ({ sessionId }) => {
 
         // Cleanup on component unmount
         return () => {
-            socket.emit('leaveLobby', sessionId); // Notify server that this client is leaving
             socket.off('updateParticipants'); // Remove listener for participant updates
             socket.off('error'); // Remove error listener
         };
@@ -33,6 +30,8 @@ const LobbyParticipants = ({ sessionId }) => {
     if (error) {
         return <div className="text-red-500 text-center mt-4">{error}</div>;
     }
+
+
 
     return (
         <div className="mt-8 mx-auto p-4 max-w-md bg-gray-100 border border-gray-300 rounded-lg shadow-md">
@@ -46,7 +45,7 @@ const LobbyParticipants = ({ sessionId }) => {
                             key={index}
                             className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-center"
                         >
-                            {participant}
+                            {participant.name}
                         </li>
                     ))}
                 </ul>

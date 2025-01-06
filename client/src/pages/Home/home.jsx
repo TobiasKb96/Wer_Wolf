@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
@@ -12,32 +12,41 @@ import socket from '../../utils/socket'; // Import the initialized Socket.IO cli
 //TODO M9.	The system shall be able to distribute player roles between up to 8 players per game session.
 
 function Home() {
-    const [qrCode, setQrCode] = useState(null);           // State for QR Code
-    const [sessionId, setSessionId] = useState(null);     // State for confirmed session ID
+    const [qrCode, setQrCode] = useState(null); // State for QR Code
+    const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
-    const backendUrl = window.__BACKEND_URL__;            // Backend URL
+    const backendUrl = window.__BACKEND_URL__; // Backend URL
 
-    const handleNewGame = () => {
-        socket.emit('createGame'); // Emit the event to create a new game
-
-        socket.on('gameCreated', async ({ sessionId }) => {
+    // Socket event listeners
+    useEffect(() => {
+        const gameCreatedHandler = async ({ sessionId }) => {
             setSessionId(sessionId);
 
             // Generate QR code
-            const sessionUrl = `${__BACKEND_URL__}/join/${sessionId}`; // Adjust URL as needed
+            const sessionUrl = `${backendUrl}/join/${sessionId}`; // Adjust URL as needed
             setSessionLink(sessionUrl);
             const qrCodeImg = await QRCode.toDataURL(sessionUrl);
             setQrCode(qrCodeImg);
-        });
+        };
 
-        socket.on('error', (err) => {
-            console.error('Error creating game:', err);
-        });
+        const errorHandler = (err) => {
+            console.error("Error creating game:", err);
+        };
+
+        // Set up listeners
+        socket.on("gameCreated", gameCreatedHandler);
+        socket.on("error", errorHandler);
+
+        return () => {
+            // Clean up listeners
+            socket.off("gameCreated", gameCreatedHandler);
+            socket.off("error", errorHandler);
+        };
+    }, []);
+
+    const handleNewGame = () => {
+        socket.emit("createGame");
     };
-
-
-
-
 
     return (
         <div className="text-center p-8">
@@ -54,7 +63,11 @@ function Home() {
                     {/* QR Code */}
                     <div className="text-center border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
                         <div className="flex justify-center">
-                            <img src={qrCode} alt="QR Code for New Game" className="w-48 h-48 mb-4"/>
+                            <img
+                                src={qrCode}
+                                alt="QR Code for New Game"
+                                className="w-48 h-48 mb-4"
+                            />
                         </div>
                         <p>Scan the QR code to join the game!</p>
                         {/* Display Session Link */}
@@ -68,9 +81,7 @@ function Home() {
                     </div>
 
                     {/* Active Participants */}
-                    {sessionId && (
-                        <div><LobbyParticipants sessionId={sessionId}/></div>
-                    )}
+                    {sessionId && <div><LobbyParticipants sessionId={sessionId} /></div>}
                 </div>
             )}
         </div>
