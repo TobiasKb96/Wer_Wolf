@@ -2,6 +2,9 @@ const {v4: uuidv4} = require("uuid");
 const lobbies = {}; // Store lobby participants
 
 module.exports = (io, socket) => {
+
+    console.log(`${socket.id} connected`)
+
     socket.on('joinLobby', ({sessionId, name}) => {
         if (!lobbies[sessionId]) {
             lobbies[sessionId] = [];

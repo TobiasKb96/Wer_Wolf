@@ -26,14 +26,20 @@ function Join({setPlayer}) {
             console.error('Error joining lobby:', errMsg);
         };
 
+        const startGameHandler = (errMsg) => {
+
+        };
+
         // Set up listeners
         socket.on('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
         socket.on('JoinError', errorHandler);
+        socket.on('startGame', startGameHandler);
 
         return () => {
             // Clean up listeners
             socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
             socket.off('JoinError', errorHandler);
+            socket.off('startGame', startGameHandler);
         };
     }, []);
 
