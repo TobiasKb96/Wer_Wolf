@@ -65,6 +65,7 @@ function App() {
                         ))}
                         {/* Manually Defined Routes */}
                         <Route path="/join/:sessionId" element={<Join setPlayer={setPlayer} />} />
+                        <Route path="/game" element={<Game player={player} />} />
                     </Routes>
                 </Suspense>
             </main>

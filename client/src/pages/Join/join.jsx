@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
@@ -13,12 +13,14 @@ function Join({setPlayer}) {
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const playerJoinedSuccessfullyHandler = (data) => {
             setSuccess(true);
             setError(null);
             console.log('Player joined:', data);
+            setPlayer(new Player(name)) //makes issues
         };
 
         const errorHandler = (errMsg) => {
@@ -26,8 +28,10 @@ function Join({setPlayer}) {
             console.error('Error joining lobby:', errMsg);
         };
 
-        const startGameHandler = (errMsg) => {
-
+        const startGameHandler = () => {
+            console.log('Game started');
+            //switch to game.jsx here
+            navigate('/game');
         };
 
         // Set up listeners

@@ -1,14 +1,7 @@
 import Join from "../Join/join.jsx";
 import {useState, useEffect} from "react";
-import io from "socket.io-client";
 import adapter from 'webrtc-adapter';
 
-const signalUrl = window.__SIGNAL_URL__;
-
-const socket = io.connect(`${signalUrl}`, {
-    rejectUnauthorized: false
-})
-console.log(`connected to ${signalUrl}`)
 
 //TODO Anna
 
@@ -36,9 +29,7 @@ function Game({player}){
 
     return (
         <div
-            className={`flex items-center justify-center h-screen ${
-                isNight ? "bg-black text-white" : "bg-gray-100 text-black"
-            }`}
+            className={`flex items-center justify-center h-screen ${isNight ? "bg-black text-white" : "bg-gray-100 text-black"}`}
         >
             <div>
                 <h1 className="text-3xl font-bold mb-4">

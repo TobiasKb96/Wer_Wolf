@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
@@ -16,6 +17,7 @@ function Home() {
     const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
     const backendUrl = window.__BACKEND_URL__; // Backend URL
+    const navigate = useNavigate();
 
     // Socket event listeners
     useEffect(() => {
@@ -49,7 +51,7 @@ function Home() {
     };
 
     const startGame = () => {
-        socket.emit("startGame");
+        socket.emit("startGame",sessionId);
     };
 
     return (

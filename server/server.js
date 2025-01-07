@@ -83,7 +83,6 @@ fs.readdirSync(handlersPath).forEach((file) => {
     const handler = require(path.join(handlersPath, file));
     io.on('connection', (socket) => {
         handler(io, socket);
-
     });
 });
 
