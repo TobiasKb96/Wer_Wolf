@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import gameState from "./gamelogic/gameState.js";
+import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 
 
 //TODO show names of all participants and their roles
@@ -12,6 +13,7 @@ const Narrator = () => {
     const [players, setPlayers] = useState([]);
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [currentPhase, setCurrentPhase] = useState(gameState.getPhase());
+    //const [sessionId, setSessionId] = useState("");
 
     useEffect(() => {
         setPlayers(gameState.getPlayers());
@@ -32,6 +34,9 @@ const Narrator = () => {
         gameState.setPhase(newPhase);
         setCurrentPhase(newPhase);
     };
+
+    /*const confirmedSessionId = response.data.sessionId;
+    setSessionId(confirmedSessionId);*/
 
     return (
         <div
@@ -54,7 +59,7 @@ const Narrator = () => {
                     className="border border-gray-300 rounded px-4 py-2 w-64 text-black"
                 >
                     <option value="" disabled>
-                        Select a player
+                        <LobbyParticipants sessionId={sessionId} />
                     </option>
                     {players.map((player) => (
                         <option key={player} value={player}>

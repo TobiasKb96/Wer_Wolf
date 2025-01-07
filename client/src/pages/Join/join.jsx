@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import gameState from "../Game/gamelogic/gameState.js";
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby
 function Join() {
@@ -19,6 +20,10 @@ function Join() {
 
         try {
             await axios.post(`${backendUrl}/api/join-lobby`, { name, sessionId });
+
+            // Add the player to the game state after successful join
+            gameState.addPlayer(name);
+
             setSuccess(true);
             setError(null);
         } catch (err) {
