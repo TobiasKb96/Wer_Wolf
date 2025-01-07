@@ -20,7 +20,6 @@ function Join({setPlayer}) {
             setSuccess(true);
             setError(null);
             console.log('Player joined:', data);
-            setPlayer(new Player(name)) //makes issues
         };
 
         const errorHandler = (errMsg) => {
@@ -28,8 +27,11 @@ function Join({setPlayer}) {
             console.error('Error joining lobby:', errMsg);
         };
 
-        const startGameHandler = () => {
+        const startGameHandler = (user) => {
             console.log('Game started');
+            console.log(user);
+            setPlayer(new Player(user.name))
+            console.log(new Player(user.name))
             //switch to game.jsx here
             navigate('/game');
         };

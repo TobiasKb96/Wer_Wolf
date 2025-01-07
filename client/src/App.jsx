@@ -1,20 +1,31 @@
 import React, { useState, Suspense } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import routes from "./utils/routes";
+//import routes from "./utils/routes";
 import adapter from 'webrtc-adapter';
 import Game from "./pages/Game/game.jsx";
+import Narrator from "./pages/Game/narrator.jsx";
+import Home from "./pages/Home/home.jsx";
 import Join from "./pages/Join/join.jsx";
+import Basic from "./pages/Vite_react_basic/basic.jsx";
 
 //TODO player state
 
 function App() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
-    const [player, setPlayer] = useState(null)
+    const [player, setPlayer] = useState(null);
 
     const toggleSidebar = () => {
         setSidebarVisible((prev) => !prev);
     };
 
+    // Static routes array
+    const staticRoutes = [
+        { path: "/", name: "Home", component: <Home /> },
+        { path: "/join/:sessionId", name: "Join", component: <Join setPlayer={setPlayer} /> },
+        { path: "/game", name: "Game", component: <Game player={player} /> },
+        { path: "/narrator", name: "Narrator", component: <Narrator /> },
+        { path: "/basic_test", name: "Basic Test", component: <Basic /> },
+    ];
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -34,7 +45,7 @@ function App() {
             >
                 <h2 className="text-2xl font-bold mb-4">Available Pages</h2>
                 <ul className="space-y-2">
-                    {routes.map((route, index) => (
+                    {staticRoutes.map((route, index) => (
                         <li key={index}>
                             <Link
                                 to={route.path}
@@ -56,16 +67,13 @@ function App() {
             >
                 <Suspense fallback={<div>Loading...</div>}>
                     <Routes>
-                        {routes.map((route, index) => (
+                        {staticRoutes.map((route, index) => (
                             <Route
                                 key={index}
                                 path={route.path}
-                                element={<route.component />}
+                                element={route.component}
                             />
                         ))}
-                        {/* Manually Defined Routes */}
-                        <Route path="/join/:sessionId" element={<Join setPlayer={setPlayer} />} />
-                        <Route path="/game" element={<Game player={player} />} />
                     </Routes>
                 </Suspense>
             </main>
