@@ -23,7 +23,7 @@ function App() {
     const staticRoutes = [
         { path: "/", name: "Home", component: <Home /> },
         { path: "/join/:sessionId", name: "Join", component: <Join setPlayer={setPlayer} /> },
-        { path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player")} /> },
+        { path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player", "Default role")} /> },
         { path: "/narrator", name: "Narrator", component: <Narrator /> },
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];

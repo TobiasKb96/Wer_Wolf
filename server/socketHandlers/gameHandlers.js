@@ -15,6 +15,13 @@ module.exports = (io, socket) => {
             }
         });
     });
+
+    socket.on('setPhasePlayers', (newPhase) => {
+        const sessionId = getSessionId(socket);
+
+        socket.to(sessionId).emit("setPhasePlayers", newPhase)
+
+    });
 };
 
 
@@ -35,4 +42,13 @@ const distributeRoles = (lobbyParticipants) => {
 
     // Debugging: log the distributed roles
     console.log("Roles distributed in original order:", lobbyParticipants);
+};
+
+
+const getSessionId = (socket) => {
+    // Get the sessionId (assuming it's the first custom room the socket joined)
+    for (const room of socket.rooms) {
+        if (room !== socket.id) return room; // Skip the default room (socket.id)
+    }
+    return null;
 };

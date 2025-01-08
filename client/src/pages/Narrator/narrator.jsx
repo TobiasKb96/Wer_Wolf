@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import gameState from "../Game/gamelogic/gameState.js";
+import socket from "../../utils/socket.js";
 
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
@@ -20,6 +21,7 @@ const Narrator = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
         gameState.setPhase(newPhase);
         setCurrentPhase(newPhase);
+        socket.emit("setPhasePlayers", newPhase )
     };
 
     return (

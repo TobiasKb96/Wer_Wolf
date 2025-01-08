@@ -1,8 +1,7 @@
-import Join from "../Join/join.jsx";
 import {useState, useEffect} from "react";
-import io from "socket.io-client";
 import gameState from "./gamelogic/gameState.js";
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
+import socket from "../../utils/socket.js";
 
 
 //TODO Anna
@@ -17,10 +16,28 @@ import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 //TODO M8.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
 function Game({player}){
-    const [isNight] = useState(false);
 
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
+    const [currentPhase, setCurrentPhase] = useState(gameState.getPhase());
+
+    socket.on("setPhasePlayers", (newPhase) =>{
+        gameState.setPhase(newPhase)
+        setCurrentPhase(newPhase)
+    });
+
+    useEffect(() => {
+        const setPhasePlayersHandler = (newPhase) => {
+                gameState.setPhase(newPhase);
+        };
+
+        socket.on('setPhasePlayers', setPhasePlayersHandler);
+
+        return () => {
+            // Clean up listeners
+            socket.off('setPhasePlayers', setPhasePlayersHandler);
+        };
+    }, []);
 
     useEffect(() => {
         console.log("Player object handed over:",player)
