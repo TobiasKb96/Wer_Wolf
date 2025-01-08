@@ -23,7 +23,7 @@ function Game({player}){
     const [selectedPlayer, setSelectedPlayer] = useState("");
 
     useEffect(() => {
-        console.log(player)
+        console.log("Player object handed over:",player)
 
 
     if (!player.isAlive) {
