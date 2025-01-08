@@ -39,13 +39,13 @@ function Join({setPlayer}) {
         // Set up listeners
         socket.on('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
         socket.on('JoinError', errorHandler);
-        socket.on('startGame', startGameHandler);
+        socket.on('gameStarted', startGameHandler);
 
         return () => {
             // Clean up listeners
             socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
             socket.off('JoinError', errorHandler);
-            socket.off('startGame', startGameHandler);
+            socket.off('gameStarted', startGameHandler);
         };
     }, []);
 

@@ -3,13 +3,15 @@ module.exports = (io, socket) => {
 
 
     socket.on('startGame', (sessionId) => {
-        //distributeRoles(io.lobbies[sessionId])
-        const player = io.lobbies[sessionId].find(user => user.id === socket.id)
-        console.log(io.lobbies[sessionId])
-        console.log(socket.id)
-        console.log(io.lobbies[sessionId].find(user => user.id === socket.id))
-        console.log(player)
-        socket.to(sessionId).emit('startGame', player)
+        distributeRoles(io.lobbies[sessionId])
+        //debugging
+        io.lobbies[sessionId].forEach((user) => {
+            if (user.id !== socket.id) {
+                socket.to(user.id).emit('gameStarted', user);
+                console.log(user.id);
+                console.log(user);
+            }
+        });
     });
 
 };

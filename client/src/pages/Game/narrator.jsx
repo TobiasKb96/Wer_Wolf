@@ -9,7 +9,6 @@ import adapter from 'webrtc-adapter';
 //TODO provide instructions for phases
 //TODO provide buttons to transition phases/end game
 //TODO should: provide timers, Narrator has option to kill players (this allows to keep track of who is alive, so the script changes accordingly)
-//TODO
 
 function Narrator(){
 
