@@ -35,14 +35,20 @@ function Home() {
             console.error("Error creating game:", err);
         };
 
+        const gameStartedForNarratorHandler = () => {
+            navigate('/narrator');
+        }
+
         // Set up listeners
         socket.on("gameCreated", gameCreatedHandler);
         socket.on("error", errorHandler);
+        socket.on("gameStartedForNarrator", gameStartedForNarratorHandler)
 
         return () => {
             // Clean up listeners
             socket.off("gameCreated", gameCreatedHandler);
             socket.off("error", errorHandler);
+            socket.off("gameStartedForNarrator", gameStartedForNarratorHandler)
         };
     }, []);
 
