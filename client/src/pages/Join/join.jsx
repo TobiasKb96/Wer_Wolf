@@ -4,6 +4,7 @@ import axios from 'axios';
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import Player from "../Game/gamelogic/Player.js";
+import gameState from "../Game/gamelogic/gameState.js";
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby -> works?
 //TODO use player from parent
@@ -55,6 +56,8 @@ function Join({setPlayer}) {
             return;
         }
         socket.emit('joinLobby', { sessionId, name });
+
+        gameState.addPlayer(name); // checkif correct here
     };
 
     return (
