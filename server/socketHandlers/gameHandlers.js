@@ -9,6 +9,7 @@ module.exports = (io, socket) => {
         io.lobbies[sessionId].forEach((user) => {
             if (user.id !== socket.id) {
                 socket.to(user.id).emit('gameStarted', user);
+                socket.emit('gameStartedForNarrator', io.lobbies[sessionId])
                 console.log(user.id);
                 console.log(user);
             }

@@ -3,10 +3,11 @@ import { Routes, Route, Link } from "react-router-dom";
 //import routes from "./utils/routes";
 import adapter from 'webrtc-adapter';
 import Game from "./pages/Game/game.jsx";
-import Narrator from "./pages/Game/narrator.jsx";
+import Narrator from "./pages/narrator/narrator.jsx";
 import Home from "./pages/Home/home.jsx";
 import Join from "./pages/Join/join.jsx";
 import Basic from "./pages/Vite_react_basic/basic.jsx";
+import Player from "./pages/Game/gamelogic/Player.js";
 
 //TODO player state
 
@@ -22,7 +23,7 @@ function App() {
     const staticRoutes = [
         { path: "/", name: "Home", component: <Home /> },
         { path: "/join/:sessionId", name: "Join", component: <Join setPlayer={setPlayer} /> },
-        { path: "/game", name: "Game", component: <Game player={player} /> },
+        { path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player")} /> },
         { path: "/narrator", name: "Narrator", component: <Narrator /> },
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];

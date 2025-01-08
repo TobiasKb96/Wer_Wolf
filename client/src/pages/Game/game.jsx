@@ -19,11 +19,12 @@ import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 function Game({player}){
     const [isNight] = useState(false);
 
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedPlayer, setSelectedPlayer] = useState("");
+
     useEffect(() => {
         console.log(player)
 
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPlayer, setSelectedPlayer] = useState("");
 
     if (!player.isAlive) {
             alert("You have died!");

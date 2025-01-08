@@ -4,6 +4,7 @@ import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
+import gameState from "../Game/gamelogic/gameState.js";
 
 //TODO M1. The system shall provide the users with the ability to play a game of Werewolf with a narrator.
 //TODO M2. The system shall provide the user with a one time login QR code for the players to enter the game session.
@@ -35,7 +36,8 @@ function Home() {
             console.error("Error creating game:", err);
         };
 
-        const gameStartedForNarratorHandler = () => {
+        const gameStartedForNarratorHandler = (playersInSession) => {
+            console.log("Lobby Data ", playersInSession)
             navigate('/narrator');
         }
 
