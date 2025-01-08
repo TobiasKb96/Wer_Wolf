@@ -18,6 +18,8 @@ function Game({player}){
     const [isNight] = useState(false);
 
     useEffect(() => {
+        console.log(player)
+
         if (!player.isAlive) {
             alert("You have died!");
         }

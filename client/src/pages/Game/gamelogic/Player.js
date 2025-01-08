@@ -1,8 +1,8 @@
 class Player {
 
-    constructor(name) {
+    constructor(name,role) {
         this.name = name;
-        this.role = null;
+        this.role = role;
         this.isAlive = true;
     }
 

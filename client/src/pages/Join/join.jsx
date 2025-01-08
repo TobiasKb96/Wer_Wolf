@@ -30,8 +30,8 @@ function Join({setPlayer}) {
         const gameStartedHandler = (user) => {
             console.log('Game started');
             console.log(user);
-            setPlayer(new Player(user.name))
-            console.log(new Player(user.name))
+            setPlayer(new Player(user.name, user.role))
+            console.log(new Player(user.name, user.role))
             //switch to game.jsx here
             navigate('/game');
         };
