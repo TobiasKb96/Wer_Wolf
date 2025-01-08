@@ -1,22 +1,33 @@
-const gameState ={
-    currentPhase: 'day',
-    players: [],
+const gameState = {
+    players: [], // List of players who joined
+    currentPhase: "day", // Default is "day"
+    votes: {}, // Track votes cast by players
 
-    addPlayer(name){
-        this.players.push(name);
+    addPlayer(name) {
+        if (!this.players.some((player) => player.name === name)) {
+            this.players.push({ name });
+        }
     },
 
-    setPhase(phase){
+    getPlayers() {
+        return this.players;
+    },
+
+    setPhase(phase) {
         this.currentPhase = phase;
     },
 
-    getPhase(){
+    getPhase() {
         return this.currentPhase;
     },
 
-    getPlayers(){
-        return this.players;
-    }
+    castVote(voter, selectedPlayer) {
+        this.votes[voter] = selectedPlayer;
+    },
+
+    resetVotes() {
+        this.votes = {};
+    },
 };
 
 export default gameState;

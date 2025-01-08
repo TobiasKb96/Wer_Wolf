@@ -1,6 +1,8 @@
 import Join from "../Join/join.jsx";
 import {useState, useEffect} from "react";
-import adapter from 'webrtc-adapter';
+import io from "socket.io-client";
+import gameState from "./gamelogic/gameState.js";
+import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 
 
 //TODO Anna
@@ -20,7 +22,10 @@ function Game({player}){
     useEffect(() => {
         console.log(player)
 
-        if (!player.isAlive) {
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [selectedPlayer, setSelectedPlayer] = useState("");
+
+    if (!player.isAlive) {
             alert("You have died!");
         }
     }, [player.isAlive]);
@@ -29,23 +34,62 @@ function Game({player}){
         alert(`Your role is: ${player?.role}`);
     };
 
+    const handleVoteClick = () => {
+        if (showDropdown && selectedPlayer) {
+            // Send vote to gameState
+            gameState.castVote(name, selectedPlayer);
+            alert(`${name} has voted for ${selectedPlayer}`);
+            setShowDropdown(false);
+        } else {
+            setShowDropdown(true);
+        }
+    };
     return (
         <div
-            className={`flex items-center justify-center h-screen ${isNight ? "bg-black text-white" : "bg-gray-100 text-black"}`}
+            className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
+                gameState.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+            }`}
         >
-            <div>
-                <h1 className="text-3xl font-bold mb-4">
-                    {isNight ? "It's night. You're asleep." : "It's daytime. Wake up!"}
-                </h1>
-                    <button
-                        onClick={handleShowRole}
-                        className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
-                    >
-                        Show Role
-                    </button>
-                </div>
+            <h1 className="text-4xl font-bold mb-8">
+                {gameState.getPhase()}!
+            </h1>
+
+            {showDropdown && (
+                <select
+                    value={selectedPlayer}
+                    onChange={(e) => setSelectedPlayer(e.target.value)}
+                    className="border border-gray-300 rounded px-4 py-2 mb-4 text-black"
+                >
+                    <option value="" disabled>
+                        Select a player
+                    </option>
+                    {gameState.getPlayers()
+                        .filter((player) => player.name !== name) // Exclude self
+                        .map((player) => (
+                            <option key={player.name} value={player.name}>
+                                <LobbyParticipants sessionId={name}/>
+                            </option>
+                        ))}
+                </select>
+            )}
+
+            <button
+                onClick={handleVoteClick}
+                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
+            >
+                {showDropdown ? "Send Vote" : "Vote"}
+            </button>
+
+            <button
+                onClick={handleShowRole}
+                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
+            >
+                Show Role
+            </button>
+
         </div>
     );
+
 }
 
 export default Game;
