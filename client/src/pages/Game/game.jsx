@@ -19,13 +19,12 @@ import socket from "../../utils/socket.js";
 //TODO M7 Steffi / Anna. The system shall provide the narrator with an overview of the characters of the players.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
-function Game({ownSocketId}){
+function Game({ownSocketId}) {
     const [isNight] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState();
-
 
 
     const playersReceivedHandler = (players) => {
@@ -43,28 +42,26 @@ function Game({ownSocketId}){
     }
 
     useEffect(() => {
-        console.log("Own Socket Id object handed over:",ownSocketId)
+        console.log("Own Socket Id object handed over:", ownSocketId)
     }, [ownSocketId]);
 
     useEffect(() => {
-    socket.on('playersReceived', playersReceivedHandler);
+        socket.on('playersReceived', playersReceivedHandler);
+        socket.on('phaseReceived', phaseReceivedHandler);
 
-    socket.on('phaseReceived', phaseReceivedHandler);
+        return () => {
+            // Clean up listeners
+            socket.off('playersReceived', playersReceivedHandler);
+            socket.off('phaseReceived', phaseReceivedHandler);
+        };
+    }, []);
 
-    return () => {
-        // Clean up listeners
-        socket.off('playersReceived', playersReceivedHandler);
-        socket.off('phaseReceived', phaseReceivedHandler);
-
-    };
-}, []);
-
-/*
-    if (!player.isAlive) {
-            alert("You have died!");
-        }
-    }, [player.isAlive]);
-*/
+    /*
+        if (!player.isAlive) {
+                alert("You have died!");
+            }
+        }, [player.isAlive]);
+    */
     const handleShowRole = () => {
         alert(`Your role is: ${player?.role}`);
     };

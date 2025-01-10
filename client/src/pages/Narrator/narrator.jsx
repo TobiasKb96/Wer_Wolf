@@ -51,7 +51,7 @@ function Narrator ({joinedLobbyParticipants}) {
             gameState.addPlayer(new Player(player.name, player.role, player.id));
         }
         console.log("Players added to gameState:", gameState.getPlayers());
-        wait(5000);
+        wait(10000);
         socket.emit("sendPlayers", gameState.getPlayers());
 
 
