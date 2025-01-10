@@ -23,24 +23,26 @@ function Narrator ({joinedLobbyParticipants}) {
 
     const gameLoop = () => {
         //TODO implement game loop
-
+       // gameController.dayPhase();
+       // gameController.nightPhase();
     }
 
+    const initializeGame = async () => {
+        gameController.distributeRoles(joinedLobbyParticipants);
+        console.log("Role distributed in original order:", joinedLobbyParticipants);
+
+        await wait(5000);  // Replace this if you want a different wait mechanism
+
+        socket.emit("sendPlayers", gameController.getPlayers());
+        console.log("Players sent to server:", gameController.getPlayers());
+    };
 
     useEffect( () => {
 
-        const initializeGame = async () => {
-            gameController.distributeRoles(joinedLobbyParticipants);
-            console.log("Role distributed in original order:", joinedLobbyParticipants);
-
-            await wait(5000);  // Replace this if you want a different wait mechanism
-
-            socket.emit("sendPlayers", gameController.getPlayers());
-            console.log("Players sent to server:", gameController.getPlayers());
-        };
-
         initializeGame();
         //socket.on('gameStarted', gameStartedHandler);
+
+        gameLoop();
 
         return () => {
             // Clean up listeners
