@@ -9,11 +9,12 @@ import Join from "./pages/Join/join.jsx";
 import Basic from "./pages/Vite_react_basic/basic.jsx";
 import Player from "./pages/Game/gamelogic/Player.js";
 
-//TODO player state
+//TODO use participants instead of player
 
 function App() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
-    const [player, setPlayer] = useState(null);
+    //const [player, setPlayer] = useState(null);
+    const [player, setPlayer] = useState(new Player("Default, game loaded without player", null));
 
     const toggleSidebar = () => {
         setSidebarVisible((prev) => !prev);
@@ -23,7 +24,9 @@ function App() {
     const staticRoutes = [
         { path: "/", name: "Home", component: <Home /> },
         { path: "/join/:sessionId", name: "Join", component: <Join setPlayer={setPlayer} /> },
-        { path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player")} /> },
+        { path: "/game", name: "Game", component: <Game /> },
+        //{ path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player", null)} /> },
+        //{ path: "/game", name: "Game", component: <Game player={player} /> },
         { path: "/narrator", name: "Narrator", component: <Narrator /> },
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];
@@ -70,9 +73,10 @@ function App() {
                     <Routes>
                         {staticRoutes.map((route, index) => (
                             <Route
-                                key={index}
                                 path={route.path}
+                                key={index}
                                 element={route.component}
+
                             />
                         ))}
                     </Routes>

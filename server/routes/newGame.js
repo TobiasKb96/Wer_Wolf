@@ -39,7 +39,7 @@ router.post('/join-lobby', (req, res) => {
     // Respond with success and updated participant list
     res.json({
         message: `${name} successfully joined session ${sessionId}.`,
-        participants,
+        participants
     });
 });
 

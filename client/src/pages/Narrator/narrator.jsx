@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import gameState from "../Game/gamelogic/gameState.js";
+import LobbyParticipants from "../../components/LobbyParticipants.jsx";
+import PlayerOverview from "../../components/playerOverview.jsx";
 
-//TODO show names of all participants and their roles
+//TODO: add sessionID
+
+
 //TODO provide instructions for phases
 //TODO provide buttons to transition phases/end game
 //TODO should: provide timers, Narrator has option to kill players (this allows to keep track of who is alive, so the script changes accordingly)
@@ -10,6 +14,7 @@ import gameState from "../Game/gamelogic/gameState.js";
 const Narrator = () => {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameState.getPhase());
+
 
 
     useEffect(() => {
@@ -44,6 +49,10 @@ const Narrator = () => {
             >
                 Switch to {gameState.getPhase() === "day" ? "Night" : "Day"}
             </button>
+
+            {<div><PlayerOverview sessionId={'1234'} /></div>}
+
+
         </div>
     );
 };

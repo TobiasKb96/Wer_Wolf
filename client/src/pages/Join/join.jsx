@@ -5,9 +5,10 @@ import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import Player from "../Game/gamelogic/Player.js";
 import gameState from "../Game/gamelogic/gameState.js";
+import player from "../Game/gamelogic/Player.js";
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby -> works?
-//TODO use player from parent
+//TODO use participant instead of player
 
 function Join({setPlayer}) {
     const { sessionId } = useParams();

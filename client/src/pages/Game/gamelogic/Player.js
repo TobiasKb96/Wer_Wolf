@@ -13,5 +13,10 @@ class Player {
     kill() {
         this.isAlive = false;
     }
+
+    getName(){
+        return this.name;
+    }
+
 }
     export default Player;

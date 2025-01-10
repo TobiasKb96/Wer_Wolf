@@ -1,5 +1,7 @@
 const {v4: uuidv4} = require("uuid");
 
+//TODO: use dynamic session id
+
 
 module.exports = (io, socket) => {
 
@@ -17,13 +19,19 @@ module.exports = (io, socket) => {
             socket.emit('JoinError','User already exists in the lobby');
         }
         else {
-            io.lobbies[sessionId].push({id: socket.id, name: name}); // Add participant as an object
+            io.lobbies[sessionId].push({id: socket.id, name: name, role: null, isAlive: true}); // Add participant as an object
             io.to(sessionId).emit('updateParticipants', io.lobbies[sessionId]);
 
             socket.join(sessionId);
             socket.emit('playerJoinedSuccessfully', {name});
             console.log(`Player ${name} with ID: ${socket.id} joined session ${sessionId}`);
         }
+    });
+
+
+    socket.on('getParticipantRole', ({sessionId, name}) => {
+        const role = io.lobbies[sessionId].find(p => p.name === name).role;
+        socket.emit('sendRole', {role});
     });
 
 
@@ -46,7 +54,8 @@ module.exports = (io, socket) => {
 
 
     socket.on('createGame', () => {
-        const sessionId = uuidv4();
+        const sessionId = 1234;
+       // const sessionId = uuidv4();
         socket.join(sessionId);
         io.to(socket.id).emit('gameCreated', { sessionId });
         console.log(`Game created with session ID: ${sessionId}`);
