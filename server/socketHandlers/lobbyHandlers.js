@@ -19,7 +19,7 @@ module.exports = (io, socket) => {
             socket.emit('JoinError','User already exists in the lobby');
         }
         else {
-            io.lobbies[sessionId].push({id: socket.id, name: name, role: null, isAlive: true}); // Add participant as an object
+            io.lobbies[sessionId].push({id: socket.id, name: name, role: null}); // Add participant as an object
             io.to(sessionId).emit('updateParticipants', io.lobbies[sessionId]);
 
             socket.join(sessionId);

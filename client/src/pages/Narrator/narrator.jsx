@@ -50,7 +50,7 @@ const Narrator = () => {
                 Switch to {gameState.getPhase() === "day" ? "Night" : "Day"}
             </button>
 
-            {<div><PlayerOverview sessionId={'1234'} /></div>}
+            {<div><PlayerOverview sessionId={'1234'} player={this} /></div>}
 
 
         </div>

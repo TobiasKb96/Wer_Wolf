@@ -7,8 +7,6 @@ import PlayerOverview from "../../components/playerOverview.jsx";
 
 
 //TODO add sessionID
-//TODO no more player object
-//TODO fix this page it stays blank
 
 
 //TODO should: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component)
@@ -29,6 +27,8 @@ function Game({player}){
             alert("You have died!");
         }
     }, [player.isAlive]);
+
+
 
     const handleShowRole = () => {
         alert(`Your role is: ${player?.role}`);
@@ -87,7 +87,9 @@ function Game({player}){
                 Show Role
             </button>
 
-            {/* {<div><PlayerOverview sessionId={'1234'} /></div>} */}
+            {<div><PlayerOverview
+                        sessionId={'1234'}
+                        player={player}/></div>}
         </div>
     );
 
