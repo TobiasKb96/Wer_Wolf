@@ -21,10 +21,12 @@ module.exports = (io, socket) => {
             io.to(sessionId).emit('updateParticipants', io.lobbies[sessionId]);
 
             socket.join(sessionId);
-            socket.emit('playerJoinedSuccessfully', {name});
+            socket.emit('playerJoinedSuccessfully', socket.id);
             console.log(`Player ${name} with ID: ${socket.id} joined session ${sessionId}`);
         }
     });
+
+
 
 
     socket.on('disconnect', () => {

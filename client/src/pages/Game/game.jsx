@@ -3,34 +3,37 @@ import {useState, useEffect} from "react";
 import io from "socket.io-client";
 import gameState from "./gamelogic/gameState.js";
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
+import PropTypes from "prop-types";
+import Player from "./gamelogic/Player.js";
 
 
 //TODO Anna
 
 //TODO show your own role, (all players that are not the narrator, are on this page)
-//TODO should: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component)
+//TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameState
 
 //TODO use player from parent
 //TODO M5. The system shall provide 2 playable characters, werewolf.js and villager -> works?
-//TODO M6. The system shall manage game phases to differentiate between day and night.
-//TODO M7. The system shall provide the narrator with an overview of the characters of the players.
-//TODO M8.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
+//TODO M6 Steffi. The system shall manage game phases to differentiate between day and night.
+//TODO M7 Steffi / Anna. The system shall provide the narrator with an overview of the characters of the players.
+//TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
-function Game({player}){
+function Game({ownSocketId}){
     const [isNight] = useState(false);
-
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
+    const [player, setPlayer] = useState(); // search for id in gamestate after initial fill
 
     useEffect(() => {
-        console.log("Player object handed over:",player)
+        console.log("Own Socket Id object handed over:",ownSocketId)
+    }, [ownSocketId]);
 
-
+/*
     if (!player.isAlive) {
             alert("You have died!");
         }
     }, [player.isAlive]);
-
+*/
     const handleShowRole = () => {
         alert(`Your role is: ${player?.role}`);
     };
@@ -92,5 +95,9 @@ function Game({player}){
     );
 
 }
+
+Game.propTypes = {
+    ownSocketId: PropTypes.string.isRequired,
+};
 
 export default Game;

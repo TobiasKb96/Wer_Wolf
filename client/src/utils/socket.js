@@ -8,6 +8,8 @@ console.log(backendUrl)
 const socket = io.connect(`${backendUrl}`, {
     rejectUnauthorized: false
 })
+
+
 export default socket;
 
 

@@ -5,11 +5,13 @@ import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import Player from "../Game/gamelogic/Player.js";
 import gameState from "../Game/gamelogic/gameState.js";
+import PropTypes from "prop-types";
+import Game from "../Game/game.jsx";
 
 //TODO M10.	The system shall allow players to choose their name when joining a lobby -> works?
 //TODO use player from parent
 
-function Join({setPlayer}) {
+function Join({setOwnSocketId}) {
     const { sessionId } = useParams();
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
@@ -17,10 +19,11 @@ function Join({setPlayer}) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const playerJoinedSuccessfullyHandler = (data) => {
+        const playerJoinedSuccessfullyHandler = (ownSocketId) => {
             setSuccess(true);
             setError(null);
-            console.log('Player joined:', data);
+            setOwnSocketId(ownSocketId);
+            console.log('Player joined:', ownSocketId);
         };
 
         const errorHandler = (errMsg) => {
@@ -28,11 +31,8 @@ function Join({setPlayer}) {
             console.error('Error joining lobby:', errMsg);
         };
 
-        const gameStartedHandler = (user) => {
+        const gameStartedHandler = () => {
             console.log('Game started');
-            console.log(user);
-            setPlayer(new Player(user.name, user.role))
-            console.log(new Player(user.name, user.role))
             //switch to game.jsx here
             navigate('/game');
         };
@@ -87,5 +87,9 @@ function Join({setPlayer}) {
         </div>
     );
 }
+
+Join.propTypes = {
+    setOwnSocketId: PropTypes.func.isRequired,
+};
 
 export default Join;

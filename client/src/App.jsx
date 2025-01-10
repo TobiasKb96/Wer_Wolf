@@ -13,7 +13,9 @@ import Player from "./pages/Game/gamelogic/Player.js";
 
 function App() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
-    const [player, setPlayer] = useState(null);
+    const [ownSocketId, setOwnSocketId] = useState(null);
+    const [joinedLobbyParticipants, setJoinedLobbyParticipants] = useState([]);
+
 
     const toggleSidebar = () => {
         setSidebarVisible((prev) => !prev);
@@ -21,10 +23,10 @@ function App() {
 
     // Static routes array
     const staticRoutes = [
-        { path: "/", name: "Home", component: <Home /> },
-        { path: "/join/:sessionId", name: "Join", component: <Join setPlayer={setPlayer} /> },
-        { path: "/game", name: "Game", component: <Game player={player || new Player("Default, appears because game was loaded without Player")} /> },
-        { path: "/narrator", name: "Narrator", component: <Narrator /> },
+        { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} /> },
+        { path: "/join/:sessionId", name: "Join", component: <Join setOwnSocketId={setOwnSocketId} /> },
+        { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} /> },
+        { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants}/> },
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];
 
