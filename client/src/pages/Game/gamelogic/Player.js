@@ -1,3 +1,5 @@
+import Role from "./Role.js";
+
 class Player {
 
     constructor(name,role,id) {
@@ -14,5 +16,6 @@ class Player {
     kill() {
         this.isAlive = false;
     }
+
 }
     export default Player;

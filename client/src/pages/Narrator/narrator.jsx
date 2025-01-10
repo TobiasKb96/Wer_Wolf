@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import gameState from "../Game/gamelogic/gameState.js";
+import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
 import Join from "../Join/join.jsx";
 import Player from "../Game/gamelogic/Player.js";
+
 
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
@@ -15,47 +16,30 @@ import Player from "../Game/gamelogic/Player.js";
 
 function Narrator ({joinedLobbyParticipants}) {
     const [votes, setVotes] = useState({});
-    const [currentPhase, setCurrentPhase] = useState(gameState.getPhase());
-    const [sessionID, setSessionID] = useState(gameState.getSessionID());
+    const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
+    const [sessionID, setSessionID] = useState(gameController.getSessionID());
 
-    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const distributeRoles = (lobbyParticipants) => {
-        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+    const gameLoop = () => {
+        //TODO implement game loop
 
-        // Generate a shuffled list of roles
-        const roles = Array(lobbyParticipants.length).fill("Villager");
-        for (let i = 0; i < numberOfWerewolves; i++) {
-            roles[i] = "Werewolf";
-        }
-        const shuffledRoles = roles.sort(() => Math.random() - 0.5);
-
-        // Assign roles back to participants in the original order
-        lobbyParticipants.forEach((participant, index) => {
-            participant.role = shuffledRoles[index];
-        });
+    }
 
 
+    useEffect( () => {
 
-        // Debugging: log the distributed roles
-        console.log("Roles distributed in original order:", lobbyParticipants);
-    };
+        const initializeGame = async () => {
+            gameController.distributeRoles(joinedLobbyParticipants);
+            console.log("Role distributed in original order:", joinedLobbyParticipants);
 
-    useEffect(() => {
+            await wait(5000);  // Replace this if you want a different wait mechanism
 
-        distributeRoles(joinedLobbyParticipants);
-        console.log("Roles distributed in original order:", joinedLobbyParticipants);
+            socket.emit("sendPlayers", gameController.getPlayers());
+            console.log("Players sent to server:", gameController.getPlayers());
+        };
 
-
-        for(const player of joinedLobbyParticipants) {
-            gameState.addPlayer(new Player(player.name, player.role, player.id));
-        }
-        console.log("Players added to gameState:", gameState.getPlayers());
-        wait(10000);
-        socket.emit("sendPlayers", gameState.getPlayers());
-
-
-
+        initializeGame();
         //socket.on('gameStarted', gameStartedHandler);
 
         return () => {
@@ -67,12 +51,12 @@ function Narrator ({joinedLobbyParticipants}) {
     //socket.emit("getPlayers", )
 
     useEffect(() => {
-        setVotes({ ...gameState.votes }); // Sync votes with gameState
-    }, [gameState.votes]);
+        setVotes({ ...gameController.votes }); // Sync votes with gameController
+    }, [gameController.votes]);
 
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
-        gameState.setPhase(newPhase);
+        gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
     };
 
@@ -81,8 +65,9 @@ function Narrator ({joinedLobbyParticipants}) {
         console.log();
     }, [currentPhase]);
 
-    const toggleVoting = () => {
+    const startVoting = (voters, victims) => {
         //TODO send out alert to all players to start voting
+
     };
 
 
@@ -91,11 +76,11 @@ function Narrator ({joinedLobbyParticipants}) {
     return (
         <div
             className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
-                gameState.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
             }`}
         >
             <h1 className="text-4xl font-bold mb-8">
-                It&#39;s {gameState.getPhase()}!
+                It&#39;s {gameController.getPhase()}!
             </h1>
 
             {Object.entries(votes).map(([voter, selectedPlayer]) => (
@@ -105,7 +90,7 @@ function Narrator ({joinedLobbyParticipants}) {
             ))}
 
             <button
-                onClick={toggleVoting}
+                onClick={startVoting}
                 className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
             >
                 Start Voting
@@ -114,7 +99,7 @@ function Narrator ({joinedLobbyParticipants}) {
                 onClick={togglePhase}
                 className="px-6 py-3 text-lg text-white bg-red-600 rounded-md transition-colors hover:bg-red-700"
             >
-                Switch to {gameState.getPhase() === "day" ? "Night" : "Day"}
+                Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
             </button>
         </div>
     );

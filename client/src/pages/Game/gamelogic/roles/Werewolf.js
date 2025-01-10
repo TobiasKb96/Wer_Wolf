@@ -1,10 +1,11 @@
-import Roles from "../Roles.js";
+import Role from "../Role.js";
 
-class Werewolf extends Roles{
+class Werewolf extends Role{
 
     constructor()
     {
         super('Werewolf', true);
+        this.priority = 1;
     }
 
     nightAction(player)

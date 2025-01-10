@@ -1,7 +1,7 @@
 import Join from "../Join/join.jsx";
 import {useState, useEffect} from "react";
 import io from "socket.io-client";
-import gameState from "./gamelogic/gameState.js";
+import gameController from "./gamelogic/gameController.js";
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import PropTypes from "prop-types";
 import Player from "./gamelogic/Player.js";
@@ -11,10 +11,10 @@ import socket from "../../utils/socket.js";
 //TODO Anna
 
 //TODO show your own role, (all players that are not the narrator, are on this page)
-//TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameState
+//TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameController
 
 //TODO use player from parent
-//TODO M5. The system shall provide 2 playable characters, werewolf.js and villager -> works?
+//TODO M5. The system shall provide 2 playable characters, Werewolf.js and villager -> works?
 //TODO M6 Steffi. The system shall manage game phases to differentiate between day and night.
 //TODO M7 Steffi / Anna. The system shall provide the narrator with an overview of the characters of the players.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
@@ -29,15 +29,15 @@ function Game({ownSocketId}) {
 
     const playersReceivedHandler = (players) => {
         console.log("Players received:", players);
-        gameState.setPlayers(players);
+        gameController.setPlayers(players);
 
-        setPlayer(gameState.findPlayerById(ownSocketId));
-        console.log(gameState.getPlayers());
+        setPlayer(gameController.findPlayerById(ownSocketId));
+        console.log(gameController.getPlayers());
         console.log(player);
     }
 
     const phaseReceivedHandler = (phase) => {
-        gameState.setPhase(phase);
+        gameController.setPhase(phase);
         setPhase(phase);
     }
 
@@ -63,13 +63,13 @@ function Game({ownSocketId}) {
         }, [player.isAlive]);
     */
     const handleShowRole = () => {
-        alert(`Your role is: ${player?.role}`);
+        alert(`Your role is: ${player.role.roleName}`);
     };
 
     const handleVoteClick = () => {
         if (showDropdown && selectedPlayer) {
-            // Send vote to gameState
-            gameState.castVote(name, selectedPlayer);
+            // Send vote to gameController
+            gameController.castVote(name, selectedPlayer);
             alert(`${name} has voted for ${selectedPlayer}`);
             setShowDropdown(false);
         } else {
@@ -79,11 +79,11 @@ function Game({ownSocketId}) {
     return (
         <div
             className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
-                gameState.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
             }`}
         >
             <h1 className="text-4xl font-bold mb-8">
-                {gameState.getPhase()}!
+                {gameController.getPhase()}!
             </h1>
 
             {showDropdown && (
@@ -95,13 +95,14 @@ function Game({ownSocketId}) {
                     <option value="" disabled>
                         Select a player
                     </option>
-                    {gameState.getPlayers()
-                        .filter((player) => player.name !== name) // Exclude self
-                        .map((player) => (
-                            <option key={player.name} value={player.name}>
-                                <LobbyParticipants sessionId={name}/>
+                    {gameController.getPlayers()
+                        .filter((foe) => foe.name !== player.name) // Exclude self
+                        .map((foe) => (
+                            <option key={foe.id} value={foe.name}>
+                                {foe.name}
                             </option>
                         ))}
+
                 </select>
             )}
 

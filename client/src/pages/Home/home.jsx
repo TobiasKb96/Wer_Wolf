@@ -4,7 +4,7 @@ import axios from "axios";
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
-import gameState from "../Game/gamelogic/gameState.js";
+import gameController from "../Game/gamelogic/gameController.js";
 
 console.log(socket.id)
 

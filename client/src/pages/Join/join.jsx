@@ -4,7 +4,7 @@ import axios from 'axios';
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import Player from "../Game/gamelogic/Player.js";
-import gameState from "../Game/gamelogic/gameState.js";
+import gameController from "../Game/gamelogic/gameController.js";
 import PropTypes from "prop-types";
 import Game from "../Game/game.jsx";
 
@@ -57,7 +57,7 @@ function Join({setOwnSocketId}) {
         }
         socket.emit('joinLobby', { sessionId, name });
 
-        gameState.addPlayer(name); // checkif correct here
+        gameController.addPlayer(name); // checkif correct here
     };
 
     return (

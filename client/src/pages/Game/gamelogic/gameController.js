@@ -1,6 +1,9 @@
 import LobbyParticipants from "../../../components/LobbyParticipants.jsx";
+import Werewolf from "./roles/Werewolf.js";
+import Villager from "./roles/Villager.js";
+import Player from "./Player.js";
 
-class GameState {
+class GameController {
     constructor() {
         this.players = []; // List of players who joined
         this.currentPhase = "day"; // Default is "day"
@@ -58,6 +61,38 @@ class GameState {
     findPlayerById(id) {
         return this.players.find(player => player.id === id);
     }
+
+    distributeRoles = (lobbyParticipants) => {
+        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+
+        // Generate a shuffled list of roles
+        const roles = Array(lobbyParticipants.length).fill(new Villager);
+        for (let i = 0; i < numberOfWerewolves; i++) {
+            roles[i] = new Werewolf;
+        }
+        const shuffledRoles = roles.sort(() => Math.random() - 0.5);
+
+        // Assign roles back to participants in the original order
+        lobbyParticipants.forEach((participant, index) => {
+            participant.role = shuffledRoles[index];
+        });
+
+
+
+        // Debugging: log the distributed roles
+        console.log("Role distributed in original order:", lobbyParticipants);
+
+        for (const player of lobbyParticipants) {
+            this.addPlayer(new Player(player.name, player.role, player.id));
+        }
+        console.log("Players added to gameController:", this.getPlayers());
+
+    };
+
+    gameLoop = () => {
+        //TODO implement game loop
+
+    }
 }
 
-export default new GameState();
+export default new GameController();

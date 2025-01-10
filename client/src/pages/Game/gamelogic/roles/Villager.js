@@ -1,6 +1,6 @@
-import Roles from "../Roles.js";
+import Role from "../Role.js";
 
-class Villager extends Roles{
+class Villager extends Role{
 
     constructor() {
         super('Villager', false);
