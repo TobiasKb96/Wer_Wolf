@@ -20,6 +20,11 @@ module.exports = (io, socket) => {
         console.log("Session ID of narrator sending player to games: ", sessionId);
         socket.to(sessionId).emit('playersReceived', players);
     });
+
+    socket.on('sendPhase', (currentPhase) => {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('phaseReceived', currentPhase);
+    });
 };
 
 const getSessionId = (socket) => {

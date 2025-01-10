@@ -18,6 +18,7 @@ function Narrator ({joinedLobbyParticipants}) {
     const [currentPhase, setCurrentPhase] = useState(gameState.getPhase());
     const [sessionID, setSessionID] = useState(gameState.getSessionID());
 
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const distributeRoles = (lobbyParticipants) => {
         const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
@@ -46,11 +47,11 @@ function Narrator ({joinedLobbyParticipants}) {
         console.log("Roles distributed in original order:", joinedLobbyParticipants);
 
 
-
         for(const player of joinedLobbyParticipants) {
             gameState.addPlayer(new Player(player.name, player.role, player.id));
         }
         console.log("Players added to gameState:", gameState.getPlayers());
+        wait(5000);
         socket.emit("sendPlayers", gameState.getPlayers());
 
 
@@ -74,6 +75,11 @@ function Narrator ({joinedLobbyParticipants}) {
         gameState.setPhase(newPhase);
         setCurrentPhase(newPhase);
     };
+
+    useEffect(() => {
+        socket.emit("sendPhase", currentPhase);
+        console.log();
+    }, [currentPhase]);
 
     const toggleVoting = () => {
         //TODO send out alert to all players to start voting

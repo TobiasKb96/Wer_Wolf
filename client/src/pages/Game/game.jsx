@@ -24,6 +24,7 @@ function Game({ownSocketId}){
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(); // search for id in gamestate after initial fill
+    const [phase, setPhase] = useState();
 
 
 
@@ -36,6 +37,11 @@ function Game({ownSocketId}){
         console.log(player);
     }
 
+    const phaseReceivedHandler = (phase) => {
+        gameState.setPhase(phase);
+        setPhase(phase);
+    }
+
     useEffect(() => {
         console.log("Own Socket Id object handed over:",ownSocketId)
     }, [ownSocketId]);
@@ -43,9 +49,12 @@ function Game({ownSocketId}){
     useEffect(() => {
     socket.on('playersReceived', playersReceivedHandler);
 
+    socket.on('phaseReceived', phaseReceivedHandler);
+
     return () => {
         // Clean up listeners
         socket.off('playersReceived', playersReceivedHandler);
+        socket.off('phaseReceived', phaseReceivedHandler);
 
     };
 }, []);
