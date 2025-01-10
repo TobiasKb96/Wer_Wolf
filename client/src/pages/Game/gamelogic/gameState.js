@@ -54,6 +54,10 @@ class GameState {
     setSessionID(id) {
         this.sessionId = id;
     }
+
+    findPlayerById(id) {
+        return this.players.find(player => player.id === id);
+    }
 }
 
 export default new GameState();

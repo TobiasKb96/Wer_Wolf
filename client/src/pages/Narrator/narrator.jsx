@@ -43,22 +43,23 @@ function Narrator ({joinedLobbyParticipants}) {
     useEffect(() => {
 
         distributeRoles(joinedLobbyParticipants);
+        console.log("Roles distributed in original order:", joinedLobbyParticipants);
 
 
 
         for(const player of joinedLobbyParticipants) {
             gameState.addPlayer(new Player(player.name, player.role, player.id));
         }
-
+        console.log("Players added to gameState:", gameState.getPlayers());
         socket.emit("sendPlayers", gameState.getPlayers());
 
 
 
-        socket.on('gameStarted', gameStartedHandler);
+        //socket.on('gameStarted', gameStartedHandler);
 
         return () => {
             // Clean up listeners
-            socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
+            //socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
 
         };
     }, []);

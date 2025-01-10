@@ -5,6 +5,7 @@ import gameState from "./gamelogic/gameState.js";
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import PropTypes from "prop-types";
 import Player from "./gamelogic/Player.js";
+import socket from "../../utils/socket.js";
 
 
 //TODO Anna
@@ -24,9 +25,30 @@ function Game({ownSocketId}){
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(); // search for id in gamestate after initial fill
 
+
+
+    const playersReceivedHandler = (players) => {
+        console.log("Players received:", players);
+        gameState.setPlayers(players);
+
+        setPlayer(gameState.findPlayerById(ownSocketId));
+        console.log(gameState.getPlayers());
+        console.log(player);
+    }
+
     useEffect(() => {
         console.log("Own Socket Id object handed over:",ownSocketId)
     }, [ownSocketId]);
+
+    useEffect(() => {
+    socket.on('playersReceived', playersReceivedHandler);
+
+    return () => {
+        // Clean up listeners
+        socket.off('playersReceived', playersReceivedHandler);
+
+    };
+}, []);
 
 /*
     if (!player.isAlive) {
