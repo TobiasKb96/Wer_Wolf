@@ -8,40 +8,23 @@ import gameController from "../pages/Game/gamelogic/gameController.js";
 //TODO: Message Button making messages
 //TODO: when participant/player dies red
 
-const PlayerOverview = ({sessionId, player}) => {
-    const [participants, setParticipants] = useState([]);
+const PlayerOverview = ({player}) => {
+    const [participants, setParticipants] = useState(gameController.getPlayers());
     const [error, setError] = useState(null);
     const [showRole, setShowRole] = useState(false);
     const [chatUser, setChatUser] = useState(null);  // Track selected user for chat
-
-
-    useEffect(() => {
-        socket.emit('getParticipants', sessionId)
-        // Listen for participant updates
-        socket.on('updateParticipants', (updatedParticipants) => {
-            console.log('Participants updated:', updatedParticipants);
-            if (updatedParticipants != null) setParticipants(updatedParticipants);
-        });
-
-        // Handle any errors
-        socket.on('error', (errMsg) => {
-            setError(errMsg);
-            console.error('Error:', errMsg);
-        });
-
-
-        // Cleanup on component unmount
-        return () => {
-            socket.off('updateParticipants'); // Remove listener for participant updates
-            socket.off('error'); // Remove error listener
-        };
-    }, [sessionId]);
 
     if (error) {
         return <div className="text-red-500 text-center mt-4">{error}</div>;
     }
 
+    useEffect(() => {
+        setParticipants(gameController.getPlayers())
+    });
+
+
     const handleOpenChat = (participant) => {
+        console.log(participants)
         setChatUser(participant);  // Open chat with selected participant
     };
 
@@ -52,13 +35,12 @@ const PlayerOverview = ({sessionId, player}) => {
     const handleShowRole = () => {
         setShowRole(!showRole) // Toggle roles visibility
 
-        if(!showRole){
+        if (!showRole) {
             document.getElementById('showRoleButton').innerHTML = 'Hide Roles'
-        } else { document.getElementById('showRoleButton').innerHTML = 'Show Roles' }
+        } else {
+            document.getElementById('showRoleButton').innerHTML = 'Show Roles'
+        }
     };
-
-
-
 
     return (
         <div className="mt-8 mx-auto p-4 max-w-md bg-gray-100 border border-gray-300 rounded-lg shadow-md">
@@ -68,40 +50,42 @@ const PlayerOverview = ({sessionId, player}) => {
 
             {/* Show Role Button */}
             {location.pathname.includes("/narrator") && (
-            <button
-                onClick={handleShowRole}
-                className="w-full px-4 py-2 mb-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-                id={'showRoleButton'}
-            >
-                Show Roles
-            </button>
+                <button
+                    onClick={handleShowRole}
+                    className="w-full px-4 py-2 mb-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                    id={'showRoleButton'}
+                >
+                    Show Roles
+                </button>
             )}
 
             {/* Participant List */}
             {participants.length > 0 ? (
-                <ul className="list-none">
-                    {participants.map((participant, index) => (
-                        <li
-                            key={index}
-                            className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-left"
-                        >
-                            <p className="font-bold">{participant.name}</p>
-                            {showRole && (
-                                <>
-                                    <p>Role: {participant.role}
-                                    </p>
-
-                                </>
-                            )}
-                            <button
-                                onClick={() => handleOpenChat(participant)}
-                                className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    <ul className="list-none">
+                        {participants.map((participant, index) => (
+                            <li
+                                key={index}
+                                className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-left"
                             >
-                                Message
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                                <p className="font-bold">{participant.name}</p>
+                                {showRole && (
+                                    <>
+                                        <p>Role: {participant.role.roleName}
+                                        </p>
+
+                                    </>
+                                )}
+                                {location.pathname.includes("game") && (
+                                    <button
+                                        onClick={() => handleOpenChat(participant)}
+                                        className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                    >
+                                        Message
+                                    </button>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
                 )
                 :
                 (
@@ -121,8 +105,5 @@ const PlayerOverview = ({sessionId, player}) => {
         ;
 };
 
-PlayerOverview.propTypes = {
-    sessionId: PropTypes.string.isRequired,
-};
 
 export default PlayerOverview;

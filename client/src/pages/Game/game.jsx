@@ -122,7 +122,6 @@ function Game({ownSocketId}) {
             </button>
 
             {<div><PlayerOverview
-                sessionId={'1234'}
                 player={player}/></div>}
         </div>
     );

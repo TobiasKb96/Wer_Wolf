@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import socket from '../utils/socket';
 
-const ChatRoom = ({currentUser, recipient}) => {
+const ChatRoom = ({currentUser, recipient, onClose}) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -9,10 +9,8 @@ const ChatRoom = ({currentUser, recipient}) => {
         // Listen for incoming messages
         socket.on('listenMessages', (message) => {
             console.log("message received", message)
+            setMessages((prevMessages) => [...prevMessages, message]);
 
-            if (message.sender === recipient.name || message.sender === currentUser.name) {
-                setMessages((prevMessages) => [...prevMessages, message]);
-            }
         });
 
         return () => {
@@ -30,6 +28,7 @@ const ChatRoom = ({currentUser, recipient}) => {
 
         const messageData = {
             sender: currentUser.id,
+            senderName: currentUser.name,
             recipient: recipient.id,
             text: newMessage,
         };
@@ -43,7 +42,7 @@ const ChatRoom = ({currentUser, recipient}) => {
         <div className="fixed bottom-0 right-0 w-80 bg-white border border-gray-300 rounded-lg shadow-lg">
             <div className="p-4 bg-gray-800 text-white flex justify-between items-center">
                 <h2>Chat with {recipient.name}</h2>
-                <button className="text-red-500">X</button>
+                <button onClick={onClose} className="text-red-500">X</button>
             </div>
 
             <div className="p-4 h-64 overflow-y-auto">
@@ -51,10 +50,10 @@ const ChatRoom = ({currentUser, recipient}) => {
                     <div
                         key={index}
                         className={`mb-2 p-2 rounded ${
-                            msg.sender === currentUser.name ? 'bg-blue-200 text-right' : 'bg-gray-200 text-left'
+                            msg.sender === currentUser.id ? 'bg-blue-200 text-right' : 'bg-gray-200 text-left'
                         }`}
                     >
-                        <p><b>{msg.sender}:</b> {msg.text}</p>
+                        <p><b>{msg.senderName}:</b> {msg.text}</p>
                     </div>
                 ))}
             </div>
