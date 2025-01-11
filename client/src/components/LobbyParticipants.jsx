@@ -4,8 +4,6 @@ import socket from '../utils/socket';
 
 
 //TODO option to kick players that joined
-//TODO start game button
-//TODO start game button is clickable when 4 players are in the lobby
 
 const LobbyParticipants = ({ sessionId }) => {
     const [participants, setParticipants] = useState([]);

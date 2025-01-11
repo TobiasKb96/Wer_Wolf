@@ -6,6 +6,7 @@ import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import PropTypes from "prop-types";
 import Player from "./gamelogic/Player.js";
 import socket from "../../utils/socket.js";
+import PlayerOverview from "../../components/playerOverview.jsx";
 
 
 //TODO Anna
@@ -14,7 +15,7 @@ import socket from "../../utils/socket.js";
 //TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameController
 
 //TODO use player from parent
-//TODO M5. The system shall provide 2 playable characters, Werewolf.js and villager -> works?
+//TODO M5. The system shall provide 2 playable characters, Werewolf.js and villager -> playable debateable -> voting ?
 //TODO M6 Steffi. The system shall manage game phases to differentiate between day and night.
 //TODO M7 Steffi / Anna. The system shall provide the narrator with an overview of the characters of the players.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
@@ -120,6 +121,9 @@ function Game({ownSocketId}) {
                 Show Role
             </button>
 
+            {<div><PlayerOverview
+                        sessionId={'1234'}
+                        player={player}/></div>}
         </div>
     );
 

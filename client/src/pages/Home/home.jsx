@@ -11,7 +11,6 @@ console.log(socket.id)
 //TODO M1. The system shall provide the users with the ability to play a game of Werewolf with a narrator.
 //TODO M2. The system shall provide the user with a one time login QR code for the players to enter the game session.
 //TODO M4. The system shall assign random roles to the users entering the game
-//TODO ad.M4 bis 5 spieler in der Lobby 1 Werewolf darueber 2
 //TODO CX depends on setup options, pick how many player should be werewolves
 //TODO M9.	The system shall be able to distribute player roles between up to 8 players per game session.
 //TODO user shall be able to choose between human narrator or computed

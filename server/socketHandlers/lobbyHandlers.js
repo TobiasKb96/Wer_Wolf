@@ -29,6 +29,12 @@ module.exports = (io, socket) => {
 
 
 
+    socket.on('getParticipantRole', ({sessionId, name}) => {
+        const role = io.lobbies[sessionId].find(p => p.name === name).role;
+        socket.emit('sendRole', {role});
+    });
+
+
     socket.on('disconnect', () => {
         console.log(`${socket.id} disconnected`);
         // Clean up on disconnect

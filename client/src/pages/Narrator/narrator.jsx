@@ -4,7 +4,7 @@ import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
 import Join from "../Join/join.jsx";
 import Player from "../Game/gamelogic/Player.js";
-
+import PlayerOverview from "../../components/playerOverview.jsx";
 
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
@@ -103,6 +103,10 @@ function Narrator ({joinedLobbyParticipants}) {
             >
                 Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
             </button>
+
+            {<div><PlayerOverview sessionId={'1234'} player={this} /></div>}
+
+
         </div>
     );
 };

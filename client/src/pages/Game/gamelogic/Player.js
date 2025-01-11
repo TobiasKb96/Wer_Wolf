@@ -17,5 +17,9 @@ class Player {
         this.isAlive = false;
     }
 
+    getName(){
+        return this.name;
+    }
+
 }
     export default Player;
