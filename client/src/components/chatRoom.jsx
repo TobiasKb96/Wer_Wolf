@@ -7,14 +7,16 @@ const ChatRoom = ({currentUser, recipient}) => {
 
     useEffect(() => {
         // Listen for incoming messages
-        socket.on('receiveMessage', (message) => {
+        socket.on('listenMessages', (message) => {
+            console.log("message received", message)
+
             if (message.sender === recipient.name || message.sender === currentUser.name) {
                 setMessages((prevMessages) => [...prevMessages, message]);
             }
         });
 
         return () => {
-            socket.off('receiveMessage');
+            socket.off('listenMessages');
         };
     }, [recipient, currentUser]);
 
