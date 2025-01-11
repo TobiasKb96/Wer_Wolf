@@ -29,8 +29,8 @@ const ChatRoom = ({currentUser, recipient}) => {
         if (newMessage.trim() === '') return;
 
         const messageData = {
-            sender: currentUser.name,
-            recipient: recipient.name,
+            sender: currentUser.id,
+            recipient: recipient.id,
             text: newMessage,
         };
 

@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import socket from '../utils/socket';
 import PropTypes from "prop-types";
 import ChatRoom from "./chatRoom.jsx";
+import gameController from "../pages/Game/gamelogic/gameController.js";
 
 
 //TODO: Message Button making messages
