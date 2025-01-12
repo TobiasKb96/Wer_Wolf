@@ -24,22 +24,21 @@ function Game({ownSocketId}) {
     const [isNight] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
-    const [player, setPlayer] = useState(); // search for id in gamestate after initial fill
-    const [phase, setPhase] = useState();
+    const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
+    const [phase, setPhase] = useState('day');
 
 
     const playersReceivedHandler = (players) => {
         console.log("Players received:", players);
         gameController.setPlayers(players);
-
         setPlayer(gameController.findPlayerById(ownSocketId));
-        console.log(gameController.getPlayers());
-        console.log(player);
+
     }
 
     const phaseReceivedHandler = (phase) => {
         gameController.setPhase(phase);
         setPhase(phase);
+        console.log(player);
     }
 
     useEffect(() => {
@@ -121,8 +120,11 @@ function Game({ownSocketId}) {
                 Show Role
             </button>
 
-            {<div><PlayerOverview
-                player={player}/></div>}
+            {player && (
+                <div>
+                    <PlayerOverview player={player} />
+                </div>
+            )}
         </div>
     );
 

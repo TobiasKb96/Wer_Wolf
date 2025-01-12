@@ -59,6 +59,7 @@ class GameController {
     }
 
     findPlayerById(id) {
+        console.log('findPlayerById log:', this.players.find(player => player.id === id))
         return this.players.find(player => player.id === id);
     }
 

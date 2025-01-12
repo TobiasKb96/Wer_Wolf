@@ -19,9 +19,13 @@ const PlayerOverview = ({player}) => {
     }
 
     useEffect(() => {
-        setParticipants(gameController.getPlayers())
-    });
+        setParticipants(gameController.getPlayers());
+    }, );
 
+    const isNarratorView = location.pathname.includes("/narrator");
+    const filteredParticipants = isNarratorView
+        ? participants
+        : participants.filter((p) => p.id !== player.id);
 
     const handleOpenChat = (participant) => {
         console.log(participants)
@@ -33,13 +37,7 @@ const PlayerOverview = ({player}) => {
     };
 
     const handleShowRole = () => {
-        setShowRole(!showRole) // Toggle roles visibility
-
-        if (!showRole) {
-            document.getElementById('showRoleButton').innerHTML = 'Hide Roles'
-        } else {
-            document.getElementById('showRoleButton').innerHTML = 'Show Roles'
-        }
+        setShowRole((prevShowRole) => !prevShowRole);
     };
 
     return (
@@ -49,20 +47,19 @@ const PlayerOverview = ({player}) => {
             </h2>
 
             {/* Show Role Button */}
-            {location.pathname.includes("/narrator") && (
+            {isNarratorView && (
                 <button
                     onClick={handleShowRole}
                     className="w-full px-4 py-2 mb-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
-                    id={'showRoleButton'}
                 >
-                    Show Roles
+                    {showRole ? 'Hide Roles' : 'Show Roles'}
                 </button>
             )}
 
             {/* Participant List */}
             {participants.length > 0 ? (
                     <ul className="list-none">
-                        {participants.map((participant, index) => (
+                        {filteredParticipants.map((participant, index) => (
                             <li
                                 key={index}
                                 className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-left"
@@ -75,7 +72,7 @@ const PlayerOverview = ({player}) => {
 
                                     </>
                                 )}
-                                {location.pathname.includes("game") && (
+                                {!isNarratorView && (
                                     <button
                                         onClick={() => handleOpenChat(participant)}
                                         className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"

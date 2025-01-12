@@ -31,7 +31,7 @@ function Narrator ({joinedLobbyParticipants}) {
         gameController.distributeRoles(joinedLobbyParticipants);
         console.log("Role distributed in original order:", joinedLobbyParticipants);
 
-        await wait(5000);  // Replace this if you want a different wait mechanism
+        await wait(500);  // Replace this if you want a different wait mechanism
 
         socket.emit("sendPlayers", gameController.getPlayers());
         console.log("Players sent to server:", gameController.getPlayers());
