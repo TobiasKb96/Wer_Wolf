@@ -5,7 +5,7 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 
 
-//TODO: Message Button making messages
+//TODO: Saving a messages array or sth
 //TODO: when participant/player dies red
 
 const PlayerOverview = ({player}) => {

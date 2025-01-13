@@ -3,6 +3,9 @@ import Werewolf from "./roles/Werewolf.js";
 import Villager from "./roles/Villager.js";
 import Player from "./Player.js";
 
+//TODO: distribute selected roles
+
+
 class GameController {
     constructor() {
         this.players = []; // List of players who joined
@@ -63,7 +66,7 @@ class GameController {
         return this.players.find(player => player.id === id);
     }
 
-    distributeRoles = (lobbyParticipants) => {
+    distributeRoles = (lobbyParticipants, selectedRoles) => {
         const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
 
         // Generate a shuffled list of roles
@@ -71,6 +74,10 @@ class GameController {
         for (let i = 0; i < numberOfWerewolves; i++) {
             roles[i] = new Werewolf;
         }
+        for (let j = 0; j < selectedRoles.length; j++){
+            roles[roles.length - j] = new selectedRoles;
+        }
+
         const shuffledRoles = roles.sort(() => Math.random() - 0.5);
 
         // Assign roles back to participants in the original order

@@ -15,6 +15,7 @@ function App() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
     const [ownSocketId, setOwnSocketId] = useState(null);
     const [joinedLobbyParticipants, setJoinedLobbyParticipants] = useState([]);
+    const [selectedRoles, setSelectedRoles] = useState([]);
 
 
     const toggleSidebar = () => {
@@ -23,10 +24,10 @@ function App() {
 
     // Static routes array
     const staticRoutes = [
-        { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} /> },
+        { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
         { path: "/join/:sessionId", name: "Join", component: <Join setOwnSocketId={setOwnSocketId} /> },
         { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} /> },
-        { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants}/> },
+        { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants} selectedRoles={selectedRoles} />},
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];
 

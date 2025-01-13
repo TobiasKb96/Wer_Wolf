@@ -5,6 +5,7 @@ import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import gameController from "../Game/gamelogic/gameController.js";
+import GameOptions from "../../components/GameOptions.jsx";
 
 console.log(socket.id)
 
@@ -16,7 +17,7 @@ console.log(socket.id)
 //TODO user shall be able to choose between human narrator or computed
 
 
-function Home({setJoinedLobbyParticipants}) {
+function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
     const [qrCode, setQrCode] = useState(null); // State for QR Code
     const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
@@ -102,6 +103,8 @@ function Home({setJoinedLobbyParticipants}) {
                     {sessionId && <div><LobbyParticipants sessionId={sessionId} /></div>}
                 </div>
             )}
+            <GameOptions setSelectedRoles={setSelectedRoles} />
+
             {/* Start Game Button */}
             {LobbyParticipants.length > 0 && (
                 <button
