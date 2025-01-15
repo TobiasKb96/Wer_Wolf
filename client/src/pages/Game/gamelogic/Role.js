@@ -1,3 +1,4 @@
+import {bool} from "prop-types";
 
 class Role {
 

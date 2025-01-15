@@ -8,6 +8,8 @@ import Home from "./pages/Home/home.jsx";
 import Join from "./pages/Join/join.jsx";
 import Basic from "./pages/Vite_react_basic/basic.jsx";
 import Player from "./pages/Game/gamelogic/Player.js";
+import NewGameStatic from "./pages/staticLayouts/newGameStatic.jsx"
+import HomeStatic from "./pages/staticLayouts/HomeStatic.jsx";
 
 //TODO player state
 
@@ -28,6 +30,8 @@ function App() {
         { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} /> },
         { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants}/> },
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
+        { path: "/newGameStatic", name: "newGameStatic", component: <NewGameStatic /> },
+        { path: "/HomeStatic", name: "HomeStatic", component: <HomeStatic /> }
     ];
 
     return (
@@ -64,7 +68,7 @@ function App() {
 
             {/* Main Content */}
             <main
-                className={`flex-1 p-5 transition-all ${
+                className={`flex-1 transition-all ${
                     sidebarVisible ? "ml-64" : "ml-0"
                 }`}
             >
