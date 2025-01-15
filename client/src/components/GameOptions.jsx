@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Villager from "../pages/Game/gamelogic/roles/Villager.js";
 import Witch from "../pages/Game/gamelogic/roles/Witch.js";
+import Cupid from "../pages/Game/gamelogic/roles/Cupid.js";
 
 const GameOptions = ({setSelectedRoles}) => {
     const availableRoles = Villager.getSubclasses();
