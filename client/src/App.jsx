@@ -16,6 +16,7 @@ function App() {
     const [ownSocketId, setOwnSocketId] = useState(null);
     const [joinedLobbyParticipants, setJoinedLobbyParticipants] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState([]);
+    const [messages, setMessages] = useState([]);
 
 
     const toggleSidebar = () => {
@@ -26,7 +27,7 @@ function App() {
     const staticRoutes = [
         { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
         { path: "/join/:sessionId", name: "Join", component: <Join setOwnSocketId={setOwnSocketId} /> },
-        { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} /> },
+        { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} messages={messages} setMessages={setMessages}/> },
         { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants} selectedRoles={selectedRoles} />},
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
     ];

@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import socket from '../utils/socket';
 
-const ChatRoom = ({currentUser, recipient, onClose}) => {
-    const [messages, setMessages] = useState([]);
+const ChatRoom = ({messages, setMessages, currentUser, recipient, onClose}) => {
+
     const [newMessage, setNewMessage] = useState('');
+
+
+    //TODO: Messages als ganzes Array hier übernehmen und dann nach recipient und currentUser filtern
+    //TODO: setMessages woanders als socket abhören
+
 
     useEffect(() => {
         // Listen for incoming messages
@@ -27,9 +32,9 @@ const ChatRoom = ({currentUser, recipient, onClose}) => {
         if (newMessage.trim() === '') return;
 
         const messageData = {
-            sender: currentUser.id,
+            sender: currentUser,
             senderName: currentUser.name,
-            recipient: recipient.id,
+            recipient: recipient,
             text: newMessage,
         };
 
@@ -50,7 +55,7 @@ const ChatRoom = ({currentUser, recipient, onClose}) => {
                     <div
                         key={index}
                         className={`mb-2 p-2 rounded ${
-                            msg.sender === currentUser.id ? 'bg-blue-200 text-right' : 'bg-gray-200 text-left'
+                            msg.sender.id === currentUser.id ? 'bg-blue-200 text-right' : 'bg-gray-200 text-left'
                         }`}
                     >
                         <p><b>{msg.senderName}:</b> {msg.text}</p>

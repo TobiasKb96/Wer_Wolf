@@ -5,7 +5,6 @@ class Bodyguard extends Role{
 
     constructor() {
         super('Bodyguard', true);
-        this.hasPotion = true;
     }
 
 

@@ -8,7 +8,6 @@ import Cupid from "./roles/Cupid.js";
 import Hunter from "./roles/Hunter.js";
 import Seer from "./roles/Seer.js";
 
-//TODO: distribute selected roles
 
 
 class GameController {

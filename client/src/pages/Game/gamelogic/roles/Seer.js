@@ -5,7 +5,6 @@ class Seer extends Role{
 
     constructor() {
         super('Seer', true);
-        this.hasPotion = true;
     }
 
 

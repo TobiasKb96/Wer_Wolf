@@ -20,7 +20,7 @@ import PlayerOverview from "../../components/playerOverview.jsx";
 //TODO M7 Steffi / Anna. The system shall provide the narrator with an overview of the characters of the players.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
-function Game({ownSocketId}) {
+function Game({ownSocketId, messages, setMessages}) {
     const [isNight] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
@@ -122,7 +122,7 @@ function Game({ownSocketId}) {
 
             {player && (
                 <div>
-                    <PlayerOverview player={player} />
+                    <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
                 </div>
             )}
         </div>
