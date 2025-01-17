@@ -25,6 +25,29 @@ module.exports = (io, socket) => {
         const sessionId = getSessionId(socket);
         socket.to(sessionId).emit('phaseReceived', currentPhase);
     });
+
+    socket.on('witchNightAction' , ()=> {
+        console.log("server socket is listening")
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('witchShowPotions');
+    });
+
+    socket.on('healingPotion' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('useHealingPotion');
+    });
+
+    socket.on('poisonPotion' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('usePoisonPotion');
+    });
+
+
+    socket.on('revealRole', (revealedPlayer) =>{
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('showRole', revealedPlayer);
+    })
+
 };
 
 const getSessionId = (socket) => {

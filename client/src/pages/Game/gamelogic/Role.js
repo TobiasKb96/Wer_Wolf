@@ -9,8 +9,7 @@ class Role {
         this.goal = goal; //for checking win conditions and displaying on card
     }
 
-    nightAction() {
-
+    static nightAction() {
     }
 
 

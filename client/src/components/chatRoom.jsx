@@ -10,18 +10,6 @@ const ChatRoom = ({messages, setMessages, currentUser, recipient, onClose}) => {
     //TODO: setMessages woanders als socket abhören
 
 
-    useEffect(() => {
-        // Listen for incoming messages
-        socket.on('listenMessages', (message) => {
-            console.log("message received", message)
-            setMessages((prevMessages) => [...prevMessages, message]);
-
-        });
-
-        return () => {
-            socket.off('listenMessages');
-        };
-    }, [recipient, currentUser]);
 
     if (!currentUser || !recipient) {
         console.error("ChatRoom: Missing currentUser or recipient");
