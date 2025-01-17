@@ -4,6 +4,7 @@ import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
 import gameController from "../Game/gamelogic/gameController.js";
+import GameOptions from "../../components/GameOptions.jsx";
 
 console.log(socket.id)
 

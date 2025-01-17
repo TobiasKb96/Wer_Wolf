@@ -28,6 +28,7 @@ function App() {
     // Static routes array
     const staticRoutes = [
         { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
+        { path: "/home", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
         { path: "/join/:sessionId", name: "Join", component: <Join setOwnSocketId={setOwnSocketId} /> },
         { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} messages={messages} setMessages={setMessages}/> },
         { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants} selectedRoles={selectedRoles} />},
