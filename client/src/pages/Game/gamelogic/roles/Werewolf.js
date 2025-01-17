@@ -4,7 +4,7 @@ class Werewolf extends Role{
 
     constructor()
     {
-        super('Werewolf', true);
+        super('Werewolf', true, 'Werewolf');
         this.priority = 1;
     }
 

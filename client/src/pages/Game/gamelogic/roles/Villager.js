@@ -5,7 +5,7 @@ class Villager extends Role{
     static subclasses = [];
 
     constructor() {
-        super('Villager', false);
+        super('Villager', false, 'Villager');
     }
 
     nightAction() {

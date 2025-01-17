@@ -77,6 +77,7 @@ class GameController {
         const roles = Array(lobbyParticipants.length).fill(new Villager);
         for (let i = 0; i < numberOfWerewolves; i++) {
             roles[i] = new Werewolf;
+            console.log(Werewolf.roleName);
         }
         console.log(selectedRoles);
 
