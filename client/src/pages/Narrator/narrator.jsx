@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import Join from "../Join/join.jsx";
 import Player from "../Game/gamelogic/Player.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
+import Voting, { test } from "../Game/gamelogic/voting.jsx";
+import game from "../Game/game.jsx";
 
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
@@ -21,7 +23,12 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+
+
+
     const gameLoop = () => {
+
+        test();
         //TODO implement game loop
        // gameController.dayPhase();
        // gameController.nightPhase();
@@ -96,7 +103,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
             {Object.entries(votes).map(([voter, selectedPlayer]) => (
                 <p key={voter} className="text-lg">{voter} has selected {selectedPlayer}.</p>
             ))}
-            <button onClick={startVoting} className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700">
+            <button onClick={startVoting} data-modal-target="default-modal" data-modal-toggle="default-modal" className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                 Start Voting
             </button>
             <button
