@@ -5,10 +5,10 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 
 
-//TODO: Message Button making messages
+//TODO: Saving a messages array or sth
 //TODO: when participant/player dies red
 
-const PlayerOverview = ({player}) => {
+const PlayerOverview = ({player, setMessages, messages}) => {
     const [participants, setParticipants] = useState(gameController.getPlayers());
     const [error, setError] = useState(null);
     const [showRole, setShowRole] = useState(false);
@@ -93,6 +93,8 @@ const PlayerOverview = ({player}) => {
                 <ChatRoom
                     currentUser={player}
                     recipient={chatUser}
+                    messages={messages}
+                    setMessages={setMessages}
                     onClose={handleCloseChat}
                 />
             )}

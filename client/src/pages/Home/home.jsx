@@ -2,9 +2,20 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode';
 import LobbyParticipants from '../../components/LobbyParticipants';
-import socket from '../../utils/socket';
+import socket from '../../utils/socket'; // Import the initialized Socket.IO client
+import gameController from "../Game/gamelogic/gameController.js";
 
-function Home({ setJoinedLobbyParticipants }) {
+console.log(socket.id)
+
+//TODO M1. The system shall provide the users with the ability to play a game of Werewolf with a narrator.
+//TODO M2. The system shall provide the user with a one time login QR code for the players to enter the game session.
+//TODO M4. The system shall assign random roles to the users entering the game
+//TODO CX depends on setup options, pick how many player should be werewolves
+//TODO M9.	The system shall be able to distribute player roles between up to 8 players per game session.
+//TODO user shall be able to choose between human narrator or computed
+
+
+function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
     const [qrCode, setQrCode] = useState(null); // State for QR Code
     const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
@@ -91,6 +102,8 @@ function Home({ setJoinedLobbyParticipants }) {
                     <LobbyParticipants sessionId={sessionId} />
                 </div>
             )}
+
+            <GameOptions setSelectedRoles={setSelectedRoles} />
 
             {/* Start Game Button */}
             {qrCode && (

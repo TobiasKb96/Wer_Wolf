@@ -14,7 +14,7 @@ import PlayerOverview from "../../components/playerOverview.jsx";
 //TODO narrator gets prompt from server to start voting process
 //TODO after: voting starts with timer -> based on computed narrator
 
-function Narrator ({joinedLobbyParticipants}) {
+function Narrator ({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
@@ -28,7 +28,7 @@ function Narrator ({joinedLobbyParticipants}) {
     }
 
     const initializeGame = async () => {
-        gameController.distributeRoles(joinedLobbyParticipants);
+        gameController.distributeRoles(joinedLobbyParticipants, selectedRoles);
         console.log("Role distributed in original order:", joinedLobbyParticipants);
 
         await wait(500);  // Replace this if you want a different wait mechanism
