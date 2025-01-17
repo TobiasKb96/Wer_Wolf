@@ -70,6 +70,48 @@ class GameController {
         return this.players.find(player => player.id === id);
     }
 
+    // Initiate the voting process
+    initiateVoting() {
+        const narrator = this.players.find(player => player.role === 'Narrator');
+        if (narrator) {
+            socket.to(narrator.id).emit('startVoting');
+        }
+        this.players.forEach(player => {
+            if (player.role !== 'Narrator') {
+                socket.to(player.id).emit('votePrompt');
+            }
+        });
+    }
+
+    // Handle voting results
+    handleVotingResults() {
+        const voteCounts = {};
+        Object.values(this.votes).forEach(votedFor => {
+            if (!voteCounts[votedFor]) {
+                voteCounts[votedFor] = 0;
+            }
+            voteCounts[votedFor] += 1;
+        });
+
+        const mostVotedPlayer = Object.keys(voteCounts).reduce((a, b) => voteCounts[a] > voteCounts[b] ? a : b);
+        const narrator = this.players.find(player => player.role === 'Narrator');
+        if (narrator) {
+            socket.to(narrator.id).emit('voteResult', mostVotedPlayer);
+        }
+        this.resetVotes();
+    }
+
+    // Game loop to manage phases and initiate voting
+    gameLoop() {
+        if (this.currentPhase === 'day') {
+            this.setPhase('night');
+            this.initiateVoting();
+        } else {
+            this.setPhase('day');
+            this.handleVotingResults();
+        }
+    }
+
     distributeRoles = (lobbyParticipants, selectedRoles) => {
         const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
 
@@ -121,10 +163,7 @@ class GameController {
 
     };
 
-    gameLoop = () => {
-        //TODO implement game loop
 
-    }
 }
 
 export default new GameController();

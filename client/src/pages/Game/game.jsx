@@ -48,11 +48,14 @@ function Game({ownSocketId, messages, setMessages}) {
     useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
-
+        socket.on('votePrompt', () => {
+            setShowDropdown(true);
+        });
         return () => {
             // Clean up listeners
             socket.off('playersReceived', playersReceivedHandler);
             socket.off('phaseReceived', phaseReceivedHandler);
+            socket.off('votePrompt');
         };
     }, []);
 
@@ -68,10 +71,11 @@ function Game({ownSocketId, messages, setMessages}) {
 
     const handleVoteClick = () => {
         if (showDropdown && selectedPlayer) {
-            // Send vote to gameController
-            gameController.castVote(name, selectedPlayer);
-            alert(`${name} has voted for ${selectedPlayer}`);
+            gameController.castVote(player.name, selectedPlayer);
+            //alert(`${player.name} has voted for ${selectedPlayer}`);
             setShowDropdown(false);
+            socket.emit('vote', { voter: player.name, votedFor: selectedPlayer });
+            console.log('vote', { voter: player.name, votedFor: selectedPlayer });
         } else {
             setShowDropdown(true);
         }

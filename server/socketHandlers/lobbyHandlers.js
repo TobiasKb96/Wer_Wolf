@@ -6,6 +6,9 @@ module.exports = (io, socket) => {
     if (!io.lobbies) {
         io.lobbies = {}; // Initialize a container for session-specific data
     }
+    if (!io.narrators) {
+        io.narrators = {}; // Initialize a container for narrators
+    }
     
     console.log(`${socket.id} connected`)
 
@@ -56,6 +59,7 @@ module.exports = (io, socket) => {
     socket.on('createGame', () => {
         const sessionId = uuidv4();
         socket.join(sessionId);
+        io.narrators[sessionId] = socket.id;
         io.to(socket.id).emit('gameCreated', { sessionId });
         console.log(`Game created with session ID: ${sessionId}`);
     });

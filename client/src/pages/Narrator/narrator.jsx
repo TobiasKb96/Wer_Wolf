@@ -56,6 +56,18 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
         setVotes({ ...gameController.votes }); // Sync votes with gameController
     }, [gameController.votes]);
 
+    useEffect(() => {
+        socket.on('voteResult', (mostVotedPlayer) => {
+            alert(`${mostVotedPlayer} has been killed!`);
+        });
+
+
+        return () => {
+            socket.off('voteResult');
+            socket.off('startVoting');
+        };
+    }, []);
+
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
         gameController.setPhase(newPhase);
@@ -67,13 +79,10 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
         console.log();
     }, [currentPhase]);
 
-    const startVoting = (voters, victims) => {
-        //TODO send out alert to all players to start voting
 
-    };
-
-
-
+    const startVoting = () => {
+        socket.emit("startVoting");
+    }
 
     return (
         <div
@@ -84,17 +93,10 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
             <h1 className="text-4xl font-bold mb-8">
                 It&#39;s {gameController.getPhase()}!
             </h1>
-
             {Object.entries(votes).map(([voter, selectedPlayer]) => (
-                <p key={voter} className="text-lg">
-                    {voter} has selected {selectedPlayer}.
-                </p>
+                <p key={voter} className="text-lg">{voter} has selected {selectedPlayer}.</p>
             ))}
-
-            <button
-                onClick={startVoting}
-                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
-            >
+            <button onClick={startVoting} className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700">
                 Start Voting
             </button>
             <button
@@ -104,7 +106,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
                 Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
             </button>
 
-            {<div><PlayerOverview sessionId={'1234'} player={this} /></div>}
+            {<div><PlayerOverview player={this} /></div>}
 
 
         </div>
@@ -113,6 +115,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
 Narrator.propTypes = {
     joinedLobbyParticipants: PropTypes.array.isRequired,
+    selectedRoles: PropTypes.array.isRequired,
 };
 
 

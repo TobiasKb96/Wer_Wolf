@@ -1,3 +1,5 @@
+const votes = {};
+let totalVotes = 0;
 
 module.exports = (io, socket) => {
 
@@ -24,6 +26,45 @@ module.exports = (io, socket) => {
     socket.on('sendPhase', (currentPhase) => {
         const sessionId = getSessionId(socket);
         socket.to(sessionId).emit('phaseReceived', currentPhase);
+    });
+
+    socket.on('startVoting', () => {
+        const sessionId = getSessionId(socket);
+        const players = io.lobbies[sessionId];
+        players.forEach(player => {
+            socket.to(player.id).emit('votePrompt');
+        });
+        console.log('startVoting');
+    });
+
+
+    socket.on('vote', ({ voter, votedFor }) => {
+        if (!votes[voter]) {
+            votes[voter] = votedFor;
+            totalVotes += 1;
+            console.log(totalVotes);
+            console.log(voter);
+            const sessionId = getSessionId(socket);
+            const players = io.lobbies[sessionId];
+
+            if (totalVotes === players.length) {
+                const voteCounts = {};
+                Object.values(votes).forEach(votedFor => {
+                    if (!voteCounts[votedFor]) {
+                        voteCounts[votedFor] = 0;
+                    }
+                    voteCounts[votedFor] += 1;
+                });
+                console.log(voteCounts);
+
+                const mostVotedPlayer = Object.keys(voteCounts).reduce((a, b) => voteCounts[a] > voteCounts[b] ? a : b);
+                console.log('mostVotedPlayer', mostVotedPlayer);
+                socket.to(io.narrators[sessionId]).emit('voteResult', mostVotedPlayer);
+
+                totalVotes = 0;
+                Object.keys(votes).forEach(key => delete votes[key]);
+            }
+        }
     });
 };
 
