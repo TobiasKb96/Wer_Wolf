@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import Villager from "../pages/Game/gamelogic/roles/Villager.js";
-import Witch from "../pages/Game/gamelogic/roles/Witch.js";
-import Cupid from "../pages/Game/gamelogic/roles/Cupid.js";
+
 
 const GameOptions = ({setSelectedRoles}) => {
-    const availableRoles = Villager.getSubclasses();
+    const availableRoles = ['Witch', 'Cupid', 'Bodyguard', 'Seer', 'Hunter'];
 
-    console.log("Available Roles: ", availableRoles)
     // Toggle roles in the array
     const handleRoleChange = (role) => {
-        console.log("This is activated");
-        console.log(role.roleName);
+        console.log(role);
         setSelectedRoles((prevRoles) =>
             prevRoles.includes(role)
                 ? prevRoles.filter((r) => r !== role)  // Remove if already selected
@@ -33,7 +29,7 @@ const GameOptions = ({setSelectedRoles}) => {
                                 onChange={() => handleRoleChange(role)}
                                 className="mr-2"
                             />
-                            {role.roleName}
+                            {role}
                         </label>
                     ))}
                 </div>

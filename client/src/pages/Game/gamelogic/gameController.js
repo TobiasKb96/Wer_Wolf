@@ -2,6 +2,11 @@ import LobbyParticipants from "../../../components/LobbyParticipants.jsx";
 import Werewolf from "./roles/Werewolf.js";
 import Villager from "./roles/Villager.js";
 import Player from "./Player.js";
+import Witch from "./roles/Witch.js";
+import Bodyguard from "./roles/Bodyguard.js";
+import Cupid from "./roles/Cupid.js";
+import Hunter from "./roles/Hunter.js";
+import Seer from "./roles/Seer.js";
 
 //TODO: distribute selected roles
 
@@ -74,9 +79,29 @@ class GameController {
         for (let i = 0; i < numberOfWerewolves; i++) {
             roles[i] = new Werewolf;
         }
-        for (let j = 0; j < selectedRoles.length; j++){
-            roles[roles.length - j] = new selectedRoles;
+        console.log(selectedRoles);
+
+        for (let j = 0; j < selectedRoles.length; j++) {
+            switch(selectedRoles[j]) {
+                case 'Witch':
+                    roles[roles.length - j - 1] = new Witch;
+                    break;
+                case 'Bodyguard':
+                    roles[roles.length - j - 1] = new Bodyguard;
+                    break;
+                case 'Cupid':
+                    roles[roles.length - j - 1] = new Cupid;
+                    break;
+                case 'Hunter':
+                    roles[roles.length - j - 1] = new Hunter;
+                    break;
+                case 'Seer':
+                    roles[roles.length - j - 1] = new Seer;
+                    break;
+            }
         }
+
+        console.log(roles);
 
         const shuffledRoles = roles.sort(() => Math.random() - 0.5);
 
@@ -84,7 +109,6 @@ class GameController {
         lobbyParticipants.forEach((participant, index) => {
             participant.role = shuffledRoles[index];
         });
-
 
 
         // Debugging: log the distributed roles

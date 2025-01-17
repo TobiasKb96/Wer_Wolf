@@ -1,11 +1,11 @@
-import Villager from "./Villager.js";
+import Role from "../Role.js";
 
 
-class Witch extends Villager{
+class Witch extends Role{
 
     constructor() {
         super('Witch', true);
-        this.hasPotion = true;
+        //this.hasPotion = true;
     }
 
 
@@ -15,6 +15,6 @@ class Witch extends Villager{
 
 
 }
-Villager.registerSubclass(new Witch());
+
 
 export default Witch;

@@ -1,10 +1,10 @@
 import Role from "../Role.js";
 
 
-class Cupid extends Role{
+class Hunter extends Role{
 
     constructor() {
-        super('Cupid', true);
+        super('Hunter', true);
     }
 
 
@@ -16,4 +16,4 @@ class Cupid extends Role{
 }
 
 
-export default Cupid;
+export default Hunter;
