@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
@@ -14,7 +14,7 @@ import PlayerOverview from "../../components/playerOverview.jsx";
 //TODO narrator gets prompt from server to start voting process
 //TODO after: voting starts with timer -> based on computed narrator
 
-function Narrator ({joinedLobbyParticipants, selectedRoles}) {
+function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
@@ -23,8 +23,8 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
     const gameLoop = () => {
         //TODO implement game loop
-       // gameController.dayPhase();
-       // gameController.nightPhase();
+        // gameController.dayPhase();
+        // gameController.nightPhase();
     }
 
     const initializeGame = async () => {
@@ -37,7 +37,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
         console.log("Players sent to server:", gameController.getPlayers());
     };
 
-    useEffect( () => {
+    useEffect(() => {
 
         initializeGame();
         //socket.on('gameStarted', gameStartedHandler);
@@ -53,7 +53,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
     //socket.emit("getPlayers", )
 
     useEffect(() => {
-        setVotes({ ...gameController.votes }); // Sync votes with gameController
+        setVotes({...gameController.votes}); // Sync votes with gameController
     }, [gameController.votes]);
 
     const togglePhase = () => {
@@ -73,17 +73,28 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
     };
 
 
-
-
     return (
         <div
-            className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
-                gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
-            }`}
-        >
-            <h1 className="text-4xl font-bold mb-8">
-                It&#39;s {gameController.getPhase()}!
-            </h1>
+            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
+
+            <div
+                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                Wer?Wolf
+            </div>
+
+
+            <div
+                className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 ${
+                    gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                }`}>
+
+
+            {/*Narrator Script*/}
+            <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
+                <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
+            </div>
+
+
 
             {Object.entries(votes).map(([voter, selectedPlayer]) => (
                 <p key={voter} className="text-lg">
@@ -91,31 +102,46 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
                 </p>
             ))}
 
-            <button
-                onClick={startVoting}
-                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
-            >
-                Start Voting
-            </button>
-            <button
-                onClick={togglePhase}
-                className="px-6 py-3 text-lg text-white bg-red-600 rounded-md transition-colors hover:bg-red-700"
-            >
-                Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
-            </button>
+            {/* Player Overview Component*/}
+            <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
+                <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Player Overview</h2>
+                <PlayerOverview player={this}/>
+            </div>
 
-            {<div><PlayerOverview sessionId={'1234'} player={this} /></div>}
+            </div>
+            <footer className="flex justify-between p-4 sm:p-6">
+                <button
+                    //TODO: add end game functionality
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    End Game
+                </button>
+
+                <button
+                    onClick={startVoting}
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    Start Voting
+                </button>
+
+                <button
+                    onClick={togglePhase}
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    Next Phase
+                </button>
+            </footer>
 
 
         </div>
-    );
-};
 
-Narrator.propTypes = {
-    joinedLobbyParticipants: PropTypes.array.isRequired,
-};
+    )}
+
+    Narrator.propTypes = {
+        joinedLobbyParticipants: PropTypes.array.isRequired,
+    };
 
 
-export default Narrator;
+    export default Narrator;
 
 

@@ -7,7 +7,7 @@ function HomeStatic() {
             <div
                 className="flex overflow-hidden flex-col items-center h-full pt-0 pb-20 mt-1.5 border-2 border-solid bg-zinc-300 border-stone-600">
                 <div
-                    className="overflow-hidden self-stretch px-16 py-1.5 text-5xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                    className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
                     Wer?Wolf
                 </div>
                 <div className="mt-20">
@@ -25,6 +25,7 @@ function HomeStatic() {
                     Notify authorities now
                 </div>
                 <button className="mt-4 px-6 py-3 text-lg text-white bg-yellow-800 rounded-md transition-colors hover:bg-yellow-900">
+
                     Learn more
                 </button>
             </div>
