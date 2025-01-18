@@ -72,6 +72,8 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     };
 
+    //TODO: Narrator mobile view
+
 
     return (
         <div
@@ -89,24 +91,21 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 }`}>
 
 
-            {/*Narrator Script*/}
-            <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
-                <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
-            </div>
+                {/*Narrator Script*/}
+                <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
+                    <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
+                </div>
 
 
+                {Object.entries(votes).map(([voter, selectedPlayer]) => (
+                    <p key={voter} className="text-lg">
+                        {voter} has selected {selectedPlayer}.
+                    </p>
+                ))}
 
-            {Object.entries(votes).map(([voter, selectedPlayer]) => (
-                <p key={voter} className="text-lg">
-                    {voter} has selected {selectedPlayer}.
-                </p>
-            ))}
-
-            {/* Player Overview Component*/}
-            <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
-                <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Player Overview</h2>
-                <PlayerOverview player={this}/>
-            </div>
+                {/* Player Overview Component*/}
+                <div className="w-full sm:w-1/3 lg:w-1/4 p-4 overflow-hidden"><PlayerOverview player={this}/>
+                </div>
 
             </div>
             <footer className="flex justify-between p-4 sm:p-6">
@@ -135,13 +134,14 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
         </div>
 
-    )}
+    )
+}
 
-    Narrator.propTypes = {
-        joinedLobbyParticipants: PropTypes.array.isRequired,
-    };
+Narrator.propTypes = {
+    joinedLobbyParticipants: PropTypes.array.isRequired,
+};
 
 
-    export default Narrator;
+export default Narrator;
 
 
