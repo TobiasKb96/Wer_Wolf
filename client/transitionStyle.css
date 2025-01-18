@@ -1,0 +1,32 @@
+/* transitionStyle.css */
+@keyframes sun-move {
+    0% {
+        transform: translate(0, 200%);
+    }
+    50% {
+        transform: translate(-100%, 100%);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes moon-move {
+    0% {
+        transform: translate(0, 200%);
+    }
+    50% {
+        transform: translate(-100%, 100%);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.sun-animation {
+    animation: sun-move 2s ease-in-out forwards;
+}
+
+.moon-animation {
+    animation: moon-move 2s ease-in-out forwards;
+}

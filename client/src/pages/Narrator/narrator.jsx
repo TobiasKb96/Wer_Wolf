@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
@@ -6,6 +6,8 @@ import Join from "../Join/join.jsx";
 import Player from "../Game/gamelogic/Player.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
 import game from "../Game/game.jsx";
+import sunImg from '../../assets/sun.png';
+import moonImg from '../../assets/moon.png';
 
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
@@ -15,7 +17,7 @@ import game from "../Game/game.jsx";
 //TODO narrator gets prompt from server to start voting process
 //TODO after: voting starts with timer -> based on computed narrator
 
-function Narrator ({joinedLobbyParticipants, selectedRoles}) {
+function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
@@ -24,8 +26,8 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
     const gameLoop = () => {
         //TODO implement game loop
-       // gameController.dayPhase();
-       // gameController.nightPhase();
+        // gameController.dayPhase();
+        // gameController.nightPhase();
     }
 
     const initializeGame = async () => {
@@ -38,7 +40,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
         console.log("Players sent to server:", gameController.getPlayers());
     };
 
-    useEffect( () => {
+    useEffect(() => {
 
         initializeGame();
         //socket.on('gameStarted', gameStartedHandler);
@@ -54,7 +56,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
     //socket.emit("getPlayers", )
 
     useEffect(() => {
-        setVotes({ ...gameController.votes }); // Sync votes with gameController
+        setVotes({...gameController.votes}); // Sync votes with gameController
     }, [gameController.votes]);
 
     useEffect(() => {
@@ -102,7 +104,9 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
             {Object.entries(votes).map(([voter, selectedPlayer]) => (
                 <p key={voter} className="text-lg">{voter} has selected {selectedPlayer}.</p>
             ))}
-            <button onClick={startVoting} data-modal-target="default-modal" data-modal-toggle="default-modal" className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+            <button onClick={startVoting}
+                    className="px-6 py-3 text-lg text-white bg-red-600 rounded-md transition-colors hover:bg-red-700"
+            >
                 Start Voting
             </button>
             <button
@@ -112,7 +116,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
                 Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
             </button>
 
-            {<div><PlayerOverview player={this} /></div>}
+            {<div><PlayerOverview player={this}/></div>}
 
 
         </div>
@@ -126,5 +130,6 @@ Narrator.propTypes = {
 
 
 export default Narrator;
+
 
 

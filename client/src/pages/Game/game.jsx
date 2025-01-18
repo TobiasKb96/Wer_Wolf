@@ -9,7 +9,9 @@ import PlayerOverview from "../../components/playerOverview.jsx";
 import Voting from "../../components/voting.jsx";
 import modalOverview from "../../components/modalOverview.jsx";
 import ModalOverview from "../../components/modalOverview.jsx";
-
+import sunImg from '../../assets/sun.png';
+import moonImg from '../../assets/moon.png';
+import '/transitionStyle.css'; // Import the CSS file
 
 //TODO Anna
 
@@ -23,9 +25,9 @@ import ModalOverview from "../../components/modalOverview.jsx";
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
 function Game({ownSocketId, messages, setMessages}) {
-    const [isNight] = useState(false);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedPlayer, setSelectedPlayer] = useState("");
+    //const [isNight, setIsNight] = useState(false);
+    //const [showDropdown, setShowDropdown] = useState(false);
+    //const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState('day');
     const [voting, setVoting] = useState(false);
@@ -88,12 +90,24 @@ function Game({ownSocketId, messages, setMessages}) {
 
     return (
         <div
-            className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
-                phase === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
-            }`}
-        >
+            className={`flex flex-col items-center justify-center min-h-screen transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
+            <div className="relative w-full h-1/2">
+                {phase === "day" ? (
+                    <img
+                        src={sunImg}
+                        alt="Sun"
+                        className="transition-transform duration-1000 transform sun-animation"
+                    />
+                ) : (
+                    <img
+                        src={moonImg}
+                        alt="Moon"
+                        className="transition-transform duration-1000 transform moon-animation"
+                    />
+                )}
+            </div>
             <h1 className="text-4xl font-bold mb-8">
-                {phase}!
+                It is {phase}!
             </h1>
 
             <button
@@ -123,6 +137,8 @@ function Game({ownSocketId, messages, setMessages}) {
 
 Game.propTypes = {
     ownSocketId: PropTypes.string.isRequired,
+    messages: PropTypes.array.isRequired,
+    setMessages: PropTypes.func.isRequired,
 };
 
 export default Game;

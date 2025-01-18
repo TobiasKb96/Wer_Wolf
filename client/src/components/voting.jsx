@@ -4,21 +4,14 @@ import gameController from "../pages/Game/gamelogic/gameController.js";
 import socket from "../utils/socket.js";
 
 function Voting({ player , votingChoices, setVoting}) {
-    const [showDropdown, setShowDropdown] = useState(false);
     const [selectedPlayer, setSelectedPlayer] = useState("");
 
 
     const handleVoteClick = () => {
-        if (showDropdown && selectedPlayer) {
             gameController.castVote(player.name, selectedPlayer);
             alert(`${player.name} has voted for ${selectedPlayer}`);
-            setShowDropdown(false);
             socket.emit('vote', { voter: player.name, votedFor: selectedPlayer});
             setVoting(false);
-        } else {
-            setShowDropdown(true);
-        }
-
     };
 
     return (
@@ -30,7 +23,6 @@ function Voting({ player , votingChoices, setVoting}) {
                             Vote now:
                         </p>
                         <p className="text-slate-500 font-medium">
-                            {showDropdown && (
                                 <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}
                                         className="border border-gray-300 rounded px-4 py-2 mb-4 text-black">
                                     <option value="" disabled>Select a player</option>
@@ -38,12 +30,11 @@ function Voting({ player , votingChoices, setVoting}) {
                                         <option key={foe.id} value={foe.name}>{foe.name}</option>
                                     ))}
                                 </select>
-                            )}
                         </p>
                     </div>
                     <button onClick={handleVoteClick}
                             className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
-                        {showDropdown ? "Send Vote" : "Vote"}
+                        Send Vote
                     </button>
                 </div>
             </div>
