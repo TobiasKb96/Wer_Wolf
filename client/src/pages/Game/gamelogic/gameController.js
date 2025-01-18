@@ -8,7 +8,7 @@ import Cupid from "./roles/Cupid.js";
 import Hunter from "./roles/Hunter.js";
 import Seer from "./roles/Seer.js";
 import socket from "../../../utils/socket.js";
-
+import Voting  from "./voting.jsx";
 
 
 class GameController {
@@ -71,35 +71,17 @@ class GameController {
         return this.players.find(player => player.id === id);
     }
 
-    // Initiate the voting process
-    initiateVoting() {
-        const narrator = this.players.find(player => player.role === 'Narrator');
-        if (narrator) {
-            socket.to(narrator.id).emit('startVoting');
-        }
-        this.players.forEach(player => {
-            if (player.role !== 'Narrator') {
-                socket.to(player.id).emit('votePrompt');
-            }
-        });
-    }
-
-    // Handle voting results
-
-
     // Game loop to manage phases and initiate voting
     gameLoop() {
         if (this.currentPhase === 'day') {
             this.setPhase('night');
-            this.initiateVoting();
         } else {
             this.setPhase('day');
-            this.handleVotingResults();
         }
     }
 
     distributeRoles = (lobbyParticipants, selectedRoles) => {
-        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+        const numberOfWerewolves = lobbyParticipants.length <= 3 ? 1 : 2;
 
         // Generate a shuffled list of roles
         const roles = Array(lobbyParticipants.length).fill(new Villager);

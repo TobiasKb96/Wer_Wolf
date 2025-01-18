@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import Player from "./gamelogic/Player.js";
 import socket from "../../utils/socket.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
+import Voting from "./gamelogic/voting.jsx";
 
 
 //TODO Anna
@@ -26,6 +27,9 @@ function Game({ownSocketId, messages, setMessages}) {
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState('day');
+    const [voting, setVoting] = useState(false);
+    const [votingChoices, setVotingChoices] = useState([]);
+
 
 
     const playersReceivedHandler = (players) => {
@@ -41,6 +45,7 @@ function Game({ownSocketId, messages, setMessages}) {
         console.log(player);
     }
 
+
     useEffect(() => {
         console.log("Own Socket Id object handed over:", ownSocketId)
     }, [ownSocketId]);
@@ -48,9 +53,9 @@ function Game({ownSocketId, messages, setMessages}) {
     useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
-        socket.on('votePrompt', () => {
-            setShowDropdown(true);
-        });
+        socket.on('votePrompt', startVotingHandler);
+
+
         return () => {
             // Clean up listeners
             socket.off('playersReceived', playersReceivedHandler);
@@ -68,18 +73,14 @@ function Game({ownSocketId, messages, setMessages}) {
     const handleShowRole = () => {
         alert(`Your role is: ${player.role.roleName}`);
     };
+    const startVotingHandler = ({choices}) =>{
+        console.log("Choices are ", choices)
+        setVotingChoices(choices);
+        setVoting(true);
+        console.log("votingstate: ", voting);
+    }
 
-    const handleVoteClick = () => {
-        if (showDropdown && selectedPlayer) {
-            gameController.castVote(player.name, selectedPlayer);
-            //alert(`${player.name} has voted for ${selectedPlayer}`);
-            setShowDropdown(false);
-            socket.emit('vote', { voter: player.name, votedFor: selectedPlayer });
-            console.log('vote', { voter: player.name, votedFor: selectedPlayer });
-        } else {
-            setShowDropdown(true);
-        }
-    };
+
     return (
         <div
             className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
@@ -89,33 +90,6 @@ function Game({ownSocketId, messages, setMessages}) {
             <h1 className="text-4xl font-bold mb-8">
                 {gameController.getPhase()}!
             </h1>
-
-            {showDropdown && (
-                <select
-                    value={selectedPlayer}
-                    onChange={(e) => setSelectedPlayer(e.target.value)}
-                    className="border border-gray-300 rounded px-4 py-2 mb-4 text-black"
-                >
-                    <option value="" disabled>
-                        Select a player
-                    </option>
-                    {gameController.getPlayers()
-                        .filter((foe) => foe.name !== player.name) // Exclude self
-                        .map((foe) => (
-                            <option key={foe.id} value={foe.name}>
-                                {foe.name}
-                            </option>
-                        ))}
-
-                </select>
-            )}
-
-            <button
-                onClick={handleVoteClick}
-                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
-            >
-                {showDropdown ? "Send Vote" : "Vote"}
-            </button>
 
             <button
                 onClick={handleShowRole}
@@ -128,6 +102,10 @@ function Game({ownSocketId, messages, setMessages}) {
                 <div>
                     <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
                 </div>
+            )}
+
+            {voting && (
+                <Voting player={player} votingChoices={votingChoices} setVoting={setVoting}/>
             )}
         </div>
     );

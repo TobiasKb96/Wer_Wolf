@@ -1,5 +1,6 @@
 const votes = {};
 let totalVotes = 0;
+let voterCount = 0;
 
 module.exports = (io, socket) => {
 
@@ -28,17 +29,26 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('phaseReceived', currentPhase);
     });
 
-    socket.on('startVoting', () => {
+    socket.on('startVoting', ({voters, choices}) => {
         const sessionId = getSessionId(socket);
         const players = io.lobbies[sessionId];
-        players.forEach(player => {
-            socket.to(player.id).emit('votePrompt');
-        });
+        voterCount = voters.length;
+        console.log('voters received', voters, 'victims received', choices);
+        if(voters) {
+            voters.forEach(voter => {
+                socket.to(voter.id).emit('votePrompt', {choices});
+            });
+        }
+        else {
+            players.forEach(player => {
+                socket.to(player.id).emit('votePrompt');
+            });
+        }
         console.log('startVoting');
     });
 
 
-    socket.on('vote', ({ voter, votedFor }) => {
+    socket.on('vote', ({ voter, votedFor}) => {
         if (!votes[voter]) {
             votes[voter] = votedFor;
             totalVotes += 1;
@@ -47,7 +57,7 @@ module.exports = (io, socket) => {
             const sessionId = getSessionId(socket);
             const players = io.lobbies[sessionId];
 
-            if (totalVotes === players.length) {
+            if (totalVotes ===  voterCount) {
                 const voteCounts = {};
                 Object.values(votes).forEach(votedFor => {
                     if (!voteCounts[votedFor]) {

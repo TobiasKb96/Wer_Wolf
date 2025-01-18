@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import Join from "../Join/join.jsx";
 import Player from "../Game/gamelogic/Player.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
-import Voting, { test } from "../Game/gamelogic/voting.jsx";
 import game from "../Game/game.jsx";
 
 //TODO show names of all participants and their roles
@@ -23,12 +22,7 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-
-
-
     const gameLoop = () => {
-
-        test();
         //TODO implement game loop
        // gameController.dayPhase();
        // gameController.nightPhase();
@@ -88,7 +82,11 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
 
 
     const startVoting = () => {
-        socket.emit("startVoting");
+        const players = gameController.getPlayers();
+        const voters = players.filter(player => player.role.roleName === "Werewolf");
+        const choices = players.filter(player => player.role.roleName !== "Werewolf");
+        socket.emit("startVoting", {voters, choices});
+        console.log("voters: ", voters, "victims: ", choices);
     }
 
     return (
