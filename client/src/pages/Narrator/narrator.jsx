@@ -85,7 +85,8 @@ function Narrator ({joinedLobbyParticipants, selectedRoles}) {
         const players = gameController.getPlayers();
         const voters = players.filter(player => player.role.roleName === "Werewolf");
         const choices = players.filter(player => player.role.roleName !== "Werewolf");
-        socket.emit("startVoting", {voters, choices});
+        const txtMsg = "Kill now!";
+        socket.emit("startVoting", {voters, choices, txtMsg});
         console.log("voters: ", voters, "victims: ", choices);
     }
 

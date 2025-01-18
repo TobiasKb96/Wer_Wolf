@@ -29,14 +29,14 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('phaseReceived', currentPhase);
     });
 
-    socket.on('startVoting', ({voters, choices}) => {
+    socket.on('startVoting', ({voters, choices, txtMsg}) => {
         const sessionId = getSessionId(socket);
         const players = io.lobbies[sessionId];
         voterCount = voters.length;
         console.log('voters received', voters, 'victims received', choices);
         if(voters) {
             voters.forEach(voter => {
-                socket.to(voter.id).emit('votePrompt', {choices});
+                socket.to(voter.id).emit('votePrompt', {choices, txtMsg});
             });
         }
         else {
@@ -72,6 +72,7 @@ module.exports = (io, socket) => {
                 socket.to(io.narrators[sessionId]).emit('voteResult', mostVotedPlayer);
 
                 totalVotes = 0;
+                voterCount = 0;
                 Object.keys(votes).forEach(key => delete votes[key]);
             }
         }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import gameController from "./gameController.js";
-import socket from "../../../utils/socket.js";
+import gameController from "../pages/Game/gamelogic/gameController.js";
+import socket from "../utils/socket.js";
 
 function Voting({ player , votingChoices, setVoting}) {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -22,15 +22,19 @@ function Voting({ player , votingChoices, setVoting}) {
     };
 
     return (
+
         <div>
-            {showDropdown && (
-                <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} className="border border-gray-300 rounded px-4 py-2 mb-4 text-black">
-                    <option value="" disabled>Select a player</option>
-                    {votingChoices.filter((foe) => foe.name !== player.name).map((foe) => (
-                        <option key={foe.id} value={foe.name}>{foe.name}</option>
-                    ))}
-                </select>
-            )}
+            <div>
+                <h2>Vote now:</h2><br/>
+                {showDropdown && (
+                    <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)} className="border border-gray-300 rounded px-4 py-2 mb-4 text-black">
+                        <option value="" disabled>Select a player</option>
+                        {votingChoices.filter((foe) => foe.name !== player.name).map((foe) => (
+                            <option key={foe.id} value={foe.name}>{foe.name}</option>
+                        ))}
+                    </select>
+                )}
+            </div>
             <button onClick={handleVoteClick} className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700">
                 {showDropdown ? "Send Vote" : "Vote"}
             </button>

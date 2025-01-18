@@ -1,13 +1,14 @@
 import Join from "../Join/join.jsx";
-import {useState, useEffect} from "react";
-import io from "socket.io-client";
+import React, {useState, useEffect} from "react";
 import gameController from "./gamelogic/gameController.js";
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import PropTypes from "prop-types";
 import Player from "./gamelogic/Player.js";
 import socket from "../../utils/socket.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
-import Voting from "./gamelogic/voting.jsx";
+import Voting from "../../components/voting.jsx";
+import modalOverview from "../../components/modalOverview.jsx";
+import ModalOverview from "../../components/modalOverview.jsx";
 
 
 //TODO Anna
@@ -29,6 +30,8 @@ function Game({ownSocketId, messages, setMessages}) {
     const [phase, setPhase] = useState('day');
     const [voting, setVoting] = useState(false);
     const [votingChoices, setVotingChoices] = useState([]);
+    const [votingMsg, setVotingMsg] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
 
 
 
@@ -71,24 +74,26 @@ function Game({ownSocketId, messages, setMessages}) {
         }, [player.isAlive]);
     */
     const handleShowRole = () => {
-        alert(`Your role is: ${player.role.roleName}`);
+        setModalOpen(true);
     };
-    const startVotingHandler = ({choices}) =>{
+    const startVotingHandler = ({choices, txtMsg}) =>{
         console.log("Choices are ", choices)
         setVotingChoices(choices);
         setVoting(true);
+        setVotingMsg(txtMsg);
         console.log("votingstate: ", voting);
+
     }
 
 
     return (
         <div
             className={`flex flex-col items-center justify-center min-h-screen transition-colors ${
-                gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                phase === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
             }`}
         >
             <h1 className="text-4xl font-bold mb-8">
-                {gameController.getPhase()}!
+                {phase}!
             </h1>
 
             <button
@@ -105,7 +110,11 @@ function Game({ownSocketId, messages, setMessages}) {
             )}
 
             {voting && (
-                <Voting player={player} votingChoices={votingChoices} setVoting={setVoting}/>
+                <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>
+            )}
+
+            {modalOpen && (
+                <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
             )}
         </div>
     );
