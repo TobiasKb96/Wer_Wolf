@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useState, useEffect} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import LobbyParticipants from "../../components/LobbyParticipants.jsx";
 import socket from '../../utils/socket'; // Import the initialized Socket.IO client
@@ -12,7 +12,7 @@ import Game from "../Game/game.jsx";
 //TODO use player from parent
 
 function Join({setOwnSocketId}) {
-    const { sessionId } = useParams();
+    const {sessionId} = useParams();
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -55,37 +55,46 @@ function Join({setOwnSocketId}) {
             setError('Please enter your name.');
             return;
         }
-        socket.emit('joinLobby', { sessionId, name });
+        socket.emit('joinLobby', {sessionId, name});
 
         gameController.addPlayer(name); // checkif correct here
     };
 
     return (
-        <div className="text-center mt-8 p-4">
-            <h1 className="text-[#646cff] mb-4 text-2xl font-bold">Join Game</h1>
-            <p>Session ID: <strong>{sessionId}</strong></p>
-            <input
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-4/5 max-w-[300px] p-2 my-4 text-base border border-gray-300 rounded-md"
-            />
-            <button
-                onClick={handleJoinLobby}
-                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
-            >
-                Join Lobby
-            </button>
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-            {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
-            {success && (
-                <div>
-                    <LobbyParticipants sessionId={sessionId} />
-                </div>
-            )}
+        <div
+            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
+            <div
+                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                Wer?Wolf
+            </div>
+
+            <div className="text-center mt-8 p-4">
+                <h1 className="text-[#646cff] mb-4 text-2xl font-bold">Join Game</h1>
+                <p>Session ID: <strong>{sessionId}</strong></p>
+                <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-4/5 max-w-[300px] p-2 my-4 text-base border border-gray-300 rounded-md"
+                />
+                <button
+                    onClick={handleJoinLobby}
+                    className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
+                >
+                    Join Lobby
+                </button>
+                {error && <p className="text-red-500 mt-4">{error}</p>}
+                {success && <p className="text-green-500 mt-4">Successfully joined the lobby!</p>}
+                {success && (
+                    <div>
+                        <LobbyParticipants sessionId={sessionId}/>
+                    </div>
+                )}
+            </div>
         </div>
-    );
+)
+    ;
 }
 
 Join.propTypes = {

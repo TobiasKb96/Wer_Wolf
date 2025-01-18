@@ -7,13 +7,14 @@ class Werewolf extends Role{
     {
         super('Werewolf', true, 'Werewolf');
         this.priority = 1;
-        this.description = 'You and your pack can vote in the night to eliminate another player'
+        this.description = 'You are a werewolf. You and your pack can vote in the night to eliminate another player'
         this.goal = `Your goal is to eliminate the townsfolk`
         this.roleImg = werewolfImg
     }
 
-    nightAction(player)
+    nightAction(werewolves, playerSelection)
     {
+        //TODO: start voting for werewolves
     }
 }
 

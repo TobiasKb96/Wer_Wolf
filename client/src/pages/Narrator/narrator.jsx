@@ -91,6 +91,8 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         socket.emit("startVoting", {voters, choices, txtMsg});
         console.log("voters: ", voters, "victims: ", choices);
     }
+    //TODO: Narrator mobile view
+
 
     return (
         <div
@@ -117,11 +119,65 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             </button>
 
             {<div><PlayerOverview player={this}/></div>}
+            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
+
+            <div
+                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                Wer?Wolf
+            </div>
+
+
+            <div
+                className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 ${
+                    gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                }`}>
+
+
+                {/*Narrator Script*/}
+                <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
+                    <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
+                </div>
+
+
+                {Object.entries(votes).map(([voter, selectedPlayer]) => (
+                    <p key={voter} className="text-lg">
+                        {voter} has selected {selectedPlayer}.
+                    </p>
+                ))}
+
+                {/* Player Overview Component*/}
+                <div className="w-full sm:w-1/3 lg:w-1/4 p-4 overflow-hidden"><PlayerOverview player={this}/>
+                </div>
+
+            </div>
+            <footer className="flex justify-between p-4 sm:p-6">
+                <button
+                    //TODO: add end game functionality
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    End Game
+                </button>
+
+                <button
+                    onClick={startVoting}
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    Start Voting
+                </button>
+
+                <button
+                    onClick={togglePhase}
+                    className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                >
+                    Next Phase
+                </button>
+            </footer>
 
 
         </div>
-    );
-};
+
+    )
+}
 
 Narrator.propTypes = {
     joinedLobbyParticipants: PropTypes.array.isRequired,

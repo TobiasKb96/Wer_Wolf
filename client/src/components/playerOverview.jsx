@@ -5,7 +5,6 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 
 
-//TODO: Saving a messages array or sth
 //TODO: when participant/player dies red
 
 const PlayerOverview = ({player, setMessages, messages}) => {
@@ -20,9 +19,10 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
     useEffect(() => {
         setParticipants(gameController.getPlayers());
-    }, );
+    },);
 
     const isNarratorView = location.pathname.includes("/narrator");
+
     const filteredParticipants = isNarratorView
         ? participants
         : participants.filter((p) => p.id !== player.id);
@@ -40,17 +40,19 @@ const PlayerOverview = ({player, setMessages, messages}) => {
         setShowRole((prevShowRole) => !prevShowRole);
     };
 
+    //TODO: have list items scrollable to the right in mobile version
+
     return (
         <div className="mt-8 mx-auto p-4 max-w-md bg-gray-100 border border-gray-300 rounded-lg shadow-md">
-            <h2 className="text-center text-[#646cff] mb-4 text-xl font-bold">
-                Active Participants
+            <h2 className="text-center text-black mb-4 text-xl font-bold">
+                Player Overview
             </h2>
 
             {/* Show Role Button */}
             {isNarratorView && (
                 <button
                     onClick={handleShowRole}
-                    className="w-full px-4 py-2 mb-4 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+                    className="w-full px-4 py-2 mb-4 bg-yellow-950 text-orange-200 rounded-lg hover:bg-yellow-900"
                 >
                     {showRole ? 'Hide Roles' : 'Show Roles'}
                 </button>
@@ -58,31 +60,36 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
             {/* Participant List */}
             {participants.length > 0 ? (
-                    <ul className="list-none">
-                        {filteredParticipants.map((participant, index) => (
-                            <li
-                                key={index}
-                                className="px-4 py-2 mb-2 bg-indigo-100 rounded-md text-gray-700 text-left"
-                            >
-                                <p className="font-bold">{participant.name}</p>
-                                {showRole && (
-                                    <>
-                                        <p>Role: {participant.role.roleName}
-                                        </p>
+                        <ul className="flex sm:flex-col gap-4 flex-row overflow-x-auto">
+                            {filteredParticipants.map((participant, index) => (
+                                <li
+                                    key={index}
+                                    className="flex flex-col sm:flex-row items-center p-4 bg-white border border-gray-300 rounded-lg shadow-md min-w-[200px]"
+                                >
+                                    {/*for the avatar */}
+                                    <div className="w-16 h-16 bg-gray-400 rounded-full mb-2"></div>
 
-                                    </>
-                                )}
-                                {!isNarratorView && (
-                                    <button
-                                        onClick={() => handleOpenChat(participant)}
-                                        className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                    >
-                                        Message
-                                    </button>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+                                    <div className="ml-0 sm:ml-4 text-center sm:text-left">
+                                        <p className={`font-bold ${!participant.isAlive ? 'text-red-800' : ''}`}>{participant.name}</p>
+                                        {(showRole || !participant.isAlive) && (        //TODO: does this work?
+                                            <>
+                                                <p className="text-sm text-gray-600">Role: {participant.role.roleName}
+                                                </p>
+
+                                            </>
+                                        )}
+                                    </div>
+                                    {!isNarratorView && (
+                                        <button
+                                            onClick={() => handleOpenChat(participant)}
+                                            className="mt-2 px-4 py-1 bg-yellow-950 text-white rounded hover:bg-orange-900"
+                                        >
+                                            Message
+                                        </button>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
                 )
                 :
                 (

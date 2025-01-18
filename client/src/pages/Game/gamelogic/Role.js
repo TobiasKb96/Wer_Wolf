@@ -10,8 +10,7 @@ class Role {
         this.roleImg = roleImg; //for displaying on card
     }
 
-    nightAction() {
-
+    static nightAction() {
     }
 
 
