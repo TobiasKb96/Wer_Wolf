@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import socket from "../utils/socket.js";
 
-function Voting({ player , votingChoices, setVoting}) {
+function Voting({ player , votingChoices, setVoting, txtMsg}) {
     const [selectedPlayer, setSelectedPlayer] = useState("");
     const [timeLeft, setTimeLeft] = useState(60);
 
@@ -39,6 +39,9 @@ function Voting({ player , votingChoices, setVoting}) {
                         <p className="text-lg text-black font-semibold">
                             Vote now:
                         </p>
+                        <p>
+                            {txtMsg}
+                        </p>
                         <p className="text-red-500 font-bold text-2xl">
                             Time left: {`00:${timeLeft < 10 ? `0${timeLeft}` : timeLeft}`}
                         </p>
@@ -56,7 +59,6 @@ function Voting({ player , votingChoices, setVoting}) {
                             className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
                         Send Vote
                     </button>
-
                 </div>
             </div>
         </div>

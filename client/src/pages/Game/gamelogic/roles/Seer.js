@@ -2,6 +2,7 @@ import Role from "../Role.js";
 import game from "../../game.jsx";
 import Voting from "../../../../components/voting.jsx";
 import socket from "../../../../utils/socket.js";
+import seerImg from "../../../../assets/seer.jpg";
 
 
 class Seer extends Role{
@@ -10,7 +11,10 @@ class Seer extends Role{
         super('Seer', true);
         this.description = 'You are the Seer. You may choose one player each night whos role is going to be revealed to you.'
         this.goal = `Your goal is to win with the townsfolk`
-        this.priority = 4;
+        this.roleImg = seerImg
+        this.priority = 5;
+        this.scriptstart = "Seer, open your eyes. Cupid chooses two players to be in love."
+        this.scriptend = "Seer, close your eyes."
     }
 
 

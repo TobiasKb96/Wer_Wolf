@@ -17,9 +17,6 @@ import '/transitionStyle.css'; // Import the CSS file
 
 
 function Game({ownSocketId, messages, setMessages}) {
-    //const [isNight, setIsNight] = useState(false);
-    //const [showDropdown, setShowDropdown] = useState(false);
-    //const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState('day');
     const [showPotions, setShowPotions] = useState(false);
@@ -217,21 +214,18 @@ function Game({ownSocketId, messages, setMessages}) {
 
                         <button
                             onClick={() => handlePotionUse("skip")}
-                            className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
+                            className={`px-4 py-2 rounded-lg bg-purple-800 hover:bg-purple-950 text-white`}
                         >
                             Skip Potion Use
                         </button>
                     </div>
                 )}
 
-                {voting && (
-                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg}
-                            setVoting={setVoting}/>
-                )}
-
-                {modalOpen && (
-                    <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
-                )}
+                {/* Voting Section */}
+                {voting &&
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting} txtMsg={votingMsg}/>}
+                {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
+                }
             </div>
         </div>
     );

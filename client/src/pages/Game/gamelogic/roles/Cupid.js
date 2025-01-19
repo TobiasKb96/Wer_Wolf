@@ -1,7 +1,7 @@
 import Role from "../Role.js";
 import Voting from "../../../../components/voting.jsx";
 import socket from "../../../../utils/socket.js";
-import werewolfImg from "../../../../assets/werewolf1.jpeg";
+import cupidImg from "../../../../assets/cupid.jpeg";
 
 
 class Cupid extends Role{
@@ -10,7 +10,7 @@ class Cupid extends Role{
         super('Cupid', true);
         this.description = 'You are the Cupid. In the first night you may select to players to be lovers. If one of them dies, the other dies of a broken heart.'
         this.goal = `Your goal is to win with the townsfolk`
-        this.roleImg = werewolfImg
+        this.roleImg = cupidImg
         this.scriptstart = "Cupid, open your eyes. Cupid chooses two players to be in love."
         this.scriptend = "Cupid, close your eyes."
         this.firstNight = true;
