@@ -95,12 +95,15 @@ function Game({ownSocketId, messages, setMessages}) {
     };
 
     const handlePotionUse = (potionType) => {
+
         if (potionType === "healing" && !healingUsed) {
             socket.emit('healingPotion');
             setHealingUsed(true);  // Disable healing potion
+            setShowPotions(false);
         } else if (potionType === "poison" && !poisonUsed) {
             socket.emit('poisonPotion');
             setPoisonUsed(true);  // Disable poison potion
+            setShowPotions(false);
         } else if (potionType === "skip") {
             socket.emit('skipPotions');
             setShowPotions(false);
@@ -175,38 +178,42 @@ function Game({ownSocketId, messages, setMessages}) {
 
                 {/*Show potions section for witch */}
                 {showPotions && (
-                    <div className="mt-6 p-4 border rounded bg-gray-200">
-                        <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
-                        <button
-                            onClick={() => handlePotionUse("healing")}
-                            disabled={healingUsed}
-                            className={`px-4 py-2 rounded-lg mr-2 ${
-                                healingUsed
-                                    ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
-                                    : "bg-green-500 hover:bg-green-600 text-white"
-                            }`}
-                        >
-                            {healingUsed ? "Healing Potion Used" : "Use Healing Potion"}
-                        </button>
-
-                        <button
-                            onClick={() => handlePotionUse("poison")}
-                            disabled={poisonUsed}
-                            className={`px-4 py-2 rounded-lg mr-2 ${
-                                poisonUsed
-                                    ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
-                                    : "bg-red-500 hover:bg-red-600 text-white"
-                            }`}
-                        >
-                            {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
-                        </button>
-
-                        <button
-                            onClick={() => handlePotionUse("skip")}
-                            className={`px-4 py-2 rounded-lg bg-purple-800 hover:bg-purple-950 text-white`}
-                        >
-                            Skip Potion Use
-                        </button>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="relative p-6 bg-purple-900 text-white rounded-xl shadow-lg border border-purple-700 w-96">
+                            <h2 className="text-2xl font-bold mb-4 text-center text-purple-300">
+                                Choose a Potion
+                            </h2>
+                            <div className="flex flex-col space-y-4 items-center">
+                                <button
+                                    onClick={() => handlePotionUse("healing")}
+                                    disabled={healingUsed}
+                                    className={`potion-button ${
+                                        healingUsed
+                                            ? "bg-gray-500 cursor-not-allowed"
+                                            : "bg-green-600 hover:bg-green-700"
+                                    }`}
+                                >
+                                    {healingUsed ? "Healing Potion Used" : "Use Healing Potion"}
+                                </button>
+                                <button
+                                    onClick={() => handlePotionUse("poison")}
+                                    disabled={poisonUsed}
+                                    className={`potion-button ${
+                                        poisonUsed
+                                            ? "bg-gray-500 cursor-not-allowed"
+                                            : "bg-red-600 hover:bg-red-700"
+                                    }`}
+                                >
+                                    {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
+                                </button>
+                                <button
+                                    onClick={() => handlePotionUse("skip")}
+                                    className="potion-button bg-purple-650 hover:bg-purple-700"
+                                >
+                                    Skip Potion Use
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
 

@@ -23,6 +23,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
+    const witchRole = new Witch();
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -35,7 +36,6 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         //Seer.nightAction(seer, gameController.getPlayers());
 
         const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
-        const witchRole = new Witch();
         witchRole.nightAction(witch, gameController.getPlayers());
 
 

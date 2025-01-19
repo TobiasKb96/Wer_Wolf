@@ -5,8 +5,7 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import questionMarkImg from '../assets/questionMark.jpg';
 
-
-//TODO: when participant/player dies red
+//TODO get more pictures for roles
 
 const PlayerOverview = ({player, setMessages, messages}) => {
     const [participants, setParticipants] = useState(gameController.getPlayers());
@@ -107,7 +106,7 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
                                     <div className="ml-0 sm:ml-4 text-center sm:text-left">
                                         <p className={`font-bold ${!participant.isAlive ? 'text-red-800' : 'text-black'}`}>{participant.name}</p>
-                                        {(showRole || !participant.isAlive) && (        //TODO: does this work?
+                                        {(showRole || !participant.isAlive) && (
                                             <>
                                                 <p className="text-sm text-gray-600">Role: {participant.role.roleName}
                                                 </p>
