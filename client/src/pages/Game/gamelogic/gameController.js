@@ -137,14 +137,15 @@ class GameController {
 
     };
 
-    getActiveRolesWithNightAction(){
-        const activeRoles = this.players
+    getActiveRolesWithNightAction = async() => {
+        const activeRoles = await new Promise((resolve) => {
+            resolve(this.players
             .filter(player => player.isAlive) // Only include alive players
             .filter(player => player.role.hasNightAction) // Only include roles with night actions
             .map(player => player.role) // Extract the role objects
             .sort((a, b) => a.priority - b.priority) // Sort by priority
-            .map(role => role.roleName); // Extract only the role names
-
+            .map(role => role.roleName)) // Extract only the role names
+        })
         return activeRoles; // Returns array of role names in priority order
     }
 
@@ -164,13 +165,12 @@ class GameController {
             case 'Werewolf':
                 voters = activePlayers.filter(player => player.role.roleName === "Werewolf");
                 choices = activePlayers.filter(player => player.role.roleName !== "Werewolf");
-                const votedPlayer= await new Promise((resolve) => {
-                    const votedName = Werewolf.nightAction(voters, choices);
-                    const votedPlayer = this.players.find(player => player.name === votedName);
-                    resolve(votedPlayer)
-                });
-                this.diedThisNight.push(votedPlayer);
+                const votedName= await new Promise((resolve) => {
+                    resolve(Werewolf.nightAction(voters, choices));
 
+                });
+                const votedPlayer = this.players.find(player => player.name === votedName);
+                this.diedThisNight.push(votedPlayer);
         }
 
 
@@ -192,6 +192,26 @@ class GameController {
         }
         */
 
+    }
+
+    dayPhase = async() => {
+        console.log("Day phase started");
+        const voters = this.getActivePlayers();
+        const choices = this.getActivePlayers();
+        const txtMsg = 'Townsfolk, choose who you want to kill';
+        const votedName = await new Promise((resolve) => {
+            const handleEvent = (selectedPlayers) => {
+                console.log(`Townsfolk chose victim: ${selectedPlayers}`);
+                socket.off('voteResult', handleEvent); // Clean up listener
+                resolve(selectedPlayers);
+            };
+
+            // Register the listener
+            socket.on('voteResult', handleEvent);
+            socket.emit('startVoting', { voters, choices , txtMsg});
+        });
+        const votedPlayer = this.players.find(player => player.name === votedName);
+        votedPlayer.kill();
     }
 }
 

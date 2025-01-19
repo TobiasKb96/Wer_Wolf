@@ -24,11 +24,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
-    const [nightPhase,setNightPhase] = useState("");
+    const [nightPhase,setNightPhase] = useState(0);
     const [amountOfNightPhase,setAmountOfNightPhase] = useState(0);
     const [activeRoles, setActiveRoles] = useState([]);
     const [activePlayers, setActivePlayers] = useState([]);
     const [voteDisabled, setVoteDisabled] = useState(false);
+    const [phaseSwitchDisabled, setPhaseSwitchDisabled] = useState(true);
     const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -116,7 +117,10 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
         if (newPhase === "night") {
+            setNightPhase(0);
             setActiveRoles(gameController.getActiveRolesWithNightAction());
+            setActivePlayers(gameController.getActivePlayers());
+            setAmountOfNightPhase(activeRoles.length);
         }
 
     };
@@ -128,10 +132,24 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
 
     const startVoting = async () => {
+        if(currentPhase === "day") {
+            const revealedPlayer = await gameController.dayPhase();
+            socket.emit("revealRole", revealedPlayer);
+        }
+        if (currentPhase === "night") {
+            setVoteDisabled(true);
+            const resolvedActiveRoles = await gameController.getActiveRolesWithNightAction();
+            setActiveRoles(resolvedActiveRoles);
+            console.log("Active roles:", activeRoles);
+            await gameController.nightPhase(resolvedActiveRoles[nightPhase]);
+            console.log("Night phase started for", activeRoles[nightPhase], "at index", nightPhase);
+            setNightPhase(nightPhase + 1);
+            if (nightPhase === amountOfNightPhase) {
+                setPhaseSwitchDisabled(false);
+            }
+        }
         console.log("startVoting has been called");
-        setVoteDisabled(true);
-        gameController.getActiveRolesWithNightAction()
-        await gameController.nightPhase();
+
 
         /*
         console.log("startVoting has been called");
@@ -196,8 +214,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                     </button>
 
                     <button
+                        disabled={phaseSwitchDisabled}
                         onClick={togglePhase}
-                        className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                        className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
+                        bg-orange-200 text-black rounded-md transition-all
+                        hover:bg-orange-300
+                        disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed"
                     >
                         Switch to {gameController.getPhase() === "day" ? "Night" : "Day"}
                     </button>
