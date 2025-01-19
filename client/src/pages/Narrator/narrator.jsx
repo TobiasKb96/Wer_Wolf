@@ -78,6 +78,13 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     useEffect(() => {
         socket.on('voteResult', (mostVotedPlayer) => {
+            if(mostVotedPlayer !== null){
+                alert(`${mostVotedPlayer} has died!`);
+            } else {
+                alert("No one has been killed!");
+            }
+            const revealedPlayer = mostVotedPlayer
+            socket.emit('revealRole', revealedPlayer);
             alert(`${mostVotedPlayer} has died!`);
             setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
         });

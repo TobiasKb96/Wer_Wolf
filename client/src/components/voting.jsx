@@ -1,12 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import socket from "../utils/socket.js";
 
 function Voting({ player , votingChoices, setVoting}) {
     const [selectedPlayer, setSelectedPlayer] = useState("");
+    const [timeLeft, setTimeLeft] = useState(60);
 
     //TODO: Voting timer
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        if(timeLeft === 0) {
+            setVoting(false);
+            socket.emit("vote", { voter: player.name, votedFor: null });
+        }
+    }, [timeLeft, setVoting, player.name]);
+
 
     const handleVoteClick = () => {
             gameController.castVote(player.name, selectedPlayer);
@@ -23,20 +39,24 @@ function Voting({ player , votingChoices, setVoting}) {
                         <p className="text-lg text-black font-semibold">
                             Vote now:
                         </p>
+                        <p className="text-red-500 font-bold text-2xl">
+                            Time left: {`00:${timeLeft < 10 ? `0${timeLeft}` : timeLeft}`}
+                        </p>
                         <p className="text-slate-500 font-medium">
-                                <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}
-                                        className="border border-gray-300 rounded px-4 py-2 mb-4 text-black">
-                                    <option value="" disabled>Select a player</option>
-                                    {votingChoices.filter((foe) => foe.name !== player.name).map((foe) => (
-                                        <option key={foe.id} value={foe.name}>{foe.name}</option>
-                                    ))}
-                                </select>
+                            <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}
+                                    className="border border-gray-300 rounded px-4 py-2 mb-4 text-black">
+                                <option value="" disabled>Select a player</option>
+                                {votingChoices.filter((foe) => foe.name !== player.name).map((foe) => (
+                                    <option key={foe.id} value={foe.name}>{foe.name}</option>
+                                ))}
+                            </select>
                         </p>
                     </div>
                     <button onClick={handleVoteClick}
                             className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
                         Send Vote
                     </button>
+
                 </div>
             </div>
         </div>
@@ -45,7 +65,8 @@ function Voting({ player , votingChoices, setVoting}) {
 
 Voting.propTypes = {
     player: PropTypes.object.isRequired,
-    votingChoices: PropTypes.array
+    votingChoices: PropTypes.array,
+    setVoting: PropTypes.func.isRequired
 };
 
 export default Voting;

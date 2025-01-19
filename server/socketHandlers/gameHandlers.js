@@ -50,7 +50,9 @@ module.exports = (io, socket) => {
 
     socket.on('vote', ({ voter, votedFor}) => {
         if (!votes[voter]) {
-            votes[voter] = votedFor;
+            if (votedFor !== null) {
+                votes[voter] = votedFor;
+            }
             totalVotes += 1;
             console.log(totalVotes);
             console.log(voter);
