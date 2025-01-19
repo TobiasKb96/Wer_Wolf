@@ -134,6 +134,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     };
 
+
     useEffect(() => {
         socket.emit("sendPhase", currentPhase);
         console.log();

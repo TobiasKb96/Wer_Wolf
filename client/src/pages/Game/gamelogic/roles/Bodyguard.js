@@ -1,6 +1,6 @@
 import Role from "../Role.js";
 import socket from "../../../../utils/socket.js";
-import bodyguardImg from "../../../../assets/werewolf1.jpeg";
+import bodyguardImg from "../../../../assets/bodyguard.jpg";
 
 
 class Bodyguard extends Role{
