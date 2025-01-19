@@ -11,6 +11,7 @@ class Witch extends Role{
         super('Witch', true);
         this.description = 'You are the Witch. You own a poison potion which kills and a healing potion which revives. You may use each once in the game. Choose wisely.'
         this.goal = `Your goal is to win with the townsfolk`
+        this.goalCondition = "Townsfolk"
         this.hasPoisonPotion = true;
         this.hasRevivePotion = true;
         this.priority = 4;

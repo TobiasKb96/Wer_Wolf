@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useNavigate} from 'react-router-dom';
 import gameController from "./gamelogic/gameController.js";
 import PropTypes from "prop-types";
 import socket from "../../utils/socket.js";
@@ -29,6 +30,7 @@ function Game({ownSocketId, messages, setMessages}) {
     const [modalOpen, setModalOpen] = useState(false);
     const [isFirstRender, setIsFirstRender] = useState(true);
     const [transitionClass, setTransitionClass] = useState('radial-emerge');
+    const navigate = useNavigate();
 
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -61,6 +63,7 @@ function Game({ownSocketId, messages, setMessages}) {
 
     useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
+        socket.on('gameOver', gameOverHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
         socket.on('votePrompt', startVotingHandler);
         socket.on('showRole', handleShowSomeoneElsesRole);
@@ -70,12 +73,17 @@ function Game({ownSocketId, messages, setMessages}) {
             // Clean up listeners
             socket.off('playersReceived', playersReceivedHandler);
             socket.off('phaseReceived', phaseReceivedHandler);
-            socket.off('votePrompt');
+            socket.on('gameOver', gameOverHandler);
+            socket.off('votePrompt',startVotingHandler);
             socket.off('witchShowPotions', witchShowPotionsHandler);
             socket.off('showRole', handleShowSomeoneElsesRole);
         };
     }, []);
 
+    const gameOverHandler = (winResult) => {
+        alert(winResult, " won the game!");
+        navigate('/home');
+    }
     const playersReceivedHandler = (players) => {
         gameController.setPlayers(players);
         const thisPlayer = gameController.findPlayerById(ownSocketId)

@@ -9,8 +9,10 @@ class Bodyguard extends Role{
         super('Bodyguard', true);
         this.description = 'You are the Bodyguard. You may choose one person to protect each night. This player cannot die that die.'
         this.goal = `Your goal is to win with the townsfolk`
+        this.goalCondition = "Townsfolk"
         this.priority = 1;
         this.roleImg = bodyguardImg
+
         this.scriptstart ="Bodyguard awake now and open your eyes."
         this.scriptend = "Bodyguard, close your eyes."
     }

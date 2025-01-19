@@ -107,6 +107,11 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('showRole', revealedPlayer);
     })
 
+    socket.on('gameOver', (winResult) =>{        //send the name of a player
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('gameOver', winResult);
+    })
+
 };
 
 const getSessionId = (socket) => {

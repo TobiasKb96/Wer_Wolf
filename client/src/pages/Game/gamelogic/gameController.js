@@ -174,7 +174,8 @@ class GameController {
 
                 });
                 const votedPlayer = this.players.find(player => player.name === votedName);
-                this.diedThisNight.push(votedPlayer);
+                this.diedThisNight.push(votedPlayer.name)
+                votedPlayer.kill();
         }
 
 
@@ -217,6 +218,23 @@ class GameController {
         const votedPlayer = this.players.find(player => player.name === votedName);
         votedPlayer.kill();
         return votedPlayer;
+    }
+
+    checkWinCondition = async() => {
+        const alivePlayers = this.getActivePlayers(); // Get all alive players
+        if (alivePlayers.length === 0) {
+            return "NO_WIN"; // No players left, no winner
+        }
+        const firstGoal = alivePlayers[0].role.goalCondition; // Take the goal of the first alive player
+
+        // Check if all alive players have the same goal
+        const allSameGoal = alivePlayers.every(player => player.role.goalCondition === firstGoal);
+
+        if (allSameGoal) {
+            return firstGoal; // All alive players have the same goal, return it
+        }
+
+        return "NO_WIN"; // Not all alive players have the same goal
     }
 }
 

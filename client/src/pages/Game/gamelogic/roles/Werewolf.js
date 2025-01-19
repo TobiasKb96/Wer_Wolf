@@ -11,6 +11,7 @@ class Werewolf extends Role{
         this.priority = 1;
         this.description = 'You are a werewolf. You and your pack can vote in the night to eliminate another player'
         this.goal = `Your goal is to eliminate the townsfolk`
+        this.goalCondition = "Werewolves"
         this.roleImg = werewolfImg
         this.scriptstart ="Werewolves awake now and open your eyes."
         this.scriptend = "Werewolves, close your eyes."

@@ -8,6 +8,7 @@ class Girl extends Role{
         super('Girl', false);
         this.description = 'You are the Girl. At night, you may peek (open your eyes secretly) to see what happens at night.'
         this.goal = `Your goal is to win with the townsfolk`
+        this.goalCondition = "Townsfolk"
     }
 
 

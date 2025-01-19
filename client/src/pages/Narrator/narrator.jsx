@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useNavigate} from 'react-router-dom';
 import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
@@ -31,6 +32,8 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [voteDisabled, setVoteDisabled] = useState(false);
     const [phaseSwitchDisabled, setPhaseSwitchDisabled] = useState(true);
     const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
+    const [winCondition, setWinCondition] = useState("NO_WIN");
+    const navigate = useNavigate();
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -49,6 +52,17 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
 
 
+    }
+
+    const checkWinCondition = async() => {
+        const winResult = await gameController.checkWinCondition();
+        if (winResult !== "NO_WIN") {
+            setWinCondition(winResult);
+            console.log(`Game over! ${winResult} team wins!`);
+            socket.emit("gameOver", winResult);
+            navigate("/home");
+
+        }
     }
 
     const initializeGame = async () => {
@@ -111,9 +125,10 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             recentlyKilledPlayers.forEach((revealedPlayer) => {
                 console.log(`Revealing role for: ${revealedPlayer}`);
                 socket.emit("revealRole", revealedPlayer);
+                setRecentlyKilledPlayers([]);
             });
 
-           setRecentlyKilledPlayers([]);
+
         }
     }, [currentPhase]);
 
@@ -128,6 +143,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             setActivePlayers(gameController.getActivePlayers());
             setAmountOfNightPhase(activeRoles.length);
             setVoteDisabled(false);
+            setPhaseSwitchDisabled(true);
         }
 
     };
@@ -157,9 +173,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             setNightPhase(nightPhase + 1);
             if (nightPhase === amountOfNightPhase) {
                 setPhaseSwitchDisabled(false);
+                const diedThisNight = gameController.diedThisNight;
+                setRecentlyKilledPlayers(diedThisNight);
             }
-            else {setVoteDisabled(false)};
+            else {setVoteDisabled(false)}
         }
+        await checkWinCondition();
         console.log("startVoting has been called");
 
 
