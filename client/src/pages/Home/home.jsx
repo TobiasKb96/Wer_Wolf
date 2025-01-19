@@ -24,7 +24,7 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const gameCreatedHandler = async ({ sessionId }) => {
+        const gameCreatedHandler = async ({sessionId}) => {
             setSessionId(sessionId);
 
             // Generate QR code
@@ -70,20 +70,30 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
     };
 
     return (
-        <div className="text-center p-8">
+        <div
+            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950 ">
+            <div
+                className="flex overflow-hidden flex-col items-center h-full pt-0 pb-20 mt-1.5 border-2 border-solid bg-zinc-300 border-stone-600">
+                <div
+                    className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                    Wer?Wolf
+                </div>
+            <h1 className="text-2xl font-bold mt-4 mb-6">New Game</h1>
+
             {/* Create Game Button */}
             <button
                 onClick={handleNewGame}
-                className="px-8 py-4 text-base text-white bg-blue-600 rounded-lg cursor-pointer mb-4 transition-colors hover:bg-blue-700"
+                className="px-8 py-4 text-base text-white bg-blue-600 rounded-lg cursor-pointer mb-6 transition-colors hover:bg-blue-700"
             >
                 Create New Game
             </button>
 
-            {/* Display QR Code and Active Participants */}
+            {/* Main Content */}
             {qrCode && (
-                <div className="flex justify-center items-start gap-8 mt-8">
+                <div className="flex flex-wrap justify-center items-start gap-6 mt-6">
                     {/* QR Code Section */}
-                    <div className="text-center border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
+                    <div className="max-w-sm text-center border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
+                        <h2 className="font-bold text-lg mb-4">Join the Game</h2>
                         <img
                             src={qrCode}
                             alt="QR Code for New Game"
@@ -91,7 +101,7 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
                         />
                         <p>Scan the QR code to join the game!</p>
                         {sessionLink && (
-                            <p className="text-blue-600 underline">
+                            <p className="text-blue-600 underline mt-2">
                                 <a href={sessionLink} target="_blank" rel="noopener noreferrer">
                                     {sessionLink}
                                 </a>
@@ -99,24 +109,33 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
                         )}
                     </div>
 
-                    {/* Active Participants Section */}
-                    <LobbyParticipants sessionId={sessionId} />
+                    {/* Active Players Section */}
+                    <div className="max-w-sm border border-gray-300 p-4 rounded-lg bg-gray-100 shadow-md">
+                        <h2 className="font-bold text-lg mb-4">Active Players</h2>
+                        <LobbyParticipants sessionId={sessionId} />
+                    </div>
+
+                    {/* Game Options Section */}
+                    <div className="max-w-sm border border-gray-300 p-2 rounded-lg bg-gray-100 shadow-md">
+                        <h2 className="font-bold text-lg mb-4">Game Options</h2>
+                        <GameOptions setSelectedRoles={setSelectedRoles} />
+                    </div>
                 </div>
             )}
-
-            <GameOptions setSelectedRoles={setSelectedRoles} />
 
             {/* Start Game Button */}
             {qrCode && (
                 <button
                     onClick={startGame}
-                    className="px-8 py-4 mt-4 text-base text-white bg-green-600 rounded-lg cursor-pointer transition-colors hover:bg-green-700"
+                    className="px-8 py-4 mt-6 text-base text-white bg-green-600 rounded-lg cursor-pointer transition-colors hover:bg-green-700"
                 >
                     Start Game
                 </button>
             )}
         </div>
+        </div>
     );
-}
 
+
+}
 export default Home;
