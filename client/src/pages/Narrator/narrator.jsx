@@ -12,6 +12,7 @@ import Seer from "../Game/gamelogic/roles/Seer.js";
 //import //sunImg from '../../assets/sun.png';
 //import moonImg from '../../assets/moon.png';
 
+
 //TODO show names of all participants and their roles
 //TODO provide instructions for phases
 //TODO provide buttons to transition phases/end game
@@ -32,6 +33,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const navigate = useNavigate();
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
     const gameLoop = async () => {
 
@@ -142,6 +144,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     };
 
+
     useEffect(() => {
         socket.emit("sendPhase", currentPhase);
         console.log();
@@ -187,7 +190,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         console.log("voters: ", voters, "victims: ", choices);
 
          */
-    }
+    };
     //TODO: Narrator mobile view
 
     //TODO: scrollable view
@@ -208,6 +211,33 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 {/*Narrator Script*/}
                 <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
                     <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
+                    <p className="text-sm sm:text-base">
+                        The night has fallen.<br/>
+                        Everyone in the town close their eyes.<br/><br/>
+                        //Only in the first night<br/>
+                        Cupid, open your eyes.<br/>
+                        //narrator starts voting<br/>
+                        Cupid, close your eyes.<br/>
+                        <br/><br/>
+                        Werewolves awake now and open your eyes.<br/>
+                        //narrator starts voting<br/>
+                        Werewolves, close your eyes.<br/><br/>
+
+                        Witch, open your eyes.<br/>
+                        //narrator starts voting<br/>
+                        Witch, close your eyes.<br/><br/>
+
+                        Seer, open your eyes.<br/>
+                        //narrator starts voting<br/>
+                        Seer, close your eyes.<br/><br/>
+
+                        Hunter, open your eyes.<br/>
+                        //narrator starts voting<br/>
+                        Hunter, close your eyes.<br/><br/>
+
+                        Day has come.<br/>
+                        Everyone open your eyes.
+                    </p>
                 </div>
 
                 {/* Player Overview Component*/}

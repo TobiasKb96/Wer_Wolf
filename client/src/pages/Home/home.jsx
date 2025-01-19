@@ -11,6 +11,7 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
     const [qrCode, setQrCode] = useState(null); // State for QR Code
     const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
+    const [isGameStarted, setIsGameStarted] = useState(null);
     const backendUrl = window.__BACKEND_URL__; // Backend URL
     const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
             setSessionLink(sessionUrl);
             const qrCodeImg = await QRCode.toDataURL(sessionUrl);
             setQrCode(qrCodeImg);
+            setIsGameStarted(true);
         };
 
         const errorHandler = (err) => {
@@ -78,42 +80,44 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
                     alt="Werewolf portrait"
                     className="object-contain mt-6 w-60 max-w-full aspect-[0.96] rounded-[215px]"
                 />
-                <div
-                    className="mt-7"
-                >
+                <div className="mt-7">
                     Notify authorities now
                 </div>
                 <button
                     onClick={handleNewGame}
                     className="mt-4 px-6 py-3 text-lg text-white bg-yellow-800 rounded-md transition-colors hover:bg-yellow-900">
-
                     Create New Game
                 </button>
                 {qrCode && (
-                    <div className="flex justify-center items-center max-w-fit gap-8 mt-8">
+                    <div
+                        className="flex flex-col lg:flex-row sm:flex-col justify-center items-center lg:items-start gap-8 mt-8">
                         {/* QR Code Section */}
-                        <div className="text-center border border-gray-300 p-4 rounded-lg bg-white shadow-md">
+                        <div
+                            className="flex flex-col justify-center text-center border border-gray-300 p-4 rounded-lg bg-white shadow-md">
                             <img
                                 src={qrCode}
                                 alt="QR Code for New Game"
-                                className="w-48 h-48 mb-4"
+                                className="w-full h-auto mb-4"
                             />
                             <p>Scan the QR code to join the game!</p>
                             {sessionLink && (
                                 <p className="text-blue-600 underline">
                                     <a href={sessionLink} target="_blank" rel="noopener noreferrer">
-                                        {sessionLink}
+                                        Join via link
                                     </a>
                                 </p>
                             )}
                         </div>
 
                         {/* Active Participants Section */}
-                        <LobbyParticipants sessionId={sessionId} />
+                        <LobbyParticipants sessionId={sessionId}/>
                     </div>
                 )}
-
-                <GameOptions setSelectedRoles={setSelectedRoles} />
+                {isGameStarted && (
+                    <div className="flex flex-row justify-center items-center gap-4 mt-8">
+                        <GameOptions setSelectedRoles={setSelectedRoles}/>
+                    </div>
+                )}
 
                 {/* Start Game Button */}
                 {qrCode && (
@@ -126,11 +130,11 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
                 )}
                 <button
                     className="mt-4 px-6 py-3 text-lg text-white bg-yellow-800 rounded-md transition-colors hover:bg-yellow-900">
-
                     Learn more
                 </button>
             </div>
         </div>
+
     );
 
 }

@@ -5,9 +5,6 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import questionMarkImg from '../assets/questionMark.jpg';
 
-
-//TODO: when participant/player dies red
-
 const PlayerOverview = ({player, setMessages, messages}) => {
     const [participants, setParticipants] = useState(gameController.getPlayers());
     const [error, setError] = useState(null);
@@ -29,25 +26,6 @@ const PlayerOverview = ({player, setMessages, messages}) => {
         setParticipants(players);
     },[participants]);
 
-
-
-    /*useEffect(() => {
-        // Initialize participants only once when the component mounts
-        const players = gameController.getPlayers();
-        console.log("Fetched participants:", players); // Debug log
-        setParticipants(players);
-    }, []); // Run only on mount
-
-    useEffect(() => {
-        // Automatically enable `showRole` for dead participants
-        const updatedParticipants = participants.map((participant) => {
-            if (!participant.isAlive && !participant.showRole) {
-                return { ...participant, showRole: true }; // Ensure immutability
-            }
-            return participant;
-        });
-        setParticipants(updatedParticipants);
-    }, [participants]);*/
 
     const isNarratorView = location.pathname.includes("/narrator");
 

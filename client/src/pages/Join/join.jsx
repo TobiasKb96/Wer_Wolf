@@ -62,14 +62,19 @@ function Join({setOwnSocketId}) {
 
     return (
         <div
-            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
+            className="flex flex-col overflow-hidden px-1.5 pb-2 mx-auto w-full max-h-max text-center text-black bg-yellow-950 ">
             <div
-                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
-                Wer?Wolf
-            </div>
-
-            <div className="text-center mt-8 p-4">
-                <h1 className="text-[#646cff] mb-4 text-2xl font-bold">Join Game</h1>
+                className="flex flex-col overflow-hidden items-center h-full pt-0 pb-20 mt-1.5 border-2 border-solid bg-zinc-300 border-stone-600">
+                <div
+                    className="overflow-hidden self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                    Wer?Wolf
+                </div>
+                <h1 className="mt-8 text-4xl font-bold mb-8">
+                    Join the Game
+                </h1>
+                <img
+                    src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3RneDJjeDV5eDE2a3pyOHM2aDl2aThxOXFvaXBpaGRmNjhiODdybSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qGpHLaSIC8evPwUW5I/giphy.gif"
+                    alt="A fun GIF"/>
                 <p>Session ID: <strong>{sessionId}</strong></p>
                 <input
                     type="text"
@@ -78,10 +83,11 @@ function Join({setOwnSocketId}) {
                     onChange={(e) => setName(e.target.value)}
                     className="w-4/5 max-w-[300px] p-2 my-4 text-base border border-gray-300 rounded-md"
                 />
+
                 <button
                     onClick={handleJoinLobby}
-                    className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
-                >
+                    className="mt-4 px-6 py-3 text-lg text-white bg-yellow-800 rounded-md transition-colors hover:bg-yellow-900">
+
                     Join Lobby
                 </button>
                 {error && <p className="text-red-500 mt-4">{error}</p>}
@@ -93,8 +99,7 @@ function Join({setOwnSocketId}) {
                 )}
             </div>
         </div>
-)
-    ;
+    );
 }
 
 Join.propTypes = {
