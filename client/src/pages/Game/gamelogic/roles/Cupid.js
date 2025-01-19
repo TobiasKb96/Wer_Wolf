@@ -1,5 +1,6 @@
 import Role from "../Role.js";
 import Voting from "../../../../components/voting.jsx";
+import socket from "../../../../utils/socket.js";
 
 
 class Cupid extends Role{
@@ -11,8 +12,9 @@ class Cupid extends Role{
     }
 
 
-    nightAction(cupid, playerSelection) {
-        Voting(cupid, playerSelection, true);
+    nightAction(voters, choices) {
+        const txtMsg = 'Choose you want to be lovers';
+        socket.emit('startVoting', { voters, choices , txtMsg});
     }
 
 

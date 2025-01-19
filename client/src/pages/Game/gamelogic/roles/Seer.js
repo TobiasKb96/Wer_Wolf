@@ -1,6 +1,7 @@
 import Role from "../Role.js";
 import game from "../../game.jsx";
 import Voting from "../../../../components/voting.jsx";
+import socket from "../../../../utils/socket.js";
 
 
 class Seer extends Role{
@@ -12,8 +13,9 @@ class Seer extends Role{
     }
 
 
-    nightAction(seer, playerSelection) {
-        Voting(seer, playerSelection, true);
+    nightAction(voters, choices) {
+        const txtMsg = 'Choose whose role to reveal';
+        socket.emit('startVoting', { voters, choices , txtMsg});
     }
 
 

@@ -1,5 +1,6 @@
 import Role from "../Role.js";
 import Voting from "../../../../components/voting.jsx";
+import socket from "../../../../utils/socket.js";
 //import werewolfImg from '../../../../assets/werewolf1.jpeg';
 
 class Werewolf extends Role{
@@ -13,9 +14,10 @@ class Werewolf extends Role{
       //  this.roleImg = werewolfImg
     }
 
-    nightAction(werewolf, playerSelection)
+    nightAction(voters, choices)
     {
-        Voting(werewolf, playerSelection, true);
+        const txtMsg = 'Choose who to kill';
+        socket.emit('startVoting', { voters, choices , txtMsg});
     }
 }
 

@@ -1,5 +1,5 @@
 import Role from "../Role.js";
-import Voting from "../../../../components/voting.jsx";
+import socket from "../../../../utils/socket.js";
 
 
 class Bodyguard extends Role{
@@ -11,8 +11,9 @@ class Bodyguard extends Role{
     }
 
 
-    nightAction(bodyguard, playerSelection) {
-        Voting(bodyguard, playerSelection, true);
+    nightAction(voters, choices) {
+        const txtMsg = 'Choose who to protect';
+        socket.emit('startVoting', { voters, choices , txtMsg});
     }
 
 

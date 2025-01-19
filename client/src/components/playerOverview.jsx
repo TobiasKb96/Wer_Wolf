@@ -19,7 +19,7 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
     useEffect(() => {
         setParticipants(gameController.getPlayers());
-    },);
+    },[participants]);
 
     const isNarratorView = location.pathname.includes("/narrator");
 
@@ -70,7 +70,7 @@ const PlayerOverview = ({player, setMessages, messages}) => {
                                     <div className="w-16 h-16 bg-gray-400 rounded-full mb-2"></div>
 
                                     <div className="ml-0 sm:ml-4 text-center sm:text-left">
-                                        <p className={`font-bold ${!participant.isAlive ? 'text-red-800' : ''}`}>{participant.name}</p>
+                                        <p className={`font-bold ${!participant.isAlive ? 'text-red-800' : 'text-black'}`}>{participant.name}</p>
                                         {(showRole || !participant.isAlive) && (        //TODO: does this work?
                                             <>
                                                 <p className="text-sm text-gray-600">Role: {participant.role.roleName}

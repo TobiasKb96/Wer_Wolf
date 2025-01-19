@@ -79,14 +79,15 @@ module.exports = (io, socket) => {
     });
 
     socket.on('witchNightAction' , ()=> {
-        console.log("server socket is listening")
         const sessionId = getSessionId(socket);
         socket.to(sessionId).emit('witchShowPotions');
     });
 
+
+    //TODO: send Array of recently killed players to Witch
     socket.on('healingPotion' , ()=> {
         const sessionId = getSessionId(socket);
-        socket.to(sessionId).emit('useHealingPotion');
+        socket.to(sessionId).emit('useHealingPotion', recentlyKilledPlayers);
     });
 
     socket.on('poisonPotion' , ()=> {

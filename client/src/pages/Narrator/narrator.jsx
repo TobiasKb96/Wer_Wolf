@@ -3,6 +3,9 @@ import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";
 import PlayerOverview from "../../components/playerOverview.jsx";
+import Witch from "../Game/gamelogic/roles/Witch.js";
+import Werewolf from "../Game/gamelogic/roles/Werewolf.js";
+import Seer from "../Game/gamelogic/roles/Seer.js";
 //import //sunImg from '../../assets/sun.png';
 //import moonImg from '../../assets/moon.png';
 
@@ -24,6 +27,14 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         //TODO implement game loop
         // gameController.dayPhase();
         // gameController.nightPhase();
+
+        //const seer = gameController.getPlayers().filter(player => player.role.roleName === "Seer")
+        //Seer.nightAction(seer, gameController.getPlayers());
+
+        const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
+        console.log('Is this even the witch player here?', gameController.getPlayers());
+        const witchRole = new Witch();
+        witchRole.nightAction(witch, gameController.getPlayers());
     }
 
     const initializeGame = async () => {
@@ -58,6 +69,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     useEffect(() => {
         socket.on('voteResult', (mostVotedPlayer) => {
             alert(`${mostVotedPlayer} has been killed!`);
+            mostVotedPlayer.kill();
         });
 
 
@@ -69,6 +81,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
+        gameLoop();
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
     };
@@ -90,16 +103,17 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     }
     //TODO: Narrator mobile view
 
+    //TODO: scrollable view
 
     return (
         <div
-            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
+            className={`flex overflow-auto flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black ${currentPhase === "day" ? "bg-white" : "bg-gray-900"}`}>
             <div
                 className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
                 Wer?Wolf
             </div>
             <div
-                className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 ${
+                className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 overflow-scroll${
                     gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
                 }`}>
 
@@ -110,7 +124,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 </div>
 
                 {/* Player Overview Component*/}
-                <div className="w-full sm:w-1/3 lg:w-1/4 p-4 overflow-hidden"><PlayerOverview player={this}/>
+                <div className="w-full sm:w-1/3 lg:w-1/4 p-4 overflow-scroll"><PlayerOverview player={this}/>
                 </div>
 
                 {Object.entries(votes).map(([voter, selectedPlayer]) => (
@@ -118,7 +132,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 ))}
 
                 </div>
-                <footer className="flex justify-between p-4 sm:p-6">
+                <footer className="flex bg-yellow-950 justify-between p-4 sm:p-6">
                     <button
                         //TODO: add end game functionality
                         className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
