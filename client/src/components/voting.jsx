@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import socket from "../utils/socket.js";
 
-function Voting({ player , votingChoices, setVoting}) {
+function Voting({ player , votingChoices, setVoting, txtMsg}) {
     const [selectedPlayer, setSelectedPlayer] = useState("");
 
     //TODO: Voting timer
@@ -22,6 +22,9 @@ function Voting({ player , votingChoices, setVoting}) {
                     <div className="space-y-0.5">
                         <p className="text-lg text-black font-semibold">
                             Vote now:
+                        </p>
+                        <p>
+                            {txtMsg}
                         </p>
                         <p className="text-slate-500 font-medium">
                                 <select value={selectedPlayer} onChange={(e) => setSelectedPlayer(e.target.value)}

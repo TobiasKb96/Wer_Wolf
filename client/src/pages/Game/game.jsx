@@ -214,7 +214,7 @@ function Game({ownSocketId, messages, setMessages}) {
 
                 {/* Voting Section */}
                 {voting &&
-                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>}
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting} txtMsg={votingMsg}/>}
                 {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
                 }
             </div>
