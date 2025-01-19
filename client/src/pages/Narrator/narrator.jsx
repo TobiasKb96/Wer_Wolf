@@ -121,6 +121,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             setActiveRoles(gameController.getActiveRolesWithNightAction());
             setActivePlayers(gameController.getActivePlayers());
             setAmountOfNightPhase(activeRoles.length);
+            setVoteDisabled(false);
         }
 
     };
@@ -133,8 +134,11 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const startVoting = async () => {
         if(currentPhase === "day") {
-            const revealedPlayer = await gameController.dayPhase();
-            socket.emit("revealRole", revealedPlayer);
+            setVoteDisabled(true);
+            const killedPlayer = await gameController.dayPhase();
+            console.log("Day phase started for", killedPlayer);
+            socket.emit("revealRole", killedPlayer);
+            setPhaseSwitchDisabled(false)
         }
         if (currentPhase === "night") {
             setVoteDisabled(true);
@@ -147,6 +151,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             if (nightPhase === amountOfNightPhase) {
                 setPhaseSwitchDisabled(false);
             }
+            else {setVoteDisabled(false)};
         }
         console.log("startVoting has been called");
 
@@ -161,7 +166,6 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         console.log("voters: ", voters, "victims: ", choices);
 
          */
-        setVoteDisabled(false);
     }
     //TODO: Narrator mobile view
 

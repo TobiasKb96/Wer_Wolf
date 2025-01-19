@@ -198,7 +198,7 @@ class GameController {
         console.log("Day phase started");
         const voters = this.getActivePlayers();
         const choices = this.getActivePlayers();
-        const txtMsg = 'Townsfolk, choose who you want to kill';
+        const txtMsg = "Townsfolk, choose who you want to kill";
         const votedName = await new Promise((resolve) => {
             const handleEvent = (selectedPlayers) => {
                 console.log(`Townsfolk chose victim: ${selectedPlayers}`);
@@ -212,6 +212,7 @@ class GameController {
         });
         const votedPlayer = this.players.find(player => player.name === votedName);
         votedPlayer.kill();
+        return votedPlayer;
     }
 }
 
