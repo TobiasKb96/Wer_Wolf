@@ -15,6 +15,8 @@ import '/transitionStyle.css'; // Import the CSS file
 //TODO M6 Steffi. The system shall manage game phases to differentiate between day and night.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
 
+
+//TODO: when switch to day have a message saying these players died: and then the showRole socket for each player that died
 function Game({ownSocketId, messages, setMessages}) {
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState('day');
@@ -49,6 +51,7 @@ function Game({ownSocketId, messages, setMessages}) {
         socket.on('playersReceived', playersReceivedHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
         socket.on('votePrompt', startVotingHandler);
+        socket.on('showRole', handleShowSomeoneElsesRole);
 
         socket.on('witchShowPotions', witchShowPotionsHandler);
 
@@ -92,10 +95,15 @@ function Game({ownSocketId, messages, setMessages}) {
         }
     };
 
-
-    socket.on('showRole', (revealedPlayer) => {
-        alert(`${revealedPlayer.name}'s Role is: ${revealedPlayer.role.roleName}`)
-    });
+    const handleShowSomeoneElsesRole = (revealedPlayer) => {
+        console.log("In game the revealing alert is called:", revealedPlayer);
+        gameController.getPlayers().forEach(player => {
+            if (player.name === revealedPlayer) {
+                const revealedPlayerObject = player;
+                alert(`${revealedPlayerObject.name}'s Role is: ${revealedPlayerObject.role.roleName}`)
+            }
+        });
+    };
 
     const handleShowRole = () => {
         setModalOpen(true);

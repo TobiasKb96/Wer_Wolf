@@ -69,10 +69,14 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         setVotes({...gameController.votes}); // Sync votes with gameController
     }, [gameController.votes]);
 
+    //TODO: what to do on voteResult for Witch, Cupid, etc.
+    //TODO: kill PlayerObjects
+
     useEffect(() => {
         socket.on('voteResult', (mostVotedPlayer) => {
-            alert(`${mostVotedPlayer} has been killed!`);
-            mostVotedPlayer.kill();
+            alert(`${mostVotedPlayer} has died!`);
+            const revealedPlayer = mostVotedPlayer
+            socket.emit('revealRole', revealedPlayer);
         });
 
 

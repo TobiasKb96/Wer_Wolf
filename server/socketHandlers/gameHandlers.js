@@ -101,6 +101,7 @@ module.exports = (io, socket) => {
     });
 
     socket.on('revealRole', (revealedPlayer) =>{
+        console.log('revealRole is called on the server', revealedPlayer);
         const sessionId = getSessionId(socket);
         socket.to(sessionId).emit('showRole', revealedPlayer);
     })
