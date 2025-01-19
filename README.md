@@ -51,6 +51,13 @@ The application has two main components: the backend (server) and the frontend (
    ```bash
    npm install
    ```
+3. Install CERTS:
+   ```bash
+   mkdir certs
+   mkcert -install
+   mkcert create-ca
+   mkcert create-crt
+   ```
 
 #### Frontend (Client):
 1. Navigate to the `client` folder:
@@ -60,6 +67,13 @@ The application has two main components: the backend (server) and the frontend (
 2. Install the required dependencies:
    ```bash
    npm install
+   ```
+3. Install CERTS:
+   ```bash
+   mkdir certs
+   mkcert -install
+   mkcert create-ca
+   mkcert create-crt
    ```
 
 ---
@@ -124,23 +138,23 @@ Follow on-screen instructions to participate in the game.
 5. The system shall provide 2 playable characters, werewolf and villager
 6. The system shall manage game phases to differentiate between day and night.
 7. The system shall provide the narrator with an overview of the characters of the players.
-8. The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device. - Tobs
+8. The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device. 
 9. The system shall be able to distribute player roles between up to 8 players per game session.
 10. The system shall allow players to choose their name when joining a lobby done
 
 1.3.2.	Should-criteria
 
-The system should include a chat option for the players to communicate with each other. Any Player can contact any other Player during daytime, to anonymously agree on strategies. Anna
-The system should enable players to vote to eliminate another player.
-The system should provide the players with timers for actions like voting.
-The system should send a message if a player has been eliminated. ATM only to narrator, OPEN: send msg to all player about eliminated player – via narrator?
+1. The system should include a chat option for the players to communicate with each other. Any Player can contact any other Player during daytime, to anonymously agree on strategies. Anna
+2. The system should enable players to vote to eliminate another player.
+3. The system should provide the players with timers for actions like voting.
+4. The system should send a message if a player has been eliminated. 
 
 1.3.3.	Could-criteria (fully automated, no need for a narrator)
 
-1. The system could include additional roles if more players are participating (witch,..). Anna
+1. The system could include additional roles if more players are participating (witch,..).
 2. The system could allow the players to play a game without the need of a human narrator by automating all of his tasks.
-3. The system could provide the user with the ability to create their own characters. (Character ist eine eigene Gruppe von Spielern mit eigenem Goal, separat von Villagern; Goal selbst definiert)
-4. The system could be able to distribute player roles between up to 35 players per game session. Anna
+3. The system could provide the user with the ability to create their own characters. 
+4. The system could be able to distribute player roles between up to 35 players per game session.
 
 1.3.4.	Won‘t-criteria
 
