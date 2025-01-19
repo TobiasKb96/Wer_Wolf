@@ -1,4 +1,5 @@
 import Role from "../Role.js";
+import Voting from "../../../../components/voting.jsx";
 
 
 class Bodyguard extends Role{
@@ -11,8 +12,7 @@ class Bodyguard extends Role{
 
 
     nightAction(bodyguard, playerSelection) {
-        //TODO: call voting for playerSelection
-
+        Voting(bodyguard, playerSelection, true);
     }
 
 

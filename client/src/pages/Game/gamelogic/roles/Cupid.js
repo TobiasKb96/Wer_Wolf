@@ -1,4 +1,5 @@
 import Role from "../Role.js";
+import Voting from "../../../../components/voting.jsx";
 
 
 class Cupid extends Role{
@@ -11,7 +12,7 @@ class Cupid extends Role{
 
 
     nightAction(cupid, playerSelection) {
-        //TODO: voting choose person
+        Voting(cupid, playerSelection, true);
     }
 
 

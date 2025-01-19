@@ -1,5 +1,6 @@
 import Role from "../Role.js";
 import socket from "../../../../utils/socket.js";
+import Voting from "../../../../components/voting.jsx";
 
 
 class Witch extends Role{
@@ -13,7 +14,7 @@ class Witch extends Role{
     }
 
 
-    nightAction() {
+    nightAction(witch, playerSelection) {
         console.log("Night Action Witch");
         if(this.hasRevivePotion || this.hasPoisonPotion) {
             socket.emit('witchNightAction');
@@ -21,12 +22,12 @@ class Witch extends Role{
         }
 
         socket.on('usePoisonPotion' , ()=> {
-            //TODO start voting for who to kill
+            Voting(witch, playerSelection, true);
             this.hasPoisonPotion = false;
         });
 
         socket.on('useHealingPotion' , ()=> {
-            //TODO start voting for who to heal
+            Voting(witch, playerSelection, true);
             this.hasRevivePotion = false;
         });
 

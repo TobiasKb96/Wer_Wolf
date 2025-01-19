@@ -1,5 +1,6 @@
 import Role from "../Role.js";
-import werewolfImg from '../../../../assets/werewolf1.jpeg';
+import Voting from "../../../../components/voting.jsx";
+//import werewolfImg from '../../../../assets/werewolf1.jpeg';
 
 class Werewolf extends Role{
 
@@ -9,12 +10,12 @@ class Werewolf extends Role{
         this.priority = 1;
         this.description = 'You are a werewolf. You and your pack can vote in the night to eliminate another player'
         this.goal = `Your goal is to eliminate the townsfolk`
-        this.roleImg = werewolfImg
+      //  this.roleImg = werewolfImg
     }
 
-    nightAction(werewolves, playerSelection)
+    nightAction(werewolf, playerSelection)
     {
-        //TODO: start voting for werewolves
+        Voting(werewolf, playerSelection, true);
     }
 }
 

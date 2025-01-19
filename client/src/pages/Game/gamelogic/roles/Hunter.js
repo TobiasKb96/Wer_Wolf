@@ -12,11 +12,6 @@ class Hunter extends Role{
     }
 
 
-    nightAction() {
-
-    }
-
-
 }
 
 
