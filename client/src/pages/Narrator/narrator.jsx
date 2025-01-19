@@ -29,6 +29,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [activeRoles, setActiveRoles] = useState([]);
     const [activePlayers, setActivePlayers] = useState([]);
     const [voteDisabled, setVoteDisabled] = useState(false);
+    const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -37,6 +38,14 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         await wait(2000);  // Replace this if you want a different wait mechanism
         // gameController.dayPhase();
         gameController.nightPhase();
+
+        //const seer = gameController.getPlayers().filter(player => player.role.roleName === "Seer")
+        //Seer.nightAction(seer, gameController.getPlayers());
+
+        const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
+        const witchRole = new Witch();
+        witchRole.nightAction(witch, gameController.getPlayers());
+
 
 
     }
@@ -70,11 +79,16 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         setVotes({...gameController.votes}); // Sync votes with gameController
     }, [gameController.votes]);
 
+
+
+    //TODO: what to do on voteResult for Witch, Cupid, etc.
+    //TODO: kill PlayerObjects
+
     useEffect(() => {
         /*
         socket.on('voteResult', (mostVotedPlayer) => {
-            alert(`${mostVotedPlayer} has been killed!`);
-            mostVotedPlayer.kill();
+            alert(`${mostVotedPlayer} has died!`);
+            setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
         });
 */
 
@@ -82,6 +96,20 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             //socket.off('voteResult');
         };
     }, []);
+
+    useEffect(() => {
+        if (currentPhase === "day") {
+            console.log("Day phase started. Emitting recently killed players.", recentlyKilledPlayers);
+
+            recentlyKilledPlayers.forEach((revealedPlayer) => {
+                console.log(`Revealing role for: ${revealedPlayer}`);
+                socket.emit("revealRole", revealedPlayer);
+            });
+
+           setRecentlyKilledPlayers([]);
+        }
+    }, [currentPhase]);
+
 
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";

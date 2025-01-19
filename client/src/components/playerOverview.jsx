@@ -3,6 +3,7 @@ import socket from '../utils/socket';
 import PropTypes from "prop-types";
 import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
+import questionMarkImg from '../assets/questionMark.jpg';
 
 
 //TODO: when participant/player dies red
@@ -19,7 +20,18 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
     useEffect(() => {
         setParticipants(gameController.getPlayers());
-    },[participants]);
+    }, [participants]);
+
+    useEffect(() => {
+        // Automatically enable `showRole` for dead participants
+        const updatedParticipants = participants.map((participant) => {
+            if (!participant.isAlive) {
+                participant.showRole = true; // Add a `showRole` flag to the participant object
+            }
+            return participant;
+        });
+        setParticipants(updatedParticipants);
+    }, [participants]);
 
     const isNarratorView = location.pathname.includes("/narrator");
 
@@ -67,7 +79,9 @@ const PlayerOverview = ({player, setMessages, messages}) => {
                                     className="flex flex-col sm:flex-row items-center p-4 bg-white border border-gray-300 rounded-lg shadow-md min-w-[200px]"
                                 >
                                     {/*for the avatar */}
-                                    <div className="w-16 h-16 bg-gray-400 rounded-full mb-2"></div>
+                                    <div className="w-16 h-16 bg-gray-400 rounded-full mb-2">
+                                        {showRole || participant.showRole ? <img src={participant.role.roleImg} alt="Role" className="w-full h-full object-cover rounded-full"/> : <img src={questionMarkImg} alt="Role" className="w-full h-full object-cover rounded-full"/>}
+                                    </div>
 
                                     <div className="ml-0 sm:ml-4 text-center sm:text-left">
                                         <p className={`font-bold ${!participant.isAlive ? 'text-red-800' : 'text-black'}`}>{participant.name}</p>

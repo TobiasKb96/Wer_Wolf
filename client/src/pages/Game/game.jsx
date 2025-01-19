@@ -7,13 +7,15 @@ import Voting from "../../components/voting.jsx";
 import ModalOverview from "../../components/modalOverview.jsx";
 //import sunImg from '../../assets/sun.png';
 //import moonImg from '../../assets/moon.png';
-import '/transitionStyle.css'; // Import the CSS file
+import '/transitionStyle.css';
+import axios from "axios"; // Import the CSS file
 
 //TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameController
 
 
 //TODO M6 Steffi. The system shall manage game phases to differentiate between day and night.
 //TODO M8 Steffi.	The system shall display the narrator’s script, including all necessary prompts and instructions, on the narrator’s device.
+
 
 function Game({ownSocketId, messages, setMessages}) {
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
@@ -26,11 +28,13 @@ function Game({ownSocketId, messages, setMessages}) {
     const [votingChoices, setVotingChoices] = useState([]);
     const [votingMsg, setVotingMsg] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [isFirstRender, setIsFirstRender] = useState(true);
+
+    const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     useEffect(() => {
         // Listen for incoming messages
         socket.on('listenMessages', (message) => {
-            console.log("message received", message)
             setMessages((prevMessages) => [...prevMessages, message]);
 
         });
@@ -46,10 +50,19 @@ function Game({ownSocketId, messages, setMessages}) {
     }, [ownSocketId]);
 
     useEffect(() => {
+        if (!isFirstRender && phase === "day") {
+            console.log(" if is called");
+            alert("These players died tonight: ");
+        }
+        setIsFirstRender(false); // Update first render after the check
+    }, [phase]);
+
+
+    useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
         socket.on('votePrompt', startVotingHandler);
-
+        socket.on('showRole', handleShowSomeoneElsesRole);
         socket.on('witchShowPotions', witchShowPotionsHandler);
 
         return () => {
@@ -57,6 +70,8 @@ function Game({ownSocketId, messages, setMessages}) {
             socket.off('playersReceived', playersReceivedHandler);
             socket.off('phaseReceived', phaseReceivedHandler);
             socket.off('votePrompt');
+            socket.off('witchShowPotions', witchShowPotionsHandler);
+            socket.off('showRole', handleShowSomeoneElsesRole);
         };
     }, []);
 
@@ -94,10 +109,17 @@ function Game({ownSocketId, messages, setMessages}) {
         }
     };
 
-
-    socket.on('showRole', (revealedPlayer) => {
-        alert(`${revealedPlayer.name}'s Role is: ${revealedPlayer.role.roleName}`)
-    });
+    const handleShowSomeoneElsesRole = async (revealedPlayer) => {
+        console.log("In game the revealing alert is called:", revealedPlayer);
+        for (const player of gameController.getPlayers()) {
+            if (player.name === revealedPlayer) {
+                const revealedPlayerObject = player;
+                await wait(500);
+                alert(`${revealedPlayerObject.name}'s Role is: ${revealedPlayerObject.role.roleName}`);
+                revealedPlayerObject.isAlive = false;
+            }
+        }
+    };
 
     const handleShowRole = () => {
         setModalOpen(true);
@@ -183,7 +205,7 @@ function Game({ownSocketId, messages, setMessages}) {
 
                         <button
                             onClick={() => handlePotionUse("skip")}
-                            className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
+                            className={`px-4 py-2 rounded-lg bg-purple-800 hover:bg-purple-950 text-white`}
                         >
                             Skip Potion Use
                         </button>
