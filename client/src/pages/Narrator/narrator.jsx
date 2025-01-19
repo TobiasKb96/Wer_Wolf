@@ -142,8 +142,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         if(currentPhase === "day") {
             setVoteDisabled(true);
             const killedPlayer = await gameController.dayPhase();
-            console.log("Day phase started for", killedPlayer);
-            socket.emit("revealRole", killedPlayer);
+            console.log("Townsfolk", killedPlayer.name);
+            await wait(500);
+            socket.emit("revealRole", killedPlayer.name);
             setPhaseSwitchDisabled(false)
         }
         if (currentPhase === "night") {
