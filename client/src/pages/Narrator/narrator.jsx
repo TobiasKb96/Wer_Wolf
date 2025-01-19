@@ -27,17 +27,11 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const gameLoop = () => {
-        //TODO implement game loop
+
         // gameController.dayPhase();
-        // gameController.nightPhase();
+        gameController.nightPhase();
 
-        //const seer = gameController.getPlayers().filter(player => player.role.roleName === "Seer")
-        //Seer.nightAction(seer, gameController.getPlayers());
 
-        const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
-        console.log('Is this even the witch player here?', gameController.getPlayers());
-        const witchRole = new Witch();
-        witchRole.nightAction(witch, gameController.getPlayers());
     }
 
     const initializeGame = async () => {
@@ -48,6 +42,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
         socket.emit("sendPlayers", gameController.getPlayers());
         console.log("Players sent to server:", gameController.getPlayers());
+        await wait(500);
     };
 
     useEffect(() => {
@@ -70,15 +65,15 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     }, [gameController.votes]);
 
     useEffect(() => {
+        /*
         socket.on('voteResult', (mostVotedPlayer) => {
             alert(`${mostVotedPlayer} has been killed!`);
             mostVotedPlayer.kill();
         });
-
+*/
 
         return () => {
-            socket.off('voteResult');
-            socket.off('startVoting');
+            //socket.off('voteResult');
         };
     }, []);
 

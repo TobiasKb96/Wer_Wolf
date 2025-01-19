@@ -13,6 +13,10 @@ class Role {
     static nightAction() {
     }
 
+    static setLovers() {
+        this.goal = "Lovers"
+    }
+
 
 
 }

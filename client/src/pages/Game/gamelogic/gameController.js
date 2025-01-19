@@ -12,6 +12,7 @@ import Voting  from "../../../components/voting.jsx";
 import Girl from "./roles/Girl.js";
 
 
+
 class GameController {
     constructor() {
         this.players = []; // List of players who joined
@@ -83,7 +84,7 @@ class GameController {
     }
 
     distributeRoles = (lobbyParticipants, selectedRoles) => {
-        const numberOfWerewolves = lobbyParticipants.length <= 3 ? 1 : 2;
+        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
 
         // Generate a shuffled list of roles
         const roles = Array(lobbyParticipants.length).fill(new Villager);
@@ -137,6 +138,9 @@ class GameController {
     };
 
     nightPhase = () => {
+        let voters = [];
+        let choices = [];
+        let activePlayers = this.players.filter(player => player.isAlive);
         console.log("Night phase started");
         const activeRoles =  Array.from(
             new Map(
@@ -146,17 +150,33 @@ class GameController {
             ).values() // Use a Map to ensure uniqueness by role name
         );
 
-        if(activeRoles.includes(Werewolf)) {
-            const votedID = Werewolf.nightAction();
-            const votedPlayer = this.players.find(player => player.id === votedID);
+        console.log(activeRoles);
+        /*
+        if(activeRoles.some(role => role.roleName === "Cupid")) {
+            let voters = this.players.filter(player => player.role.roleName === "Cupid");
+            let choices = this.players.filter(player => player.role.roleName !== "Cupid");
+            const lovers = Cupid.nightAction(voters, choices);
+            while(lovers.length < 2) {
+                console.log("waiting for lovers");
+            }
+        }
+        */
+
+        if(activeRoles.some(role => role.roleName === "Werewolf")) {
+            let voters = activePlayers.filter(player => player.role.roleName === "Werewolf");
+            let choices = activePlayers.filter(player => player.role.roleName !== "Werewolf");
+            const votedName = Werewolf.nightAction(voters, choices);
+            const votedPlayer = this.players.find(player => player.name === votedName);
             console.log(votedPlayer);
             this.diedThisNight.push(votedPlayer);
         }
-
+        /*
         //end of night
         for (const player of this.diedThisNight) {
             player.kill();
         }
+        */
+
     }
 }
 
