@@ -32,6 +32,8 @@ function Game({ownSocketId, messages, setMessages}) {
     const [votingMsg, setVotingMsg] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [isFirstRender, setIsFirstRender] = useState(true);
+    const [transitionClass, setTransitionClass] = useState('radial-emerge');
+
 
     useEffect(() => {
         // Listen for incoming messages
@@ -92,7 +94,14 @@ function Game({ownSocketId, messages, setMessages}) {
         }
         setIsFirstRender(false);*/
     };
-
+    useEffect(() => {
+        const handlePhaseTransition = () => {
+            setTransitionClass('radial-leave');
+            setPhase((prevPhase) => (prevPhase === 'day' ? 'night' : 'day'));
+            setTransitionClass('radial-emerge');
+        };
+        socket.on('phaseChange', handlePhaseTransition);
+    }, []);
 
     const witchShowPotionsHandler = () => {
         if (playerObject.role.roleName === "Witch") {
