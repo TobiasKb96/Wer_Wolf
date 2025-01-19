@@ -173,6 +173,42 @@ function Game({ownSocketId, messages, setMessages}) {
                         </div>
                     )}
 
+                    {showPotions && (
+                        <div className="mt-6 p-4 border rounded bg-gray-200">
+                            <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
+                            <button
+                                onClick={() => handlePotionUse("healing")}
+                                disabled={healingUsed}
+                                className={`px-4 py-2 rounded-lg mr-2 ${
+                                    healingUsed
+                                        ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
+                                        : "bg-green-500 hover:bg-green-600 text-white"
+                                }`}
+                            >
+                                {healingUsed ? "Healing Potion Used" : "Use Healing Potion"}
+                            </button>
+
+                            <button
+                                onClick={() => handlePotionUse("poison")}
+                                disabled={poisonUsed}
+                                className={`px-4 py-2 rounded-lg mr-2 ${
+                                    poisonUsed
+                                        ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
+                                        : "bg-red-500 hover:bg-red-600 text-white"
+                                }`}
+                            >
+                                {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
+                            </button>
+
+                            <button
+                                onClick={() => handlePotionUse("skip")}
+                                className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
+                            >
+                                Skip Potion Use
+                            </button>
+                        </div>
+                    )}
+
                     {voting && (
                         <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting} />
                     )}
