@@ -146,9 +146,15 @@ function Game({ownSocketId, messages, setMessages}) {
     };
 
     return (
-        <div className={'flex flex-col h-screen'}>
+        <div
+            className={`flex overflow-auto flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black`}>
             <div
-                className={`flex-1 flex justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}>
+                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                Wer?Wolf
+            </div>
+            <div
+                className={`flex justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}
+                style={{ height: '50vh', overflow: 'hidden' }} >
                 <div
                     className={`absolute w-1/2 h-1/2 transition-transform transform ${transitionClass}`}
                     style={{
@@ -214,7 +220,8 @@ function Game({ownSocketId, messages, setMessages}) {
                 )}
 
                 {voting && (
-                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg}
+                            setVoting={setVoting}/>
                 )}
 
                 {modalOpen && (
