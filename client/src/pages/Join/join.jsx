@@ -69,9 +69,10 @@ function Join({setOwnSocketId}) {
                     className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
                     Wer?Wolf
                 </div>
-                <div className="mt-20 text-lg">
-                    Join Game
-                </div>
+                <h1 className="mt-8 text-4xl font-bold mb-8">
+                    Join the Game
+                </h1>
+                <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3RneDJjeDV5eDE2a3pyOHM2aDl2aThxOXFvaXBpaGRmNjhiODdybSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qGpHLaSIC8evPwUW5I/giphy.gif" alt="A fun GIF"/>
                 <p>Session ID: <strong>{sessionId}</strong></p>
                 <input
                     type="text"
@@ -96,7 +97,8 @@ function Join({setOwnSocketId}) {
                 )}
             </div>
         </div>
-);}
+    );
+}
 
 Join.propTypes = {
     setOwnSocketId: PropTypes.func.isRequired,
