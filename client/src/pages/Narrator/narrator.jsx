@@ -227,7 +227,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 <footer className="flex bg-yellow-950 justify-between p-4 sm:p-6">
                     <button
                         //TODO: add end game functionality
-                        className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                        className="w-1/3 sm:w-4/5 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
                     >
                         End Game
                     </button>
@@ -235,7 +235,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                     <button
                         disabled={voteDisabled}
                         onClick={startVoting}
-                        className={`w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
+                        className={`w-1/3 sm:w-4/5 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
                         bg-orange-200 text-black rounded-md transition-all
                         hover:bg-orange-300
                         disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed`}
@@ -246,7 +246,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                     <button
                         disabled={phaseSwitchDisabled}
                         onClick={togglePhase}
-                        className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
+                        className="w-1/3 sm:w-4/5 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
                         bg-orange-200 text-black rounded-md transition-all
                         hover:bg-orange-300
                         disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed"

@@ -163,10 +163,9 @@ function Game({ownSocketId, messages, setMessages}) {
                 Wer?Wolf
             </div>
             <div
-                className={`flex justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}
-                style={{ height: '50vh', overflow: 'hidden' }} >
+                className={`flex min-h-72 justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}>
                 <div
-                    className={`absolute w-1/2 h-1/2 transition-transform transform ${transitionClass}`}
+                    className={`relative w-1/2 h-1/2 transition-transform transform ${transitionClass}`}
                     style={{
                         backgroundImage: `url(${phase === 'day' ? sunImg : moonImg})`,
                         backgroundSize: 'contain',
