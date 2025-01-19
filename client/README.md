@@ -2,13 +2,118 @@
 
 An online version of the game Werewolf. This is a project for the course "Software Engineering" at the FH Campus Wien.
 
+## Team Members
+* Lead Developer: Anna Zierlinger
+* Lead Designer: Tobias Kaltenbrunner
+* Lead Coordinator: Stefanie Biber
 
-Our team consists of:
-Lead Developer: Anna Zierlinger
-Lead Designer: Tobias Kaltenbrunner
-Lead Coordinator: Stefanie Biber
+## Overview
+The **Wer_Wolf** application is an interactive multiplayer game designed to be played in groups, with roles assigned to players and various game phases such as day and night. The application consists of a backend server and a frontend client.
 
-**1.3.	Product scope**
+This guide provides detailed instructions on how to install and use the application.
+
+---
+
+## Prerequisites
+Before you begin, ensure you have the following installed on your machine:
+
+- **Node.js** (v14 or later)
+- **npm** (Node Package Manager)
+- **Git** (optional, for cloning the repository)
+
+---
+
+## Installation
+
+### 1. Clone or Download the Repository
+
+#### Option 1: Clone with Git
+Run the following command in your terminal:
+```bash
+git clone <repository-url>
+cd Wer_Wolf
+```
+
+#### Option 2: Download as ZIP
+1. Click the **Download ZIP** button on the repository page.
+2. Extract the contents of the ZIP file.
+3. Navigate to the extracted `Wer_Wolf` folder.
+
+### 2. Install Dependencies
+The application has two main components: the backend (server) and the frontend (client). Dependencies must be installed for both.
+
+#### Backend (Server):
+1. Navigate to the `server` folder:
+   ```bash
+   cd server
+   ```
+2. Install the required dependencies:
+   ```bash
+   npm install
+   ```
+
+#### Frontend (Client):
+1. Navigate to the `client` folder:
+   ```bash
+   cd client
+   ```
+2. Install the required dependencies:
+   ```bash
+   npm install
+   ```
+
+---
+
+## Running the Application
+
+### 1. Start the Backend Server
+1. Navigate to the `server` folder:
+   ```bash
+   cd server
+   ```
+2. Start the server:
+   ```bash
+   npm run dev
+   ```
+
+The server will start and listen on the configured port (default: `http://localhost:5000`).
+
+### 2. Start the Frontend Client
+1. Navigate to the `client` folder:
+   ```bash
+   cd client
+   ```
+2. Start the client:
+   ```bash
+   npm run build
+   ```
+
+The client will start and open the application in your default web browser (default: `http://localhost:3000`).
+
+---
+
+## Usage
+
+### Creating a Game
+1. Navigate to the game page in your browser.
+2. Click the **Create New Game** button to start a new session.
+3. A QR code will be displayed, allowing players to join the game by scanning it or using the provided link.
+
+### Joining a Game
+1. Players can join by scanning the QR code or navigating to the session link in their browser.
+2. Enter a username and wait for the host to start the game.
+
+### Playing the Game
+The game progresses through various phases:
+- **Day Phase**: Players discuss and vote on actions.
+- **Night Phase**: Certain roles take secret actions.
+
+Follow on-screen instructions to participate in the game.
+
+---
+## Additional Information
+
+### 1.3.	Product scope
 
 1.3.1.	Must-criteria
 
@@ -41,3 +146,26 @@ The system should send a message if a player has been eliminated. ATM only to na
 
 1. The system won‘t require the user to create an account or log in.
 2. The system won’t save Sessions in case of a critical system error
+
+### Folder Structure
+- **client/**: Contains the React frontend application.
+- **server/**: Contains the Node.js backend server.
+- **package.json**: Lists project dependencies and scripts.
+
+### Scripts
+Run the following scripts in either `client` or `server` folders:
+
+- `npm run dev`: Start the application in development mode.
+- `npm run build`: Build the application for production (frontend only).
+
+### Troubleshooting
+If you encounter issues:
+- Ensure all dependencies are installed with `npm install`.
+- Check if the required ports (5000 for the server, 3000 for the client) are available.
+- Review the console output for error messages.
+
+---
+
+## Contributions
+Contributions are welcome! Feel free to submit a pull request or open an issue on the repository.
+
