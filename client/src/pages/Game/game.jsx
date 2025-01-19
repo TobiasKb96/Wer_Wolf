@@ -31,7 +31,10 @@ function Game({ownSocketId, messages, setMessages}) {
     const playersReceivedHandler = (players) => {
         console.log("Players received:", players);
         gameController.setPlayers(players);
-        setPlayer(gameController.findPlayerById(ownSocketId));
+        if (player === null) {
+            setPlayer(gameController.findPlayerById(ownSocketId));
+        }
+        console.log(player);
 
     }
 
