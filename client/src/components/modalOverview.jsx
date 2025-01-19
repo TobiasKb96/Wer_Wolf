@@ -23,7 +23,7 @@ function ModalOverview({ player, onClose }) {
                         </p>
                     </div>
                     <button onClick={onClose}
-                            className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+                            className="px-4 py-1 text-sm text-yellow-950 font-semibold rounded-full border border-b-yellow-200 hover:text-white hover:bg-yellow-950 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-yellow-950 focus:ring-offset-2">
                         Close
                     </button>
                 </div>
