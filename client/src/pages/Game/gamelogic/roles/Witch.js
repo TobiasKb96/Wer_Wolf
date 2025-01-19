@@ -12,6 +12,7 @@ class Witch extends Role{
         this.goal = `Your goal is to win with the townsfolk`
         this.hasPoisonPotion = true;
         this.hasRevivePotion = true;
+        this.priority = 4;
     }
 
 

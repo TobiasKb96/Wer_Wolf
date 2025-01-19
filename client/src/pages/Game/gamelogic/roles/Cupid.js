@@ -14,6 +14,7 @@ class Cupid extends Role{
         this.scriptstart = "Cupid, open your eyes. Cupid chooses two players to be in love."
         this.scriptend = "Cupid, close your eyes."
         this.firstNight = true;
+        this.priority = 2;
     }
 
 

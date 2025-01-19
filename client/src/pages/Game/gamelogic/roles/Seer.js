@@ -10,6 +10,7 @@ class Seer extends Role{
         super('Seer', true);
         this.description = 'You are the Seer. You may choose one player each night whos role is going to be revealed to you.'
         this.goal = `Your goal is to win with the townsfolk`
+        this.priority = 4;
     }
 
 

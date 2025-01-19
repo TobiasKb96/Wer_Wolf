@@ -21,13 +21,20 @@ import Seer from "../Game/gamelogic/roles/Seer.js";
 
 function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
+
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
+    const [nightPhase,setNightPhase] = useState("");
+    const [amountOfNightPhase,setAmountOfNightPhase] = useState(0);
+    const [activeRoles, setActiveRoles] = useState([]);
+    const [activePlayers, setActivePlayers] = useState([]);
+    const [voteDisabled, setVoteDisabled] = useState(false);
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const gameLoop = () => {
+    const gameLoop = async () => {
 
+        await wait(2000);  // Replace this if you want a different wait mechanism
         // gameController.dayPhase();
         gameController.nightPhase();
 
@@ -50,7 +57,6 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         initializeGame();
         //socket.on('gameStarted', gameStartedHandler);
 
-        gameLoop();
 
         return () => {
             // Clean up listeners
@@ -79,9 +85,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
-        gameLoop();
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
+        if (newPhase === "night") {
+            setActiveRoles(gameController.getActiveRolesWithNightAction());
+        }
+
     };
 
     useEffect(() => {
@@ -90,7 +99,13 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     }, [currentPhase]);
 
 
-    const startVoting = () => {
+    const startVoting = async () => {
+        console.log("startVoting has been called");
+        setVoteDisabled(true);
+        gameController.getActiveRolesWithNightAction()
+        await gameController.nightPhase();
+
+        /*
         console.log("startVoting has been called");
         const players = gameController.getPlayers();
         const voters = players.filter(player => player.role.roleName === "Werewolf");
@@ -98,6 +113,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         const txtMsg = "Kill now!";
         socket.emit("startVoting", {voters, choices, txtMsg});
         console.log("voters: ", voters, "victims: ", choices);
+
+         */
+        setVoteDisabled(false);
     }
     //TODO: Narrator mobile view
 
@@ -139,8 +157,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                     </button>
 
                     <button
+                        disabled={voteDisabled}
                         onClick={startVoting}
-                        className="w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg bg-orange-200 text-black rounded-md hover:bg-orange-300 transition-all"
+                        className={`w-1/3 sm:w-1/4 lg:w-1/5 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-lg
+                        bg-orange-200 text-black rounded-md transition-all
+                        hover:bg-orange-300
+                        disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-not-allowed`}
                     >
                         Start Voting
                     </button>

@@ -14,12 +14,13 @@ class Werewolf extends Role{
         this.roleImg = werewolfImg
         this.scriptstart ="Werewolves awake now and open your eyes."
         this.scriptend = "Werewolves, close your eyes."
+        this.prioriy = 3;
     }
 
     static async nightAction(voters, choices)
     {
         console.log("Werewolfs night action started");
-        const txtMsg = 'Choose who to kill';
+        const txtMsg = "Choose who to kill";
         // Create a promise that resolves when the event happens
         const playerToKill= await new Promise((resolve) => {
 
