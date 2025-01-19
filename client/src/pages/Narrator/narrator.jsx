@@ -94,13 +94,13 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             } else {
                 alert("No one has been killed!");
             }
-            setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
+            const revealedPlayer = mostVotedPlayer
+            socket.emit('revealRole', revealedPlayer);
         });
-
+*/
 
         return () => {
-            socket.off('voteResult');
-            socket.off('startVoting');
+            //socket.off('voteResult');
         };
     }, []);
 
@@ -173,7 +173,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         console.log("voters: ", voters, "victims: ", choices);
 
          */
-    }
+    };
     //TODO: Narrator mobile view
 
     //TODO: scrollable view
