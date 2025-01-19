@@ -100,8 +100,7 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('skipPotionUse');
     });
 
-    socket.on('revealRole', (revealedPlayer) =>{
-        console.log('revealRole is called on the server', revealedPlayer);
+    socket.on('revealRole', (revealedPlayer) =>{        //send the name of a player
         const sessionId = getSessionId(socket);
         socket.to(sessionId).emit('showRole', revealedPlayer);
     })

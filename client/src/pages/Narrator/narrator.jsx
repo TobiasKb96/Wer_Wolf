@@ -22,7 +22,7 @@ import Seer from "../Game/gamelogic/roles/Seer.js";
 function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [votes, setVotes] = useState({});
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
-    const [sessionID, setSessionID] = useState(gameController.getSessionID());
+    const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -38,6 +38,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         console.log('Is this even the witch player here?', gameController.getPlayers());
         const witchRole = new Witch();
         witchRole.nightAction(witch, gameController.getPlayers());
+
+
+
     }
 
     const initializeGame = async () => {
@@ -69,14 +72,15 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         setVotes({...gameController.votes}); // Sync votes with gameController
     }, [gameController.votes]);
 
+
+
     //TODO: what to do on voteResult for Witch, Cupid, etc.
     //TODO: kill PlayerObjects
 
     useEffect(() => {
         socket.on('voteResult', (mostVotedPlayer) => {
             alert(`${mostVotedPlayer} has died!`);
-            const revealedPlayer = mostVotedPlayer
-            socket.emit('revealRole', revealedPlayer);
+            setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
         });
 
 
@@ -85,6 +89,20 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             socket.off('startVoting');
         };
     }, []);
+
+    useEffect(() => {
+        if (currentPhase === "day") {
+            console.log("Day phase started. Emitting recently killed players.", recentlyKilledPlayers);
+
+            recentlyKilledPlayers.forEach((revealedPlayer) => {
+                console.log(`Revealing role for: ${revealedPlayer}`);
+                socket.emit("revealRole", revealedPlayer);
+            });
+
+           setRecentlyKilledPlayers([]);
+        }
+    }, [currentPhase]);
+
 
     const togglePhase = () => {
         const newPhase = currentPhase === "day" ? "night" : "day";
