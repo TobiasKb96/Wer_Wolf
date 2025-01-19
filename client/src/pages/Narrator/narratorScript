@@ -1,0 +1,29 @@
+The night has fallen.
+Everyone in the town close their eyes.
+//Only in the first night
+Cupid, open your eyes.
+//narrator starts voting > cupid chooses two players to be in love > lovers receive a pop up in the morning > next night phase shall start
+Cupid, close your eyes.
+
+Werewolves awake now and open your eyes.
+//narrator starts voting > werewolves choose their victim > next night phase shall start
+Werewolves, close your eyes.
+
+Witch, open your eyes.
+//narrator starts voting > witch either choose victim or hasHealingPotion -> both can be chosen after each other but only once so needs to include skip > next night phase shall start
+Witch, close your eyes.
+
+Seer, open your eyes.
+//narrator starts voting > seer chooses a player to check > next night phase shall start
+Seer, close your eyes.
+
+Hunter, open your eyes.
+//narrator starts voting > hunter chooses a player to kill > switch to day phase
+Hunter, close your eyes.
+
+Day has come.
+Everyone open your eyes.
+//narrator sends list of dead players
+//narrator starts voting > players discuss > players vote > player with most votes gets killed > new night shall start
+
+
