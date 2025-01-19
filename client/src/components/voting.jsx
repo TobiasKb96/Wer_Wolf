@@ -26,7 +26,7 @@ function Voting({ player , votingChoices, setVoting, txtMsg}) {
 
     const handleVoteClick = () => {
             gameController.castVote(player.name, selectedPlayer);
-            alert(`${player.name} has voted for ${selectedPlayer}`);
+            //alert(`${player.name} has voted for ${selectedPlayer}`);
             socket.emit('vote', { voter: player.name, votedFor: selectedPlayer});
             setVoting(false);
     };

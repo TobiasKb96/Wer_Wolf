@@ -14,7 +14,7 @@ class Witch extends Role{
         this.goalCondition = "Townsfolk"
         this.hasPoisonPotion = true;
         this.hasRevivePotion = true;
-        this.priority = 4;
+        this.nightPriority  = 4;
         this.roleImg = witchImg
         this.scriptstart ="Witch awake now and open your eyes."
         this.scriptend = "Witch, close your eyes."

@@ -18,6 +18,10 @@ class Player {
         this.isAlive = false;
     }
 
+    unkill() {
+        this.isAlive = true;
+    }
+
     getName(){
         return this.name;
     }

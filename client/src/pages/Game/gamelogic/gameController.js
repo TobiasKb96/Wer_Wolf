@@ -20,6 +20,9 @@ class GameController {
         this.votes = {}; // Track votes cast by players
         this.sessionId = "";
         this.diedThisNight = [];
+        this.nightStep = 0;
+        this.protectedPlayer = null;
+
     }
 
     // Add a player if they are not already in the list
@@ -144,11 +147,18 @@ class GameController {
     getActiveRolesWithNightAction = async() => {
         const activeRoles = await new Promise((resolve) => {
             resolve(this.players
-            .filter(player => player.isAlive) // Only include alive players
-            .filter(player => player.role.hasNightAction) // Only include roles with night actions
-            .map(player => player.role) // Extract the role objects
-            .sort((a, b) => a.priority - b.priority) // Sort by priority
-            .map(role => role.roleName)) // Extract only the role names
+                .filter(player => player.isAlive) // Only include alive players
+                .filter(player => player.role.hasNightAction) // Only include roles with night actions
+                .filter(player => {
+                    // Check if the role has specific conditions like `firstNight`
+                    if (player.role.roleName === "Cupid") {
+                        return player.role.firstNight === true; // Only include Cupid if it's the first night
+                    }
+                    return true; // Include other roles without special conditions
+                })
+                .map(player => player.role) // Extract the role objects
+                .sort((a, b) => a.nightPriority  - b.nightPriority ) // Sort by priority
+                .map(role => role.roleName)) // Extract only the role names
         })
         return activeRoles; // Returns array of role names in priority order
     }
@@ -161,6 +171,8 @@ class GameController {
         let voters = [];
         let choices = [];
         let activePlayers = this.getActivePlayers()
+        let votedName = ""
+        let votedPlayer = null
         console.log("Night phase started");
         const activeRoles = this.getActiveRolesWithNightAction();
 
@@ -169,34 +181,36 @@ class GameController {
             case 'Werewolf':
                 voters = activePlayers.filter(player => player.role.roleName === "Werewolf");
                 choices = activePlayers.filter(player => player.role.roleName !== "Werewolf");
-                const votedName= await new Promise((resolve) => {
+                votedName= await new Promise((resolve) => {
                     resolve(Werewolf.nightAction(voters, choices));
 
                 });
-                const votedPlayer = this.players.find(player => player.name === votedName);
-                this.diedThisNight.push(votedPlayer.name)
-                votedPlayer.kill();
+                votedPlayer = this.players.find(player => player.name === votedName);
+                this.diedThisNight.push(votedPlayer)
+                //votedPlayer.kill();
+                break;
+
+            case 'Cupid':
+                voters = activePlayers.filter(player => player.role.roleName === "Cupid");
+                choices = activePlayers.filter(player => player.role.roleName !== "Cupid");
+                const votedLovers= await new Promise((resolve) => {
+                    resolve(Cupid.nightAction(voters, choices));
+
+                });
+                const lover1 = this.players.find(player => player.name === votedLovers[0]);
+                const lover2 = this.players.find(player => player.name === votedLovers[1]);
+                lover1.role.setLovers()
+                lover2.role.setLovers()
+                break;
+            case 'Bodyguard':
+                voters = activePlayers.filter(player => player.role.roleName === "Bodyguard");
+                choices = activePlayers.filter(player => player.role.roleName !== "Bodyguard");
+                const votedProtected= await new Promise((resolve) => {
+                    resolve(Bodyguard.nightAction(voters, choices));
+                });
+                this.protectedPlayer = this.players.find(player => player.name === votedProtected);
+                break;
         }
-
-
-        /*
-        if(activeRoles.some(role => role.roleName === "Cupid")) {
-            let voters = this.players.filter(player => player.role.roleName === "Cupid");
-            let choices = this.players.filter(player => player.role.roleName !== "Cupid");
-            const lovers = Cupid.nightAction(voters, choices);
-            while(lovers.length < 2) {
-                console.log("waiting for lovers");
-            }
-        }
-        */
-
-        /*
-        //end of night
-        for (const player of this.diedThisNight) {
-            player.kill();
-        }
-        */
-
     }
 
     dayPhase = async() => {

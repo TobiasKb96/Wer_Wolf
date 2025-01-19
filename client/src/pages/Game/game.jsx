@@ -81,16 +81,16 @@ function Game({ownSocketId, messages, setMessages}) {
     }, []);
 
     const gameOverHandler = (winResult) => {
-        alert(winResult, " won the game!");
-        navigate('/home');
+        alert(`${winResult}, won the game!`);
+        console.log("Game Over");
+        navigate("/home");
     }
     const playersReceivedHandler = (players) => {
         gameController.setPlayers(players);
         const thisPlayer = gameController.findPlayerById(ownSocketId)
         playerObject = thisPlayer;
-        if (player === null) {
             setPlayer(thisPlayer);
-        }
+
     };
 
     const phaseReceivedHandler = (phase) => {

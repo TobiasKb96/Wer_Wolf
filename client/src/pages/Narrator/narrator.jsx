@@ -25,13 +25,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
     const [sessionID, setSessionID] = useState(gameController.getSessionID());
-    const [nightPhase,setNightPhase] = useState(0);
-    const [amountOfNightPhase,setAmountOfNightPhase] = useState(0);
-    const [activeRoles, setActiveRoles] = useState([]);
-    const [activePlayers, setActivePlayers] = useState([]);
     const [voteDisabled, setVoteDisabled] = useState(false);
     const [phaseSwitchDisabled, setPhaseSwitchDisabled] = useState(true);
-    const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
+    //const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
     const [winCondition, setWinCondition] = useState("NO_WIN");
     const navigate = useNavigate();
 
@@ -120,16 +116,16 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     useEffect(() => {
         if (currentPhase === "day") {
-            console.log("Day phase started. Emitting recently killed players.", recentlyKilledPlayers);
+            console.log("Day phase started. Emitting recently killed players.", gameController.diedThisNight);
 
-            recentlyKilledPlayers.forEach((revealedPlayer) => {
-                console.log(`Revealing role for: ${revealedPlayer}`);
-                socket.emit("revealRole", revealedPlayer);
-                setRecentlyKilledPlayers([]);
+            gameController.diedThisNight.forEach((revealedPlayer) => {
+                console.log(`Revealing role for: ${revealedPlayer.name}`);
+                socket.emit("revealRole", revealedPlayer.name);
+                revealedPlayer.kill();
             });
-
-
+            gameController.diedThisNight = [];
         }
+        socket.emit("sendPlayers", gameController.getPlayers());
     }, [currentPhase]);
 
 
@@ -138,10 +134,8 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
         if (newPhase === "night") {
-            setNightPhase(0);
-            setActiveRoles(gameController.getActiveRolesWithNightAction());
-            setActivePlayers(gameController.getActivePlayers());
-            setAmountOfNightPhase(activeRoles.length);
+            gameController.nightStep = 0;
+            console.log("After Toggle, nightPhase is", gameController.nightStep);
             setVoteDisabled(false);
             setPhaseSwitchDisabled(true);
         }
@@ -165,21 +159,22 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         }
         if (currentPhase === "night") {
             setVoteDisabled(true);
-            const resolvedActiveRoles = await gameController.getActiveRolesWithNightAction();
-            setActiveRoles(resolvedActiveRoles);
+            const nightStep = gameController.nightStep;
+            console.log("Night step is", nightStep);
+            const activeRoles = await gameController.getActiveRolesWithNightAction();
             console.log("Active roles:", activeRoles);
-            await gameController.nightPhase(resolvedActiveRoles[nightPhase]);
-            console.log("Night phase started for", activeRoles[nightPhase], "at index", nightPhase);
-            setNightPhase(nightPhase + 1);
-            if (nightPhase === amountOfNightPhase) {
+            const amountOfNightPhase = activeRoles.length - 1;
+            console.log("Amount of night phases:", amountOfNightPhase);
+            await gameController.nightPhase(activeRoles[nightStep]);
+            console.log("Night phase started for", activeRoles[nightStep], "at index", nightStep);
+            gameController.nightStep ++;
+            if (nightStep === amountOfNightPhase) {
                 setPhaseSwitchDisabled(false);
-                const diedThisNight = gameController.diedThisNight;
-                setRecentlyKilledPlayers(diedThisNight);
             }
             else {setVoteDisabled(false)}
         }
         await checkWinCondition();
-        console.log("startVoting has been called");
+        console.log("startVoting has been ended");
 
 
         /*

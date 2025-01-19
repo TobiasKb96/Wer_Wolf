@@ -13,8 +13,9 @@ class Role {
     static nightAction() {
     }
 
-    static setLovers() {
-        this.goal = "Lovers"
+    setLovers() {
+        this.goalCondition = "Lovers"
+        this.goal = "Your goal is to be the last two players alive with your lover"
     }
 
 

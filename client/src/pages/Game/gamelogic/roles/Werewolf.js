@@ -15,7 +15,7 @@ class Werewolf extends Role{
         this.roleImg = werewolfImg
         this.scriptstart ="Werewolves awake now and open your eyes."
         this.scriptend = "Werewolves, close your eyes."
-        this.prioriy = 3;
+        this.nightPriority  = 3;
     }
 
     static async nightAction(voters, choices)
@@ -26,7 +26,7 @@ class Werewolf extends Role{
         const playerToKill= await new Promise((resolve) => {
 
             const handleEvent = (selectedPlayers) => {
-                console.log(`Werewolvess chose victim: ${selectedPlayers}`);
+                console.log(`Werewolves chose victim: ${selectedPlayers}`);
                 socket.off('voteResult', handleEvent); // Clean up listener
                 resolve(selectedPlayers);
             };

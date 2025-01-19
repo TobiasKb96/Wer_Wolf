@@ -14,7 +14,7 @@ class Hunter extends Role{
         this.roleImg = hunterImg
         this.scriptstart ="Hunter awake now and open your eyes."
         this.scriptend = "Hunter, close your eyes."
-        this.prioriy = 6;
+        this.nightPriority  = 6;
     }
 
 

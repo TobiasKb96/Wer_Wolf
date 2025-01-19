@@ -10,7 +10,7 @@ class Bodyguard extends Role{
         this.description = 'You are the Bodyguard. You may choose one person to protect each night. This player cannot die that die.'
         this.goal = `Your goal is to win with the townsfolk`
         this.goalCondition = "Townsfolk"
-        this.priority = 1;
+        this.nightPriority = 1;
         this.roleImg = bodyguardImg
 
         this.scriptstart ="Bodyguard awake now and open your eyes."
@@ -18,9 +18,24 @@ class Bodyguard extends Role{
     }
 
 
-    nightAction(voters, choices) {
-        const txtMsg = 'Choose who to protect';
-        socket.emit('startVoting', { voters, choices , txtMsg});
+    static async nightAction(voters, choices)
+    {
+        console.log("Bodyguard night action started");
+        const txtMsg = "Choose who to protect";
+        // Create a promise that resolves when the event happens
+        const playerToProtect= await new Promise((resolve) => {
+
+            const handleEvent = (selectedPlayers) => {
+                console.log(`Bodyguard chooses a player to protect: ${selectedPlayers}`);
+                socket.off('voteResult', handleEvent); // Clean up listener
+                resolve(selectedPlayers);
+            };
+
+            // Register the listener
+            socket.on('voteResult', handleEvent);
+            socket.emit('startVoting', { voters, choices , txtMsg});
+        });
+        return playerToProtect;
     }
 
 

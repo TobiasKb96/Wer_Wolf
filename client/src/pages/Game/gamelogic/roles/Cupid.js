@@ -15,34 +15,36 @@ class Cupid extends Role{
         this.scriptstart = "Cupid, open your eyes. Cupid chooses two players to be in love."
         this.scriptend = "Cupid, close your eyes."
         this.firstNight = true;
-        this.priority = 2;
+        this.nightPriority  = 2;
     }
 
 
-    static nightAction(voters, choices) {
+    static async nightAction(voters, choices) {
         const lovers = [];
         const txtMsg = 'Choose who you want to be lovers, you get two separate votes';
-        let voteCount = 0;
 
-        socket.on('voteResult', (mostVotedPlayer) => {
-            if(voteCount === 0) {
-                lovers.push(mostVotedPlayer);
-                voteCount++;
-                socket.emit('startVoting', { voters, choices , txtMsg});
+        const playerToLovers= await new Promise((resolve) => {
+
+            const handleEvent = (selectedPlayers) => {
+                if(lovers.length === 0) {
+                    console.log(`Cupid chose Lover: ${selectedPlayers}`);
+                    lovers.push(selectedPlayers);
+                    choices = choices.filter(player => player.name !== selectedPlayers);
+                    socket.emit('startVoting', { voters, choices , txtMsg});
+                }
+                else if(lovers.length === 1) {
+                    console.log(`Cupid chose Lover: ${selectedPlayers}`);
+                    resolve(selectedPlayers);
+                    lovers.push(selectedPlayers);
+                    socket.off('voteResult', handleEvent);
+                }
             }
-            else if(voteCount === 1) {
-                lovers.push(mostVotedPlayer);
-                voteCount++;
-            }
+            // Register the listener
+            socket.on('voteResult', handleEvent);
+            socket.emit('startVoting', { voters, choices , txtMsg});
         });
-
-        socket.emit('startVoting', { voters, choices , txtMsg});
-
-        while(voteCount < 2) {
-
-        }
-
-    return lovers;
+        this.firstNight = false;
+        return lovers;
 
     }
 

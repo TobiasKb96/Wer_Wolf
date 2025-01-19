@@ -113,6 +113,8 @@ const PlayerOverview = ({player, setMessages, messages}) => {
                                             <>
                                                 <p className="text-sm text-gray-600">Role: {participant.role.roleName}
                                                 </p>
+                                                <p className="text-sm text-gray-600">Goal Condition: {participant.role.goalCondition}
+                                                </p>
 
                                             </>
                                         )}
