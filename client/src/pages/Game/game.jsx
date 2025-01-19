@@ -64,7 +64,9 @@ function Game({ownSocketId, messages, setMessages}) {
         gameController.setPlayers(players);
         const thisPlayer = gameController.findPlayerById(ownSocketId)
         playerObject = thisPlayer;
-        setPlayer(thisPlayer);
+        if (player === null) {
+            setPlayer(thisPlayer);
+        }
     };
 
     const phaseReceivedHandler = (phase) => {

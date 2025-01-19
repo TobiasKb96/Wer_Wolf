@@ -18,6 +18,7 @@ class GameController {
         this.currentPhase = "day"; // Default is "day"
         this.votes = {}; // Track votes cast by players
         this.sessionId = "";
+        this.diedThisNight = [];
     }
 
     // Add a player if they are not already in the list
@@ -135,7 +136,28 @@ class GameController {
 
     };
 
+    nightPhase = () => {
+        console.log("Night phase started");
+        const activeRoles =  Array.from(
+            new Map(
+                this.players
+                    .filter(player => player.isAlive) // Filter players who are alive
+                    .map(player => [player.role.roleName, player.role]) // Map to a [roleName, roleObject] pair
+            ).values() // Use a Map to ensure uniqueness by role name
+        );
 
+        if(activeRoles.includes(Werewolf)) {
+            const votedID = Werewolf.nightAction();
+            const votedPlayer = this.players.find(player => player.id === votedID);
+            console.log(votedPlayer);
+            this.diedThisNight.push(votedPlayer);
+        }
+
+        //end of night
+        for (const player of this.diedThisNight) {
+            player.kill();
+        }
+    }
 }
 
 export default new GameController();
