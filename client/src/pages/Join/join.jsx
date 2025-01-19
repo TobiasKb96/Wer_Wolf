@@ -69,8 +69,8 @@ function Join({setOwnSocketId}) {
             </div>
 
             <div className="text-center mt-8 p-4">
-                <h1 className="text-[#646cff] mb-4 text-2xl font-bold">Join Game</h1>
-                <p>Session ID: <strong>{sessionId}</strong></p>
+                <h1 className="text-white mb-4 text-3xl font-bold">Join Game</h1>
+                <p className="text-white"> Session ID: <strong>{sessionId}</strong></p>
                 <input
                     type="text"
                     placeholder="Enter your name"
@@ -80,7 +80,7 @@ function Join({setOwnSocketId}) {
                 />
                 <button
                     onClick={handleJoinLobby}
-                    className="px-6 py-3 text-lg text-white bg-blue-600 rounded-md transition-colors hover:bg-blue-700"
+                    className="px-6 py-3 text-lg text-black font-bold bg-stone-400 rounded-md transition-colors hover:bg-stone-500"
                 >
                     Join Lobby
                 </button>
