@@ -89,6 +89,11 @@ function Game({ownSocketId, messages, setMessages}) {
         }
     };
 
+
+    socket.on('showRole', (revealedPlayer) =>{
+        alert(`${revealedPlayer.name}'s Role is: ${revealedPlayer.role.roleName}`)
+    });
+
     const handleShowRole = () => {
         setModalOpen(true);
     };
