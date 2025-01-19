@@ -94,13 +94,13 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             } else {
                 alert("No one has been killed!");
             }
-            const revealedPlayer = mostVotedPlayer
-            socket.emit('revealRole', revealedPlayer);
+            setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
         });
-*/
+
 
         return () => {
-            //socket.off('voteResult');
+            socket.off('voteResult');
+            socket.off('startVoting');
         };
     }, []);
 
