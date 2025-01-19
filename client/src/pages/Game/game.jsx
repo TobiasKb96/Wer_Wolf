@@ -28,11 +28,11 @@ function Game({ownSocketId, messages, setMessages}) {
     const [votingChoices, setVotingChoices] = useState([]);
     const [votingMsg, setVotingMsg] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [isFirstRender, setIsFirstRender] = useState(true);
 
     useEffect(() => {
         // Listen for incoming messages
         socket.on('listenMessages', (message) => {
-            console.log("message received", message)
             setMessages((prevMessages) => [...prevMessages, message]);
 
         });
@@ -48,11 +48,19 @@ function Game({ownSocketId, messages, setMessages}) {
     }, [ownSocketId]);
 
     useEffect(() => {
+        if (!isFirstRender && phase === "day") {
+            console.log(" if is called");
+            alert("These players died tonight: ");
+        }
+        setIsFirstRender(false); // Update first render after the check
+    }, [phase]);
+
+
+    useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
         socket.on('phaseReceived', phaseReceivedHandler);
         socket.on('votePrompt', startVotingHandler);
         socket.on('showRole', handleShowSomeoneElsesRole);
-
         socket.on('witchShowPotions', witchShowPotionsHandler);
 
         return () => {
@@ -60,6 +68,8 @@ function Game({ownSocketId, messages, setMessages}) {
             socket.off('playersReceived', playersReceivedHandler);
             socket.off('phaseReceived', phaseReceivedHandler);
             socket.off('votePrompt');
+            socket.off('witchShowPotions', witchShowPotionsHandler);
+            socket.off('showRole', handleShowSomeoneElsesRole);
         };
     }, []);
 
@@ -73,6 +83,11 @@ function Game({ownSocketId, messages, setMessages}) {
     const phaseReceivedHandler = (phase) => {
         gameController.setPhase(phase);
         setPhase(phase);
+       /* if (!isFirstRender && phase === "day") {
+            console.log("if is called")
+            alert("These players died tonight: ");
+        }
+        setIsFirstRender(false);*/
     };
 
 
