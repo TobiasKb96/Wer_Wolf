@@ -87,7 +87,7 @@ module.exports = (io, socket) => {
     //TODO: send Array of recently killed players to Witch
     socket.on('healingPotion' , ()=> {
         const sessionId = getSessionId(socket);
-        socket.to(sessionId).emit('useHealingPotion', recentlyKilledPlayers);
+        //socket.to(sessionId).emit('useHealingPotion', recentlyKilledPlayers);
     });
 
     socket.on('poisonPotion' , ()=> {

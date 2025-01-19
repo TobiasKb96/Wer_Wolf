@@ -114,6 +114,7 @@ function Game({ownSocketId, messages, setMessages}) {
                 const revealedPlayerObject = player;
                 await wait(500);
                 alert(`${revealedPlayerObject.name}'s Role is: ${revealedPlayerObject.role.roleName}`);
+                revealedPlayerObject.isAlive = false;
             }
         }
     };

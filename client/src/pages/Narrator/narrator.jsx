@@ -35,7 +35,6 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         //Seer.nightAction(seer, gameController.getPlayers());
 
         const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
-        console.log('Is this even the witch player here?', gameController.getPlayers());
         const witchRole = new Witch();
         witchRole.nightAction(witch, gameController.getPlayers());
 
