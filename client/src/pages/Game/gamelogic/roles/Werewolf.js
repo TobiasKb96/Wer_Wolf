@@ -15,7 +15,6 @@ class Werewolf extends Role{
         this.scriptstart ="Werewolves awake now and open your eyes."
         this.scriptend = "Werewolves, close your eyes."
         this.prioriy = 3;
-
     }
 
     static async nightAction(voters, choices)

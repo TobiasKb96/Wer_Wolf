@@ -5,10 +5,9 @@ import socket from "../../utils/socket.js";
 import PlayerOverview from "../../components/playerOverview.jsx";
 import Voting from "../../components/voting.jsx";
 import ModalOverview from "../../components/modalOverview.jsx";
-//import sunImg from '../../assets/sun.png';
-//import moonImg from '../../assets/moon.png';
-import '/transitionStyle.css';
-import axios from "axios"; // Import the CSS file
+import sunImg from '../../assets/sun.png';
+import moonImg from '../../assets/moon.png';
+import '/transitionStyle.css'; // Import the CSS file
 
 //TODO should Steffi / Anna: show timers, inform player if he died, allow players to choose a player to chat to during daytime (insert chat component) Timer needs to be implemented in gameController
 
@@ -18,6 +17,9 @@ import axios from "axios"; // Import the CSS file
 
 
 function Game({ownSocketId, messages, setMessages}) {
+    //const [isNight, setIsNight] = useState(false);
+    //const [showDropdown, setShowDropdown] = useState(false);
+    //const [selectedPlayer, setSelectedPlayer] = useState("");
     const [player, setPlayer] = useState(null); // search for id in gamestate after initial fill
     const [phase, setPhase] = useState('day');
     const [showPotions, setShowPotions] = useState(false);
@@ -29,6 +31,8 @@ function Game({ownSocketId, messages, setMessages}) {
     const [votingMsg, setVotingMsg] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [isFirstRender, setIsFirstRender] = useState(true);
+    const [transitionClass, setTransitionClass] = useState('radial-emerge');
+
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -87,8 +91,20 @@ function Game({ownSocketId, messages, setMessages}) {
     const phaseReceivedHandler = (phase) => {
         gameController.setPhase(phase);
         setPhase(phase);
+       /* if (!isFirstRender && phase === "day") {
+            console.log("if is called")
+            alert("These players died tonight: ");
+        }
+        setIsFirstRender(false);*/
     };
-
+    useEffect(() => {
+        const handlePhaseTransition = () => {
+            setTransitionClass('radial-leave');
+            setPhase((prevPhase) => (prevPhase === 'day' ? 'night' : 'day'));
+            setTransitionClass('radial-emerge');
+        };
+        socket.on('phaseChange', handlePhaseTransition);
+    }, []);
 
     const witchShowPotionsHandler = () => {
         if (playerObject.role.roleName === "Witch") {
@@ -136,37 +152,28 @@ function Game({ownSocketId, messages, setMessages}) {
 
     return (
         <div
-            className="flex overflow-scroll flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
-            {/*Day time night time section */}
-            <div className="flex flex-col items-center p-4 bg-gray-700 w-full">
+            className={`flex overflow-auto flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black`}>
+            <div
+                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
+                Wer?Wolf
+            </div>
+            <div
+                className={`flex justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}
+                style={{ height: '50vh', overflow: 'hidden' }} >
                 <div
-                    className={`flex flex-col items-center justify-center w-full min-h-screen transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
-                    <div className="relative w-full h-1/2">
-                        {/* {phase === "day" ? (
-                        {/* <img
-                            src={sunImg}
-                            alt="Sun"
-                            className="transition-transform duration-1000 transform sun-animation"
-                        />
-                    ) : (
-                        <img
-                            src={moonImg}
-                            alt="Moon"
-                            className="transition-transform duration-1000 transform moon-animation"
-                        />
-                    ) */}
-                    </div>
-                    <h1 className="text-4xl font-bold mb-8">
-                        It is {phase}!
-                    </h1>
-                </div>
-
-                {/* Player Info Section */}
-                <div className="flex flex-col items-center w-full p-4 bg-gray-900 rounded-lg mt-4">
-                    <div className="w-full sm:w-2/3 lg:w-1/2 p-4 bg-gray-900 rounded-lg mt-4">
-                        {player &&
-                            <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>}</div>
-                </div>
+                    className={`absolute w-1/2 h-1/2 transition-transform transform ${transitionClass}`}
+                    style={{
+                        backgroundImage: `url(${phase === 'day' ? sunImg : moonImg})`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                    }}
+                ></div>
+            </div>
+            <div className={'flex-1 bg-white flex flex-col justify-center items-center space-y-6 p-6'}>
+                <h1 className="text-4xl font-bold mb-8">
+                    It is {phase}!
+                </h1>
 
                 <button
                     onClick={handleShowRole}
@@ -175,7 +182,12 @@ function Game({ownSocketId, messages, setMessages}) {
                     Show Role
                 </button>
 
-                {/*Show potions section for witch */}
+                {player && (
+                    <div>
+                        <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
+                    </div>
+                )}
+
                 {showPotions && (
                     <div className="mt-6 p-4 border rounded bg-gray-200">
                         <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
@@ -205,21 +217,25 @@ function Game({ownSocketId, messages, setMessages}) {
 
                         <button
                             onClick={() => handlePotionUse("skip")}
-                            className={`px-4 py-2 rounded-lg bg-purple-800 hover:bg-purple-950 text-white`}
+                            className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
                         >
                             Skip Potion Use
                         </button>
                     </div>
                 )}
 
-                {/* Voting Section */}
-                {voting &&
-                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>}
-                {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
-                }
+                {voting && (
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg}
+                            setVoting={setVoting}/>
+                )}
+
+                {modalOpen && (
+                    <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
+                )}
             </div>
         </div>
     );
+
 }
 
 Game.propTypes = {

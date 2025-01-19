@@ -83,6 +83,10 @@ class GameController {
         }
     }
 
+    gameLoopTimer() {
+
+    }
+
     distributeRoles = (lobbyParticipants, selectedRoles) => {
         const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
 
