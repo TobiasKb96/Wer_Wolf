@@ -89,47 +89,51 @@ function Game({ownSocketId, messages, setMessages}) {
 
 
     return (
-        <div
-            className={`flex flex-col items-center justify-center min-h-screen transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
-            <div className="relative w-full h-1/2">
-                {phase === "day" ? (
-                    <img
-                        src={sunImg}
-                        alt="Sun"
-                        className="transition-transform duration-1000 transform sun-animation"
-                    />
-                ) : (
-                    <img
-                        src={moonImg}
-                        alt="Moon"
-                        className="transition-transform duration-1000 transform moon-animation"
-                    />
-                )}
-            </div>
-            <h1 className="text-4xl font-bold mb-8">
-                It is {phase}!
-            </h1>
-
-            <button
-                onClick={handleShowRole}
-                className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
-            >
-                Show Role
-            </button>
-
-            {player && (
-                <div>
-                    <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
+        <div className={'flex flex-col h-screen'}>
+            <div
+                className={`flex-1 flex justify-center items-center relative transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
+                <div className="relative w-full h-1/2">
+                    {phase === "day" ? (
+                        <img
+                            src={sunImg}
+                            alt="Sun"
+                            className="transition-transform duration-1000 transform sun-animation"
+                        />
+                    ) : (
+                        <img
+                            src={moonImg}
+                            alt="Moon"
+                            className="transition-transform duration-1000 transform moon-animation"
+                        />
+                    )}
                 </div>
-            )}
+            </div>
+            <div className={'flex-1 bg-white flex flex-col justify-center items-center space-y-6 p-6'}>
+                <h1 className="text-4xl font-bold mb-8">
+                    It is {phase}!
+                </h1>
+                    <button
+                        onClick={handleShowRole}
+                        className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
+                    >
+                        Show Role
+                    </button>
 
-            {voting && (
-                <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>
-            )}
+                    {player && (
+                        <div>
+                            <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
+                        </div>
+                    )}
 
-            {modalOpen && (
-                <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
-            )}
+                    {voting && (
+                        <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg}
+                                setVoting={setVoting}/>
+                    )}
+
+                    {modalOpen && (
+                        <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
+                    )}
+                </div>
         </div>
     );
 
