@@ -146,88 +146,83 @@ function Game({ownSocketId, messages, setMessages}) {
     };
 
     return (
-            <div className={'flex flex-col h-screen'}>
-                <div className={`flex-1 flex justify-center items-center relative transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
-                    <div className="relative w-full h-1/2">
-                        {phase === "day" ? (
-                            <img
-                                src={sunImg}
-                                alt="Sun"
-                                className="transition-transform duration-1000 transform sun-animation"
-                            />
-                        ) : (
-                            <img
-                                src={moonImg}
-                                alt="Moon"
-                                className="transition-transform duration-1000 transform moon-animation"
-                            />
-                        )}
-                    </div>
-                </div>
-                <div className={'flex-1 bg-white flex flex-col justify-center items-center space-y-6 p-6'}>
-                    <h1 className="text-4xl font-bold mb-8">
-                        It is {phase}!
-                    </h1>
-
-                    <button
-                        onClick={handleShowRole}
-                        className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
-                    >
-                        Show Role
-                    </button>
-
-                    {player && (
-                        <div>
-                            <PlayerOverview player={player} messages={messages} setMessages={setMessages} />
-                        </div>
-                    )}
-
-                    {showPotions && (
-                        <div className="mt-6 p-4 border rounded bg-gray-200">
-                            <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
-                            <button
-                                onClick={() => handlePotionUse("healing")}
-                                disabled={healingUsed}
-                                className={`px-4 py-2 rounded-lg mr-2 ${
-                                    healingUsed
-                                        ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
-                                        : "bg-green-500 hover:bg-green-600 text-white"
-                                }`}
-                            >
-                                {healingUsed ? "Healing Potion Used" : "Use Healing Potion"}
-                            </button>
-
-                            <button
-                                onClick={() => handlePotionUse("poison")}
-                                disabled={poisonUsed}
-                                className={`px-4 py-2 rounded-lg mr-2 ${
-                                    poisonUsed
-                                        ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
-                                        : "bg-red-500 hover:bg-red-600 text-white"
-                                }`}
-                            >
-                                {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
-                            </button>
-
-                            <button
-                                onClick={() => handlePotionUse("skip")}
-                                className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
-                            >
-                                Skip Potion Use
-                            </button>
-                        </div>
-                    )}
-
-                    {voting && (
-                        <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting} />
-                    )}
-
-                    {modalOpen && (
-                        <ModalOverview player={player} onClose={() => setModalOpen(false)} />
-                    )}
-                </div>
+        <div className={'flex flex-col h-screen'}>
+            <div
+                className={`flex-1 flex justify-center items-center relative ${phase === 'day' ? 'bg-blue-300' : 'bg-gray-800'}`}>
+                <div
+                    className={`absolute w-1/2 h-1/2 transition-transform transform ${transitionClass}`}
+                    style={{
+                        backgroundImage: `url(${phase === 'day' ? sunImg : moonImg})`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                    }}
+                ></div>
             </div>
-        );
+            <div className={'flex-1 bg-white flex flex-col justify-center items-center space-y-6 p-6'}>
+                <h1 className="text-4xl font-bold mb-8">
+                    It is {phase}!
+                </h1>
+
+                <button
+                    onClick={handleShowRole}
+                    className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
+                >
+                    Show Role
+                </button>
+
+                {player && (
+                    <div>
+                        <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
+                    </div>
+                )}
+
+                {showPotions && (
+                    <div className="mt-6 p-4 border rounded bg-gray-200">
+                        <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
+                        <button
+                            onClick={() => handlePotionUse("healing")}
+                            disabled={healingUsed}
+                            className={`px-4 py-2 rounded-lg mr-2 ${
+                                healingUsed
+                                    ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
+                                    : "bg-green-500 hover:bg-green-600 text-white"
+                            }`}
+                        >
+                            {healingUsed ? "Healing Potion Used" : "Use Healing Potion"}
+                        </button>
+
+                        <button
+                            onClick={() => handlePotionUse("poison")}
+                            disabled={poisonUsed}
+                            className={`px-4 py-2 rounded-lg mr-2 ${
+                                poisonUsed
+                                    ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
+                                    : "bg-red-500 hover:bg-red-600 text-white"
+                            }`}
+                        >
+                            {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
+                        </button>
+
+                        <button
+                            onClick={() => handlePotionUse("skip")}
+                            className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
+                        >
+                            Skip Potion Use
+                        </button>
+                    </div>
+                )}
+
+                {voting && (
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>
+                )}
+
+                {modalOpen && (
+                    <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
+                )}
+            </div>
+        </div>
+    );
 
 }
 

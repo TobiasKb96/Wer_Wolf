@@ -1,32 +1,33 @@
-/* transitionStyle.css */
-@keyframes sun-move {
+@keyframes emerge {
     0% {
-        transform: translate(0, 200%);
-    }
-    50% {
-        transform: translate(-100%, 100%);
+        transform: translate(-50%, 100%) scale(0); /* Start from bottom left */
+        opacity: 0;
     }
     100% {
-        transform: translate(0, 0);
+        transform: translate(-50%, -50%) scale(1); /* Move to center */
+        opacity: 1;
     }
 }
 
-@keyframes moon-move {
+@keyframes leave {
     0% {
-        transform: translate(0, 200%);
-    }
-    50% {
-        transform: translate(-100%, 100%);
+        transform: translate(-50%, -50%) scale(1); /* Start from center */
+        opacity: 1;
     }
     100% {
-        transform: translate(0, 0);
+        transform: translate(-50%, -100%) scale(0); /* Exit through the top */
+        opacity: 0;
     }
 }
 
-.sun-animation {
-    animation: sun-move 2s ease-in-out forwards;
+.radial-emerge {
+    animation: emerge 1s ease-out forwards;
 }
 
-.moon-animation {
-    animation: moon-move 2s ease-in-out forwards;
+.radial-leave {
+    animation: leave 1s ease-in forwards;
+}
+
+.hidden {
+    display: none;
 }
