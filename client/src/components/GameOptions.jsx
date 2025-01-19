@@ -15,7 +15,6 @@ const GameOptions = ({setSelectedRoles}) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <div className="w-80 p-6 bg-white border border-gray-300 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-bold text-center mb-4">Game Options</h1>
 
@@ -34,7 +33,6 @@ const GameOptions = ({setSelectedRoles}) => {
                     ))}
                 </div>
             </div>
-        </div>
     );
 };
 
