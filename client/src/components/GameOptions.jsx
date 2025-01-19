@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 
 const GameOptions = ({setSelectedRoles}) => {
-    const availableRoles = ['Witch', 'Cupid', 'Bodyguard', 'Seer', 'Hunter'];
+    const availableRoles = ['Witch', 'Cupid', 'Bodyguard', 'Seer', 'Hunter', 'Girl'];
 
     // Toggle roles in the array
     const handleRoleChange = (role) => {

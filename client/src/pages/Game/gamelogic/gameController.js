@@ -9,6 +9,7 @@ import Hunter from "./roles/Hunter.js";
 import Seer from "./roles/Seer.js";
 import socket from "../../../utils/socket.js";
 import Voting  from "../../../components/voting.jsx";
+import Girl from "./roles/Girl.js";
 
 
 class GameController {
@@ -107,6 +108,9 @@ class GameController {
                     break;
                 case 'Seer':
                     roles[roles.length - j - 1] = new Seer;
+                    break;
+                case 'Girl':
+                    roles[roles.length - j - 1] = new Girl;
                     break;
             }
         }

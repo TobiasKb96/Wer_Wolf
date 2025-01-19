@@ -95,6 +95,10 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('usePoisonPotion');
     });
 
+    socket.on('skipPotions' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('skipPotionUse');
+    });
 
     socket.on('revealRole', (revealedPlayer) =>{
         const sessionId = getSessionId(socket);

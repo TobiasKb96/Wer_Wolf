@@ -86,11 +86,14 @@ function Game({ownSocketId, messages, setMessages}) {
         } else if (potionType === "poison" && !poisonUsed) {
             socket.emit('poisonPotion');
             setPoisonUsed(true);  // Disable poison potion
+        } else if (potionType === "skip") {
+            socket.emit('skipPotions');
+            setShowPotions(false);
         }
     };
 
 
-    socket.on('showRole', (revealedPlayer) =>{
+    socket.on('showRole', (revealedPlayer) => {
         alert(`${revealedPlayer.name}'s Role is: ${revealedPlayer.role.roleName}`)
     });
 
@@ -109,16 +112,13 @@ function Game({ownSocketId, messages, setMessages}) {
 
     return (
         <div
-            className="flex overflow-hidden flex-col px-1.5 pb-2 mx-auto w-full h-full text-center text-black bg-yellow-950">
-            <div
-                className="overflow-visible self-stretch px-8 py-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl whitespace-nowrap rounded-b-xl border-solid bg-stone-300 border-neutral-500 shadow-[0px_2px_2px_rgba(0,0,0,0.25)] font-metal">
-                Wer?Wolf
-            </div>
-
-            <div
-                className={`flex flex-col items-center justify-center w-full min-h-screen transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
-                <div className="relative w-full h-1/2">
-                    {/* {phase === "day" ? (
+            className="flex overflow-scroll flex-col items-center justify-center min-h-screen bg-gray-800 text-white">
+            {/*Day time night time section */}
+            <div className="flex flex-col items-center p-4 bg-gray-700 w-full">
+                <div
+                    className={`flex flex-col items-center justify-center w-full min-h-screen transition-colors ${phase === "day" ? "bg-blue-300" : "bg-gray-800"}`}>
+                    <div className="relative w-full h-1/2">
+                        {/* {phase === "day" ? (
                         {/* <img
                             src={sunImg}
                             alt="Sun"
@@ -131,10 +131,18 @@ function Game({ownSocketId, messages, setMessages}) {
                             className="transition-transform duration-1000 transform moon-animation"
                         />
                     ) */}
+                    </div>
+                    <h1 className="text-4xl font-bold mb-8">
+                        It is {phase}!
+                    </h1>
                 </div>
-                <h1 className="text-4xl font-bold mb-8">
-                    It is {phase}!
-                </h1>
+
+                {/* Player Info Section */}
+                <div className="flex flex-col items-center w-full p-4 bg-gray-900 rounded-lg mt-4">
+                    <div className="w-full sm:w-2/3 lg:w-1/2 p-4 bg-gray-900 rounded-lg mt-4">
+                        {player &&
+                            <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>}</div>
+                </div>
 
                 <button
                     onClick={handleShowRole}
@@ -143,6 +151,7 @@ function Game({ownSocketId, messages, setMessages}) {
                     Show Role
                 </button>
 
+                {/*Show potions section for witch */}
                 {showPotions && (
                     <div className="mt-6 p-4 border rounded bg-gray-200">
                         <h2 className="text-xl font-semibold mb-4">Choose a Potion</h2>
@@ -161,7 +170,7 @@ function Game({ownSocketId, messages, setMessages}) {
                         <button
                             onClick={() => handlePotionUse("poison")}
                             disabled={poisonUsed}
-                            className={`px-4 py-2 rounded-lg ${
+                            className={`px-4 py-2 rounded-lg mr-2 ${
                                 poisonUsed
                                     ? "bg-gray-400 cursor-not-allowed"  // Greyed out when used
                                     : "bg-red-500 hover:bg-red-600 text-white"
@@ -169,13 +178,21 @@ function Game({ownSocketId, messages, setMessages}) {
                         >
                             {poisonUsed ? "Poison Potion Used" : "Use Poison Potion"}
                         </button>
+
+                        <button
+                            onClick={() => handlePotionUse("skip")}
+                            className={`px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white`}
+                        >
+                            Skip Potion Use
+                        </button>
                     </div>
                 )}
 
-                {player && <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>}
+                {/* Voting Section */}
                 {voting &&
                     <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}/>}
-                {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>}
+                {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
+                }
             </div>
         </div>
     );

@@ -35,6 +35,10 @@ class Witch extends Role{
             this.hasRevivePotion = false;
         });
 
+        socket.on('skipPotionUse' , ()=> {
+            return;
+        });
+
     }
 
 
