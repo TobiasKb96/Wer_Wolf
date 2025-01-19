@@ -19,19 +19,35 @@ const PlayerOverview = ({player, setMessages, messages}) => {
     }
 
     useEffect(() => {
-        setParticipants(gameController.getPlayers());
-    }, [participants]);
+        const players = gameController.getPlayers().map((participant) => {
+            if (!participant.isAlive) {
+                return { ...participant, showRole: true };
+            }
+            return participant;
+        });
+
+        setParticipants(players);
+    },[participants]);
+
+
+
+    /*useEffect(() => {
+        // Initialize participants only once when the component mounts
+        const players = gameController.getPlayers();
+        console.log("Fetched participants:", players); // Debug log
+        setParticipants(players);
+    }, []); // Run only on mount
 
     useEffect(() => {
         // Automatically enable `showRole` for dead participants
         const updatedParticipants = participants.map((participant) => {
-            if (!participant.isAlive) {
-                participant.showRole = true; // Add a `showRole` flag to the participant object
+            if (!participant.isAlive && !participant.showRole) {
+                return { ...participant, showRole: true }; // Ensure immutability
             }
             return participant;
         });
         setParticipants(updatedParticipants);
-    }, [participants]);
+    }, [participants]);*/
 
     const isNarratorView = location.pathname.includes("/narrator");
 
@@ -39,8 +55,11 @@ const PlayerOverview = ({player, setMessages, messages}) => {
         ? participants
         : participants.filter((p) => p.id !== player.id);
 
+
+
     const handleOpenChat = (participant) => {
         console.log(participants)
+        console.log('filteredParticipants:', filteredParticipants);
         setChatUser(participant);  // Open chat with selected participant
     };
 
@@ -50,6 +69,9 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
     const handleShowRole = () => {
         setShowRole((prevShowRole) => !prevShowRole);
+        console.log('filteredParticipants:', filteredParticipants);
+        console.log(participants)
+        console.log('gamecontroller.getplayer works?', gameController.getPlayers())
     };
 
     //TODO: have list items scrollable to the right in mobile version
