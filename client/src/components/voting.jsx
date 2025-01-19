@@ -6,6 +6,7 @@ import socket from "../utils/socket.js";
 function Voting({ player , votingChoices, setVoting}) {
     const [selectedPlayer, setSelectedPlayer] = useState("");
 
+    //TODO: Voting timer
 
     const handleVoteClick = () => {
             gameController.castVote(player.name, selectedPlayer);

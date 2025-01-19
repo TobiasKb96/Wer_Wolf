@@ -77,6 +77,35 @@ module.exports = (io, socket) => {
             }
         }
     });
+
+    socket.on('witchNightAction' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('witchShowPotions');
+    });
+
+
+    //TODO: send Array of recently killed players to Witch
+    socket.on('healingPotion' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('useHealingPotion', recentlyKilledPlayers);
+    });
+
+    socket.on('poisonPotion' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('usePoisonPotion');
+    });
+
+    socket.on('skipPotions' , ()=> {
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('skipPotionUse');
+    });
+
+    socket.on('revealRole', (revealedPlayer) =>{
+        console.log('revealRole is called on the server', revealedPlayer);
+        const sessionId = getSessionId(socket);
+        socket.to(sessionId).emit('showRole', revealedPlayer);
+    })
+
 };
 
 const getSessionId = (socket) => {
