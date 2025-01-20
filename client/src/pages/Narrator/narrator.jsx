@@ -5,6 +5,7 @@ import socket from "../../utils/socket.js";
 import PropTypes from "prop-types";;
 import PlayerOverview from "../../components/playerOverview.jsx";
 import Witch from "../Game/gamelogic/roles/Witch.js";
+import game from "../Game/game.jsx";
 
 
 //TODO show names of all participants and their roles
@@ -120,10 +121,18 @@ function Narrator({joinedLobbyParticipants, selectedRoles, narrator}) {
             console.log("Day phase started. Emitting recently killed players.", gameController.diedThisNight);
 
             gameController.diedThisNight.forEach((killedPlayer) => {
+                if (gameController.protectedPlayer === null) {
                 console.log(`Revealing role for: ${killedPlayer.name}`);
                 socket.emit("revealRole", killedPlayer.name);
                 killedPlayer.kill();
+                }
+                else if (killedPlayer.name !== gameController.protectedPlayer.name) {
+                    console.log(`Revealing role for: ${killedPlayer.name}`);
+                    socket.emit("revealRole", killedPlayer.name);
+                    killedPlayer.kill();
+                }
             });
+
             gameController.diedThisNight = [];
 
             checkWinCondition();

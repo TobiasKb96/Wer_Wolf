@@ -18,13 +18,26 @@ class Seer extends Role{
         this.scriptend = "Seer, close your eyes."
     }
 
+    static async nightAction(voters, choices)
+    {
+        console.log("Seer night action started");
+        const txtMsg = "Choose whose role to reveal";
+        // Create a promise that resolves when the event happens
+        const playerToReveal= await new Promise((resolve) => {
 
-    nightAction(voters, choices) {
-        const txtMsg = 'Choose whose role to reveal';
-        socket.emit('startVoting', { voters, choices , txtMsg});
+            const handleEvent = (selectedPlayers) => {
+                console.log(`Seer chooses a player to reveal: ${selectedPlayers}`);
+                socket.off('voteResult', handleEvent); // Clean up listener
+                socket.emit('revealRole', selectedPlayers, voters);
+                resolve(selectedPlayers);
+            };
+
+            // Register the listener
+            socket.on('voteResult', handleEvent);
+            socket.emit('startVoting', { voters, choices , txtMsg});
+        });
+        return playerToReveal;
     }
-
-
 }
 
 

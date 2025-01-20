@@ -220,6 +220,13 @@ class GameController {
                 });
                 this.protectedPlayer = this.players.find(player => player.name === votedProtected);
                 break;
+            case 'Seer':
+                voters = activePlayers.filter(player => player.role.roleName === "Seer");
+                choices = activePlayers.filter(player => player.role.roleName !== "Seer");
+                const revealPlayer= await new Promise((resolve) => {
+                    resolve(Seer.nightAction(voters, choices));
+                });
+                break;
         }
     }
 

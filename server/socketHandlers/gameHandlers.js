@@ -102,9 +102,14 @@ module.exports = (io, socket) => {
         socket.to(sessionId).emit('skipPotionUse');
     });
 
-    socket.on('revealRole', (revealedPlayer) =>{        //send the name of a player
+    socket.on('revealRole', (revealedPlayer, seer) =>{        //send the name of a player
         const sessionId = getSessionId(socket);
-        socket.to(sessionId).emit('showRole', revealedPlayer);
+        if (seer) {
+            socket.to(seer).emit('showRole', revealedPlayer);
+        }
+        else{
+            socket.to(sessionId).emit('showRole', revealedPlayer);
+        }
     })
 
     socket.on('gameOver', (winResult) =>{        //send the name of a player
