@@ -13,7 +13,7 @@ class Werewolf extends Role{
         this.goal = `Your goal is to eliminate the townsfolk`
         this.goalCondition = "Werewolves"
         this.roleImg = werewolfImg
-        this.scriptstart ="Werewolves awake now and open your eyes."
+        this.scriptstart ="Werewolves awake now and open your eyes. \nvote on your victim."
         this.scriptend = "Werewolves, close your eyes."
         this.nightPriority  = 3;
     }

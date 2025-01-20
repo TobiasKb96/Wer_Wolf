@@ -13,7 +13,7 @@ class Bodyguard extends Role{
         this.nightPriority = 1;
         this.roleImg = bodyguardImg
 
-        this.scriptstart ="Bodyguard awake now and open your eyes."
+        this.scriptstart ="Bodyguard awake now and open your eyes. \n Choose a player to protect."
         this.scriptend = "Bodyguard, close your eyes."
     }
 

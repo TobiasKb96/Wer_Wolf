@@ -14,7 +14,7 @@ class Seer extends Role{
         this.goalCondition = "Townsfolk"
         this.roleImg = seerImg
         this.nightPriority  = 5;
-        this.scriptstart = "Seer, open your eyes. Cupid chooses two players to be in love."
+        this.scriptstart = "Seer, open your eyes and choose a player to reveal their role."
         this.scriptend = "Seer, close your eyes."
     }
 

@@ -12,7 +12,7 @@ class Cupid extends Role{
         this.goal = `Your goal is to win with the townsfolk`
         this.goalCondition = "Townsfolk"
         this.roleImg = cupidImg
-        this.scriptstart = "Cupid, open your eyes. Cupid chooses two players to be in love."
+        this.scriptstart = "Cupid, open your eyes. \nCupid choose two players to be in love."
         this.scriptend = "Cupid, close your eyes."
         this.firstNight = true;
         this.nightPriority  = 2;

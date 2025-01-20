@@ -32,8 +32,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     const [winCondition, setWinCondition] = useState("NO_WIN");
     const navigate = useNavigate();
     const [script, setScript] = useState(
-        "It is day, the villagers heard that there are werewolves rampant in the village. " +
-        "Without hope they decided to take the matter into their own hands and started to randomly kill people." +
+        "It is day, the villagers heard that there are werewolves rampant in the village.\n" +
+        "Without hope they decided to take the matter into their own hands.\n" +
+        "they started to randomly kill people.\n" +
         "Let's start the first vote!");
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -132,8 +133,10 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             gameController.diedThisNight = [];
             setVoteDisabled(false);
             setPhaseSwitchDisabled(true);
+            checkWinCondition();
         }
         if (currentPhase === "night") {
+            setScript("Night has fallen. \nEveryone close your eyes.");
             gameController.nightStep = 0;
             console.log("After Toggle, nightPhase is", gameController.nightStep);
             setVoteDisabled(false);
@@ -148,8 +151,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         const newPhase = currentPhase === "day" ? "night" : "day";
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
-
-
+        if (newPhase === "day") {
+            setScript("Day has come. \nEveryone wake up.");
+        }
+        if (newPhase === "night") {
+            setScript("Night has fallen. \nEveryone close their eyes.");
+        }
     };
 
 
@@ -168,7 +175,8 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             await wait(500);
             socket.emit("revealRole", killedPlayer.name);
             setPhaseSwitchDisabled(false)
-            setScript("The villagers have decided to kill " + killedPlayer.name + ". Night has fallen. Everyone close your eyes");
+            setScript("The villagers have decided to kill " + killedPlayer.name);
+            await checkWinCondition();
         }
         if (currentPhase === "night") {
             setVoteDisabled(true)
@@ -177,20 +185,21 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             console.log("Night step is", nightStep);
             const activeRoles = await gameController.getActiveRolesWithNightAction();
             console.log("Active roles:", activeRoles);
+
             setScript(activeRoles[nightStep].scriptstart);
             const amountOfNightPhase = activeRoles.length - 1;
             console.log("Amount of night phases:", amountOfNightPhase);
-            await gameController.nightPhase(activeRoles[nightStep]);
+            await gameController.nightPhase(activeRoles[nightStep].roleName);
             console.log("Night phase started for", activeRoles[nightStep], "at index", nightStep);
+            setScript(activeRoles[nightStep].scriptend);
             gameController.nightStep ++;
             if (nightStep === amountOfNightPhase) {
                 setPhaseSwitchDisabled(false);
             }
             else {setVoteDisabled(false)}
         }
-        await checkWinCondition();
-        console.log("startVoting has been ended");
 
+        console.log("startVoting has been ended");
 
         /*
         console.log("startVoting has been called");
@@ -224,32 +233,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
                     <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
                     <p className="text-sm sm:text-base">
-                        {script}<br/>
-                        The night has fallen.<br/>
-                        Everyone in the town close their eyes.<br/><br/>
-                        //Only in the first night<br/>
-                        Cupid, open your eyes.<br/>
-                        //narrator starts voting<br/>
-                        Cupid, close your eyes.<br/>
-                        <br/><br/>
-                        Werewolves awake now and open your eyes.<br/>
-                        //narrator starts voting<br/>
-                        Werewolves, close your eyes.<br/><br/>
-
-                        Witch, open your eyes.<br/>
-                        //narrator starts voting<br/>
-                        Witch, close your eyes.<br/><br/>
-
-                        Seer, open your eyes.<br/>
-                        //narrator starts voting<br/>
-                        Seer, close your eyes.<br/><br/>
-
-                        Hunter, open your eyes.<br/>
-                        //narrator starts voting<br/>
-                        Hunter, close your eyes.<br/><br/>
-
-                        Day has come.<br/>
-                        Everyone open your eyes.
+                        {script.split('\n').map((line, index) => (
+                            <React.Fragment key={index}>
+                                {line}
+                                <br />
+                            </React.Fragment>
+                        ))}
                     </p>
                 </div>
 

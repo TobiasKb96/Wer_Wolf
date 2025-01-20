@@ -157,8 +157,8 @@ class GameController {
                     return true; // Include other roles without special conditions
                 })
                 .map(player => player.role) // Extract the role objects
-                .sort((a, b) => a.nightPriority  - b.nightPriority ) // Sort by priority
-                .map(role => role.roleName)) // Extract only the role names
+                .sort((a, b) => a.nightPriority  - b.nightPriority )) // Sort by priority
+                //.map(role => role.roleName)) // Extract only the role names
         })
         return activeRoles; // Returns array of role names in priority order
     }
