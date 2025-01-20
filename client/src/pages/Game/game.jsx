@@ -192,6 +192,11 @@ function Game({ownSocketId, messages, setMessages}) {
                     It is {phase}!
                 </h1>
 
+                {player && !player.isAlive && (<h1 className="text-4xl font-bold mb-8 text-red-600" >
+                    You died!
+                </h1>
+                )}
+
                 <button
                     onClick={handleShowRole}
                     className="px-6 py-3 text-lg text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
@@ -207,7 +212,8 @@ function Game({ownSocketId, messages, setMessages}) {
 
                 {showPotions && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="relative p-6 bg-purple-900 text-white rounded-xl shadow-lg border border-purple-700 w-96">
+                        <div
+                            className="relative p-6 bg-purple-900 text-white rounded-xl shadow-lg border border-purple-700 w-96">
                             <h2 className="text-2xl font-bold mb-4 text-center text-purple-300">
                                 Choose a Potion
                             </h2>
@@ -247,7 +253,8 @@ function Game({ownSocketId, messages, setMessages}) {
 
                 {/* Voting Section */}
                 {voting &&
-                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting} txtMsg={votingMsg}/>}
+                    <Voting player={player} votingChoices={votingChoices} votingMsg={votingMsg} setVoting={setVoting}
+                            txtMsg={votingMsg}/>}
                 {modalOpen && <ModalOverview player={player} onClose={() => setModalOpen(false)}/>
                 }
             </div>

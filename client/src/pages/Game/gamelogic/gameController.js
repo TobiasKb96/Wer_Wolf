@@ -93,7 +93,7 @@ class GameController {
     }
 
     distributeRoles = (lobbyParticipants, selectedRoles) => {
-        const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
+        const numberOfWerewolves = Math.max(1, Math.floor(lobbyParticipants.length / 4));
 
         // Generate a shuffled list of roles
         const roles = Array.from({ length: lobbyParticipants.length }, () => new Villager());
