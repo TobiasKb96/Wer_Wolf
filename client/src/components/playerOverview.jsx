@@ -72,42 +72,60 @@ const PlayerOverview = ({player, setMessages, messages}) => {
 
             {/* Participant List */}
             {participants.length > 0 ? (
-                        <ul className="flex sm:flex-col gap-4 flex-row overflow-x-auto">
-                            {filteredParticipants.map((participant, index) => (
-                                <li
-                                    key={index}
-                                    className="flex flex-col sm:flex-row items-center p-4 bg-white border border-gray-300 rounded-lg shadow-md min-w-[200px]"
-                                >
-                                    {/*for the avatar */}
-                                    <div className="w-16 h-16 bg-gray-400 rounded-full mb-2">
-                                        {showRole || participant.showRole ? <img src={participant.role.roleImg} alt="Role" className="w-full h-full object-cover rounded-full"/> : <img src={questionMarkImg} alt="Role" className="w-full h-full object-cover rounded-full"/>}
-                                    </div>
+                    <ul className="flex sm:flex-col gap-4 flex-row overflow-x-auto">
+                        {filteredParticipants.map((participant, index) => (
+                            <li
+                                key={index}
+                                className="flex flex-row items-start p-4 bg-white border border-gray-300 rounded-lg shadow-md min-w-[200px]"
+                            >
+                                {/* Avatar */}
+                                <div className="w-16 h-16 bg-gray-400 rounded-full mr-4">
+                                    {showRole || participant.showRole ? (
+                                        <img
+                                            src={participant.role.roleImg}
+                                            alt="Role"
+                                            className="w-full h-full object-cover rounded-full"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={questionMarkImg}
+                                            alt="Role"
+                                            className="w-full h-full object-cover rounded-full"
+                                        />
+                                    )}
+                                </div>
 
-                                    <div className="ml-0 sm:ml-4 text-center sm:text-left">
-                                        <p className={`font-bold ${!participant.isAlive ? 'text-red-600' : 'text-black'}`}>
-                                            {participant.isAlive ? participant.name : `Killed: ${participant.name}`}
+                                <div className="flex flex-col justify-between justify-items-start">
+                                    <div>
+                                        <p
+                                            className={`font-bold ${
+                                                !participant.isAlive ? 'text-red-600' : 'text-black'
+                                            }`}
+                                        >
+                                            {participant.isAlive
+                                                ? participant.name
+                                                : `Killed: ${participant.name}`}
                                         </p>
-                                        {(showRole || participant.showRole ||!participant.isAlive) && (        //TODO: does this work?
-                                            <>
-                                                <p className="text-sm text-gray-600">Role: {participant.role.roleName}
-                                                </p>
-                                                <p className="text-sm text-gray-600">Goal Condition: {participant.role.goalCondition}
-                                                </p>
-
-                                            </>
+                                        {(showRole || !participant.isAlive) && (
+                                            <p className="text-sm text-gray-600">
+                                                Role: {participant.role.roleName}
+                                            </p>
                                         )}
                                     </div>
+
+                                    {/* Message Button */}
                                     {!isNarratorView && (
                                         <button
                                             onClick={() => handleOpenChat(participant)}
-                                            className="mt-2 px-4 py-1 bg-yellow-950 text-white rounded hover:bg-orange-900"
+                                            className="mt-2 w-full px-4 py-1 bg-yellow-950 text-white rounded hover:bg-orange-900"
                                         >
                                             Message
                                         </button>
                                     )}
-                                </li>
-                            ))}
-                        </ul>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 )
                 :
                 (
