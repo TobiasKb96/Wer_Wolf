@@ -5,7 +5,7 @@ import ChatRoom from "./chatRoom.jsx";
 import gameController from "../pages/Game/gamelogic/gameController.js";
 import questionMarkImg from '../assets/questionMark.jpg';
 
-const PlayerOverview = ({player, setMessages, messages}) => {
+const PlayerOverview = ({player, setMessages, messages, phase}) => {
     const [participants, setParticipants] = useState(gameController.getPlayers());
     const [error, setError] = useState(null);
     const [showRole, setShowRole] = useState(false);
@@ -106,15 +106,20 @@ const PlayerOverview = ({player, setMessages, messages}) => {
                                                 ? participant.name
                                                 : `Killed: ${participant.name}`}
                                         </p>
-                                        {(showRole || !participant.isAlive) && (
-                                            <p className="text-sm text-gray-600">
-                                                Role: {participant.role.roleName}
-                                            </p>
+                                        {(showRole || participant.showRole || !participant.isAlive) && (
+                                            <>
+                                                <p className="text-sm text-gray-600">
+                                                    Role: {participant.role.roleName}
+                                                </p>
+                                                <p className="text-sm text-gray-600">
+                                                    Goal Condition: {participant.role.goalCondition}
+                                                </p>
+                                            </>
                                         )}
                                     </div>
 
                                     {/* Message Button */}
-                                    {!isNarratorView && (
+                                    {(!isNarratorView && phase === "day") && (
                                         <button
                                             onClick={() => handleOpenChat(participant)}
                                             className="mt-2 w-full px-4 py-1 bg-yellow-950 text-white rounded hover:bg-orange-900"

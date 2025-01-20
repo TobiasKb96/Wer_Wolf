@@ -2,15 +2,9 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from 'react-router-dom';
 import gameController from "../Game/gamelogic/gameController.js";
 import socket from "../../utils/socket.js";
-import PropTypes from "prop-types";
-import Join from "../Join/join.jsx";
-import Player from "../Game/gamelogic/Player.js";
+import PropTypes from "prop-types";;
 import PlayerOverview from "../../components/playerOverview.jsx";
 import Witch from "../Game/gamelogic/roles/Witch.js";
-import Werewolf from "../Game/gamelogic/roles/Werewolf.js";
-import Seer from "../Game/gamelogic/roles/Seer.js";
-//import //sunImg from '../../assets/sun.png';
-//import moonImg from '../../assets/moon.png';
 
 
 //TODO show names of all participants and their roles
@@ -21,7 +15,7 @@ import Seer from "../Game/gamelogic/roles/Seer.js";
 //TODO narrator gets prompt from server to start voting process
 //TODO after: voting starts with timer -> based on computed narrator
 
-function Narrator({joinedLobbyParticipants, selectedRoles}) {
+function Narrator({joinedLobbyParticipants, selectedRoles, narrator}) {
     const [votes, setVotes] = useState({});
 
     const [currentPhase, setCurrentPhase] = useState(gameController.getPhase());
@@ -36,9 +30,9 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         "Without hope they decided to take the matter into their own hands.\n" +
         "they started to randomly kill people.\n" +
         "Let's start the first vote!");
+    console.log(narrator);
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 
     const gameLoop = async () => {
 
@@ -52,19 +46,57 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         const witch = gameController.getPlayers().filter(player => player.role.roleName === "Witch")
         const witchRole = new Witch();
         witchRole.nightAction(witch, gameController.getPlayers());
-
-
-
     }
+    const readScript = (text, onComplete) => {
+        if ("speechSynthesis" in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1; // Adjust rate (speed)
+            utterance.pitch = 1; // Adjust pitch
+            utterance.volume = 1; // Adjust volume
+            // Add the 'onend' event listener to detect when speech ends
+            utterance.onend = () => {
+                console.log("Finished reading script");
+                if (onComplete) {
+                    onComplete(); // Call the callback if provided
+                }
+            };
+            // Speak the text
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.warn("Text-to-speech not supported in this browser.");
+        }
+    };
+    const waitUntilProceeding = async (ms) => {
+        await wait(ms);
+        if (!voteDisabled) {
+            console.log('Start Voting button is active');
+            startVoting();
+        } else if (!phaseSwitchDisabled) {
+            console.log('Switch Phase button is active');
+            togglePhase();
+        } else {
+            console.log('No active button');
+        }
+    }
+
+    useEffect(() => {
+        if (!narrator) {
+            readScript(script, () => {
+                console.log("Text-to-speech finished. You can now proceed.");
+                waitUntilProceeding(3500);
+            });
+        }
+    }, [script]);
 
     const checkWinCondition = async() => {
         const winResult = await gameController.checkWinCondition();
         if (winResult !== "NO_WIN") {
             setWinCondition(winResult);
+            setScript(`Game over! ${winResult} team wins!`);
             console.log(`Game over! ${winResult} team wins!`);
             socket.emit("gameOver", winResult);
+            await wait(3000);
             navigate("/home");
-
         }
     }
 
@@ -80,45 +112,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     };
 
     useEffect(() => {
-
         initializeGame();
-        //socket.on('gameStarted', gameStartedHandler);
-
-
-        return () => {
-            // Clean up listeners
-            //socket.off('playerJoinedSuccessfully', playerJoinedSuccessfullyHandler);
-
-        };
-    }, []);
-    //socket.emit("getPlayers", )
-
-    useEffect(() => {
-        setVotes({...gameController.votes}); // Sync votes with gameController
-    }, [gameController.votes]);
-
-
-
-    //TODO: what to do on voteResult for Witch, Cupid, etc.
-    //TODO: kill PlayerObjects
-
-    useEffect(() => {
-        /*
-        socket.on('voteResult', (mostVotedPlayer) => {
-            setRecentlyKilledPlayers((prev) => [...prev, mostVotedPlayer]);    //TODO not necessarily supposed to die
-            if(mostVotedPlayer !== null){
-                alert(`${mostVotedPlayer} has died!`);
-            } else {
-                alert("No one has been killed!");
-            }
-            const revealedPlayer = mostVotedPlayer
-            socket.emit('revealRole', revealedPlayer);
-        });
-*/
-
-        return () => {
-            //socket.off('voteResult');
-        };
     }, []);
 
     useEffect(() => {
@@ -131,16 +125,12 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 killedPlayer.kill();
             });
             gameController.diedThisNight = [];
-            setVoteDisabled(false);
-            setPhaseSwitchDisabled(true);
+
             checkWinCondition();
         }
         if (currentPhase === "night") {
-            setScript("Night has fallen. \nEveryone close your eyes.");
             gameController.nightStep = 0;
             console.log("After Toggle, nightPhase is", gameController.nightStep);
-            setVoteDisabled(false);
-            setPhaseSwitchDisabled(true);
         }
         console.log("Sending players to server:", gameController.getPlayers());
         socket.emit("sendPlayers", gameController.getPlayers());
@@ -148,15 +138,18 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
 
     const togglePhase = () => {
+
+        setPhaseSwitchDisabled(true);
         const newPhase = currentPhase === "day" ? "night" : "day";
         gameController.setPhase(newPhase);
-        setCurrentPhase(newPhase);
         if (newPhase === "day") {
-            setScript("Day has come. \nEveryone wake up.");
+            setScript(`Day has come. \nEveryone wake up. \n}`);
         }
         if (newPhase === "night") {
             setScript("Night has fallen. \nEveryone close their eyes.");
         }
+        setCurrentPhase(newPhase);
+        setVoteDisabled(false);
     };
 
 
@@ -167,50 +160,37 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
 
     const startVoting = async () => {
+        setVoteDisabled(true);
         if(currentPhase === "day") {
-            setScript("Vote in progress");
-            setVoteDisabled(true);
+            setScript("Townsfolk council in Progress. \nIt appears to be a heated debate!");
             const killedPlayer = await gameController.dayPhase();
-            console.log("Townsfolk", killedPlayer.name);
-            await wait(500);
-            socket.emit("revealRole", killedPlayer.name);
-            setPhaseSwitchDisabled(false)
             setScript("The villagers have decided to kill " + killedPlayer.name);
+            socket.emit("sendPlayers", gameController.getPlayers());
             await checkWinCondition();
+            setPhaseSwitchDisabled(false)
         }
         if (currentPhase === "night") {
-            setVoteDisabled(true)
-
             const nightStep = gameController.nightStep;
             console.log("Night step is", nightStep);
             const activeRoles = await gameController.getActiveRolesWithNightAction();
             console.log("Active roles:", activeRoles);
 
             setScript(activeRoles[nightStep].scriptstart);
-            const amountOfNightPhase = activeRoles.length - 1;
+            const amountOfNightPhase = activeRoles.length;
             console.log("Amount of night phases:", amountOfNightPhase);
             await gameController.nightPhase(activeRoles[nightStep].roleName);
             console.log("Night phase started for", activeRoles[nightStep], "at index", nightStep);
-            setScript(activeRoles[nightStep].scriptend);
             gameController.nightStep ++;
-            if (nightStep === amountOfNightPhase) {
+            if (nightStep+1 === amountOfNightPhase) {
                 setPhaseSwitchDisabled(false);
+                setScript(activeRoles[nightStep].scriptend);
             }
-            else {setVoteDisabled(false)}
+            else {
+                setVoteDisabled(false)
+                setScript(activeRoles[nightStep].scriptend);
+            }
         }
-
         console.log("startVoting has been ended");
-
-        /*
-        console.log("startVoting has been called");
-        const players = gameController.getPlayers();
-        const voters = players.filter(player => player.role.roleName === "Werewolf");
-        const choices = players.filter(player => player.role.roleName !== "Werewolf");
-        const txtMsg = "Kill now!";
-        socket.emit("startVoting", {voters, choices, txtMsg});
-        console.log("voters: ", voters, "victims: ", choices);
-
-         */
     };
     //TODO: Narrator mobile view
 
@@ -227,7 +207,6 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 overflow-scroll${
                     gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900"
                 }`}>
-
 
                 {/*Narrator Script*/}
                 <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">

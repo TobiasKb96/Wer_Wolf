@@ -2,11 +2,11 @@ import {bool} from "prop-types";
 
 class Role {
 
-    constructor (roleName, hasNightAction, goal, roleDescription, roleImg) {
+    constructor (roleName, hasNightAction, goalCondition, roleDescription, roleImg) {
         this.roleName = roleName;
         this.hasNightAction = hasNightAction;
         this.roleDescription = roleDescription //card input
-        this.goal = goal; //for checking win conditions and displaying on card
+        this.goalCondition = goalCondition; //for checking win conditions and displaying on card
         this.roleImg = roleImg; //for displaying on card
     }
 

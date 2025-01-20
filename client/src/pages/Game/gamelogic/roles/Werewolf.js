@@ -7,7 +7,7 @@ class Werewolf extends Role{
 
     constructor()
     {
-        super('Werewolf', true, 'Werewolf');
+        super('Werewolf', true,);
         this.priority = 1;
         this.description = 'You are a werewolf. You and your pack can vote in the night to eliminate another player'
         this.goal = `Your goal is to eliminate the townsfolk`

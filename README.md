@@ -175,7 +175,7 @@ Run the following scripts in either `client` or `server` folders:
 ### Troubleshooting
 If you encounter issues:
 - Ensure all dependencies are installed with `npm install`.
-- Check if the required ports (5000 for the server, 3000 for the client) are available.
+- Check if the required ports (8080 for the server) are available.
 - Review the console output for error messages.
 
 ---

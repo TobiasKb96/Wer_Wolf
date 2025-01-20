@@ -19,6 +19,7 @@ function App() {
     const [joinedLobbyParticipants, setJoinedLobbyParticipants] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState([]);
     const [messages, setMessages] = useState([]);
+    const [narrator, setNarrator] = useState(true);
 
 
     const toggleSidebar = () => {
@@ -27,11 +28,11 @@ function App() {
 
     // Static routes array
     const staticRoutes = [
-        { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
-        { path: "/home", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles}/> },
+        { path: "/", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles} setNarrator={setNarrator}/> },
+        { path: "/home", name: "Home", component: <Home setJoinedLobbyParticipants={setJoinedLobbyParticipants} setSelectedRoles={setSelectedRoles} setNarrator={setNarrator}/> },
         { path: "/join/:sessionId", name: "Join", component: <Join setOwnSocketId={setOwnSocketId} /> },
         { path: "/game", name: "Game", component: <Game ownSocketId={ownSocketId} messages={messages} setMessages={setMessages}/> },
-        { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants} selectedRoles={selectedRoles} />},
+        { path: "/narrator", name: "Narrator", component: <Narrator joinedLobbyParticipants={joinedLobbyParticipants} selectedRoles={selectedRoles} narrator={narrator} />},
         { path: "/basic_test", name: "Basic Test", component: <Basic /> },
         { path: "/newGameStatic", name: "newGameStatic", component: <NewGameStatic /> },
         { path: "/HomeStatic", name: "HomeStatic", component: <HomeStatic /> }

@@ -77,7 +77,16 @@ function Game({ownSocketId, messages, setMessages}) {
         navigate("/home");
     }
     const playersReceivedHandler = (players) => {
+        const previousPlayers = gameController.getPlayers();
         gameController.setPlayers(players);
+
+        players.forEach((newPlayer) => {
+            const previousPlayer = previousPlayers.find((p) => p.name === newPlayer.name);
+            if (previousPlayer && previousPlayer.isAlive && !newPlayer.isAlive) {
+                alert(`${newPlayer.name} has died!`);
+            }
+        });
+
         const thisPlayer = gameController.findPlayerById(ownSocketId)
         if (thisPlayer.role.goalCondition === "Lovers" && thisPlayer.role.goalCondition !== playerObject.role.goalCondition) {
             alert("You are a Lover, your goal is to find your Lover");
@@ -96,6 +105,7 @@ function Game({ownSocketId, messages, setMessages}) {
         }
         playerObject = thisPlayer;
         setPlayer(thisPlayer);
+
     };
 
     const phaseReceivedHandler = (phase) => {
@@ -140,7 +150,7 @@ function Game({ownSocketId, messages, setMessages}) {
                 const revealedPlayerObject = player;
                 await wait(500);
                 alert(`${revealedPlayerObject.name}'s Role is: ${revealedPlayerObject.role.roleName}`);
-                revealedPlayerObject.isAlive = false;
+                //revealedPlayerObject.isAlive = false;
             }
         }
     };
@@ -191,7 +201,7 @@ function Game({ownSocketId, messages, setMessages}) {
 
                 {player && (
                     <div>
-                        <PlayerOverview player={player} messages={messages} setMessages={setMessages}/>
+                        <PlayerOverview player={player} messages={messages} setMessages={setMessages} phase={phase}/>
                     </div>
                 )}
 

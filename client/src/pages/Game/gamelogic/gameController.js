@@ -10,6 +10,8 @@ import Seer from "./roles/Seer.js";
 import socket from "../../../utils/socket.js";
 import Voting  from "../../../components/voting.jsx";
 import Girl from "./roles/Girl.js";
+import Role from "./Role.js";
+import Custom from "./roles/Custom.js";
 
 
 
@@ -120,6 +122,12 @@ class GameController {
                     break;
                 case 'Girl':
                     roles[roles.length - j - 1] = new Girl;
+                    break;
+                default:
+                    const customRoleCount =  parseInt(selectedRoles[j].count);
+                    for (let k = 0; k < customRoleCount; k++) {
+                        roles[roles.length - j - k - 1] = new Custom(selectedRoles[j].roleName, selectedRoles[j].roleDescription);
+                    }
                     break;
             }
         }

@@ -7,7 +7,7 @@ import gameController from "../Game/gamelogic/gameController.js";
 import GameOptions from "../../components/GameOptions.jsx";
 
 console.log(socket.id)
-function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
+function Home({setJoinedLobbyParticipants, setSelectedRoles, setNarrator}) {
     const [qrCode, setQrCode] = useState(null); // State for QR Code
     const [sessionId, setSessionId] = useState(null); // State for confirmed session ID
     const [sessionLink, setSessionLink] = useState(null); // State for session link
@@ -115,7 +115,7 @@ function Home({setJoinedLobbyParticipants, setSelectedRoles}) {
                 )}
                 {isGameStarted && (
                     <div className="flex flex-row justify-center items-center gap-4 mt-8">
-                        <GameOptions setSelectedRoles={setSelectedRoles}/>
+                        <GameOptions setSelectedRoles={setSelectedRoles} setNarrator={setNarrator}/>
                     </div>
                 )}
 
