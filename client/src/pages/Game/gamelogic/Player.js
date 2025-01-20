@@ -7,7 +7,6 @@ class Player {
         this.role = role;
         this.id = id;
         this.isAlive = true;
-        this.isLover = false;
     }
 
     assignRole(role) {

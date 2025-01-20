@@ -44,6 +44,7 @@ class Cupid extends Role{
             socket.emit('startVoting', { voters, choices , txtMsg});
         });
         this.firstNight = false;
+        console.log('Lovers are', lovers);
         return lovers;
 
     }

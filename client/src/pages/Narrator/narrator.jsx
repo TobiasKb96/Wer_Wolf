@@ -31,6 +31,10 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
     //const [recentlyKilledPlayers, setRecentlyKilledPlayers] = useState([]);
     const [winCondition, setWinCondition] = useState("NO_WIN");
     const navigate = useNavigate();
+    const [script, setScript] = useState(
+        "It is day, the villagers heard that there are werewolves rampant in the village. " +
+        "Without hope they decided to take the matter into their own hands and started to randomly kill people." +
+        "Let's start the first vote!");
 
     const wait = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -120,13 +124,22 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         if (currentPhase === "day") {
             console.log("Day phase started. Emitting recently killed players.", gameController.diedThisNight);
 
-            gameController.diedThisNight.forEach((revealedPlayer) => {
-                console.log(`Revealing role for: ${revealedPlayer.name}`);
-                socket.emit("revealRole", revealedPlayer.name);
-                revealedPlayer.kill();
+            gameController.diedThisNight.forEach((killedPlayer) => {
+                console.log(`Revealing role for: ${killedPlayer.name}`);
+                socket.emit("revealRole", killedPlayer.name);
+                killedPlayer.kill();
             });
             gameController.diedThisNight = [];
+            setVoteDisabled(false);
+            setPhaseSwitchDisabled(true);
         }
+        if (currentPhase === "night") {
+            gameController.nightStep = 0;
+            console.log("After Toggle, nightPhase is", gameController.nightStep);
+            setVoteDisabled(false);
+            setPhaseSwitchDisabled(true);
+        }
+        console.log("Sending players to server:", gameController.getPlayers());
         socket.emit("sendPlayers", gameController.getPlayers());
     }, [currentPhase]);
 
@@ -135,12 +148,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
         const newPhase = currentPhase === "day" ? "night" : "day";
         gameController.setPhase(newPhase);
         setCurrentPhase(newPhase);
-        if (newPhase === "night") {
-            gameController.nightStep = 0;
-            console.log("After Toggle, nightPhase is", gameController.nightStep);
-            setVoteDisabled(false);
-            setPhaseSwitchDisabled(true);
-        }
+
 
     };
 
@@ -153,19 +161,23 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
 
     const startVoting = async () => {
         if(currentPhase === "day") {
+            setScript("Vote in progress");
             setVoteDisabled(true);
             const killedPlayer = await gameController.dayPhase();
             console.log("Townsfolk", killedPlayer.name);
             await wait(500);
             socket.emit("revealRole", killedPlayer.name);
             setPhaseSwitchDisabled(false)
+            setScript("The villagers have decided to kill " + killedPlayer.name + ". Night has fallen. Everyone close your eyes");
         }
         if (currentPhase === "night") {
-            setVoteDisabled(true);
+            setVoteDisabled(true)
+
             const nightStep = gameController.nightStep;
             console.log("Night step is", nightStep);
             const activeRoles = await gameController.getActiveRolesWithNightAction();
             console.log("Active roles:", activeRoles);
+            setScript(activeRoles[nightStep].scriptstart);
             const amountOfNightPhase = activeRoles.length - 1;
             console.log("Amount of night phases:", amountOfNightPhase);
             await gameController.nightPhase(activeRoles[nightStep]);
@@ -204,7 +216,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
             </div>
             <div
                 className={`flex flex-col sm:flex-row w-full flex-grow p-4 sm:p-6 gap-4 sm:gap-6 overflow-scroll${
-                    gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900 text-white"
+                    gameController.getPhase() === "day" ? "bg-white text-black" : "bg-gray-900"
                 }`}>
 
 
@@ -212,6 +224,7 @@ function Narrator({joinedLobbyParticipants, selectedRoles}) {
                 <div className="flex-1 border border-stone-600 bg-zinc-100 p-4 rounded-lg overflow-y-auto">
                     <h2 className="text-lg sm:text-xl font-bold mb-4 text-black">Script</h2>
                     <p className="text-sm sm:text-base">
+                        {script}<br/>
                         The night has fallen.<br/>
                         Everyone in the town close their eyes.<br/><br/>
                         //Only in the first night<br/>

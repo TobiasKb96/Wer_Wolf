@@ -87,7 +87,7 @@ const PlayerOverview = ({player, setMessages, messages}) => {
                                         <p className={`font-bold ${!participant.isAlive ? 'text-red-600' : 'text-black'}`}>
                                             {participant.isAlive ? participant.name : `Killed: ${participant.name}`}
                                         </p>
-                                        {(showRole || !participant.isAlive) && (        //TODO: does this work?
+                                        {(showRole || participant.showRole ||!participant.isAlive) && (        //TODO: does this work?
                                             <>
                                                 <p className="text-sm text-gray-600">Role: {participant.role.roleName}
                                                 </p>

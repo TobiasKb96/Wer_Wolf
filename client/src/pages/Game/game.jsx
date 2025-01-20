@@ -47,19 +47,9 @@ function Game({ownSocketId, messages, setMessages}) {
         };
     }, []);
 
-
     useEffect(() => {
         console.log("Own Socket Id object handed over:", ownSocketId)
     }, [ownSocketId]);
-
-    useEffect(() => {
-        if (!isFirstRender && phase === "day") {
-            console.log(" if is called");
-            alert("These players died tonight: ");
-        }
-        setIsFirstRender(false); // Update first render after the check
-    }, [phase]);
-
 
     useEffect(() => {
         socket.on('playersReceived', playersReceivedHandler);
@@ -77,6 +67,7 @@ function Game({ownSocketId, messages, setMessages}) {
             socket.off('votePrompt',startVotingHandler);
             socket.off('witchShowPotions', witchShowPotionsHandler);
             socket.off('showRole', handleShowSomeoneElsesRole);
+
         };
     }, []);
 
@@ -88,19 +79,28 @@ function Game({ownSocketId, messages, setMessages}) {
     const playersReceivedHandler = (players) => {
         gameController.setPlayers(players);
         const thisPlayer = gameController.findPlayerById(ownSocketId)
+        if (thisPlayer.role.goalCondition === "Lovers" && thisPlayer.role.goalCondition !== playerObject.role.goalCondition) {
+            alert("You are a Lover, your goal is to find your Lover");
+            gameController.players.forEach(player => {
+                if (player.role.goalCondition === "Lovers") {
+                    player.showRole = true;
+                }
+            })
+        }
+        if (thisPlayer.role.goalCondition === "Lovers") {
+            gameController.players.forEach(player => {
+                if (player.role.goalCondition === "Lovers") {
+                    player.showRole = true;
+                }
+            })
+        }
         playerObject = thisPlayer;
-            setPlayer(thisPlayer);
-
+        setPlayer(thisPlayer);
     };
 
     const phaseReceivedHandler = (phase) => {
         gameController.setPhase(phase);
         setPhase(phase);
-       /* if (!isFirstRender && phase === "day") {
-            console.log("if is called")
-            alert("These players died tonight: ");
-        }
-        setIsFirstRender(false);*/
     };
     useEffect(() => {
         const handlePhaseTransition = () => {

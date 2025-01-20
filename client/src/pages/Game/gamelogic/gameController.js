@@ -94,7 +94,7 @@ class GameController {
         const numberOfWerewolves = lobbyParticipants.length <= 5 ? 1 : 2;
 
         // Generate a shuffled list of roles
-        const roles = Array(lobbyParticipants.length).fill(new Villager);
+        const roles = Array.from({ length: lobbyParticipants.length }, () => new Villager());
         for (let i = 0; i < numberOfWerewolves; i++) {
             roles[i] = new Werewolf;
             console.log(Werewolf.roleName);
@@ -197,10 +197,12 @@ class GameController {
                     resolve(Cupid.nightAction(voters, choices));
 
                 });
+                console.log("votedLoversArray",votedLovers);
                 const lover1 = this.players.find(player => player.name === votedLovers[0]);
                 const lover2 = this.players.find(player => player.name === votedLovers[1]);
+                console.log("lover1",lover1, "lover2",lover2);
                 lover1.role.setLovers()
-                lover2.role.setLovers()
+                lover2.role.setLovers();
                 break;
             case 'Bodyguard':
                 voters = activePlayers.filter(player => player.role.roleName === "Bodyguard");
